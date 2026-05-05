@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Privacy Policy — Linkrite</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --green-deep: #132d1e;
+      --green-mid: #1e4a2f;
+      --green-light: #2a6642;
+      --gold: #c9a84c;
+      --gold-light: #e2c97e;
+      --cream: #f5f0e8;
+      --cream-dark: #ede6d6;
+      --white: #ffffff;
+      --text-dark: #0e1f15;
+      --text-muted: #5a7264;
+      --border: rgba(201,168,76,0.25);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+      background: rgba(19,45,30,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--cream);
+      text-decoration: none;
+    }
+    .logo span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(245,240,232,0.75);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── MAIN CONTENT ── */
+    .policy-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 8rem 5% 5rem;
+      line-height: 1.8;
+    }
+
+    .policy-header {
+      margin-bottom: 3rem;
+    }
+
+    .policy-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--green-deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .policy-header p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .policy-section {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .policy-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 1rem;
+    }
+
+    .policy-section h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--green-mid);
+      margin: 1.5rem 0 0.75rem;
+    }
+
+    .policy-section p {
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+    }
+
+    .policy-section ul, .policy-section ol {
+      margin: 1rem 0 1rem 1.5rem;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+    }
+
+    .policy-section li {
+      margin-bottom: 0.6rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green-deep);
+      padding: 3rem 8% 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 0.85rem;
+      color: rgba(245,240,232,0.6);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(201,168,76,0.1);
+      font-size: 0.78rem;
+      color: rgba(245,240,232,0.35);
+    }
+
+    @media (max-width: 768px) {
+      .policy-container { padding: 8rem 4% 3rem; }
+      .policy-header h1 { font-size: 1.6rem; }
+      .policy-section h2 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">Link<span>rite</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="index.html#store">Store</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" class="nav-cta">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- POLICY CONTENT -->
+  <div class="policy-container">
+    <div class="policy-header">
+      <h1>Privacy Policy</h1>
+      <p>Effective Date: May 1, 2026 | Last Updated: May 4, 2026</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>1. Introduction</h2>
+      <p>At Linkrite ("we," "us," "our," or "Company"), we are committed to protecting your privacy and ensuring you have a positive experience on our website and when using our services. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>2. Information We Collect</h2>
+      <h3>2.1 Information You Provide</h3>
+      <p>We collect information that you voluntarily provide to us, including:</p>
+      <ul>
+        <li>Name, email address, and phone number through service request forms</li>
+        <li>Project details, manuscript files, research data, and other documents you submit</li>
+        <li>Payment information (processed securely through third-party providers)</li>
+        <li>Communication preferences and feedback</li>
+        <li>Information from consultation bookings and appointment scheduling</li>
+      </ul>
+
+      <h3>2.2 Information Collected Automatically</h3>
+      <p>When you visit our website, we automatically collect certain information:</p>
+      <ul>
+        <li>Device information (browser type, operating system, device identifiers)</li>
+        <li>IP address and approximate location (city/region level)</li>
+        <li>Pages visited, time spent on pages, and click patterns</li>
+        <li>Referral source and exit pages</li>
+        <li>Cookies and similar tracking technologies</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2>3. How We Use Your Information</h2>
+      <p>We use collected information for the following purposes:</p>
+      <ul>
+        <li>Providing and delivering our services (editing, analysis, consulting, etc.)</li>
+        <li>Processing service requests and managing client relationships</li>
+        <li>Sending confirmations, invoices, and receipt notifications</li>
+        <li>Responding to inquiries and providing customer support</li>
+        <li>Sending newsletters and marketing communications (with your consent)</li>
+        <li>Improving our website functionality and user experience</li>
+        <li>Complying with legal obligations and enforcing our terms</li>
+        <li>Detecting and preventing fraud or security threats</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2>4. Data Security & Confidentiality</h2>
+      <p>Your privacy and data security are paramount to us. We implement the following measures:</p>
+      <ul>
+        <li><strong>Encrypted Communication:</strong> SSL/TLS encryption for all data transmitted to and from our servers</li>
+        <li><strong>Secure Storage:</strong> Research data, manuscripts, and sensitive files are stored on secured, password-protected systems</li>
+        <li><strong>Access Controls:</strong> Only authorized personnel with a legitimate need-to-know have access to client data</li>
+        <li><strong>Non-Disclosure:</strong> All team members sign strict confidentiality agreements</li>
+        <li><strong>NDA Policy:</strong> Upon request, we provide comprehensive Non-Disclosure Agreements for added protection</li>
+        <li><strong>Regular Audits:</strong> We conduct security assessments and vulnerability scans to identify and address potential risks</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2>5. Third-Party Sharing</h2>
+      <p>We do not sell, rent, or share your personal data with third parties except in the following circumstances:</p>
+      <ul>
+        <li><strong>Service Providers:</strong> Payment processors, email delivery systems, and hosting providers (under strict data processing agreements)</li>
+        <li><strong>Legal Compliance:</strong> When required by law, court order, or regulatory authority</li>
+        <li><strong>Business Partners:</strong> With your explicit consent, we may share de-identified or anonymized data</li>
+        <li><strong>Website Analytics:</strong> We use tools like Google Analytics (anonymized IP addresses) to understand usage patterns</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2>6. Your Rights & Choices</h2>
+      <h3>6.1 Access & Portability</h3>
+      <p>You have the right to request a copy of the personal data we hold about you in a portable format.</p>
+
+      <h3>6.2 Correction & Deletion</h3>
+      <p>You may request that we correct inaccurate information or delete your personal data, subject to legal retention requirements.</p>
+
+      <h3>6.3 Opt-Out of Marketing</h3>
+      <p>You can unsubscribe from marketing emails at any time by clicking "Unsubscribe" in the email footer or by contacting us directly.</p>
+
+      <h3>6.4 Cookie Preferences</h3>
+      <p>Most browsers allow you to control cookies through settings. You can clear cookies or disable them, though some functionality may be affected.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>7. Data Retention</h2>
+      <p>We retain your information for as long as necessary to provide services and comply with legal obligations:</p>
+      <ul>
+        <li><strong>Client Data:</strong> Retained for 6 months to 2 years after project completion (unless you request earlier deletion)</li>
+        <li><strong>Communication Records:</strong> Retained for dispute resolution and record-keeping (up to 3 years)</li>
+        <li><strong>Marketing Lists:</strong> Retained until you unsubscribe</li>
+        <li><strong>Financial Records:</strong> Retained per accounting and tax regulations (typically 7 years)</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2>8. Cookies & Tracking</h2>
+      <p>Our website uses cookies and similar technologies to enhance user experience. These include:</p>
+      <ul>
+        <li><strong>Essential Cookies:</strong> Required for basic website functionality</li>
+        <li><strong>Performance Cookies:</strong> Help us understand how visitors use our site</li>
+        <li><strong>Preference Cookies:</strong> Remember your choices (language, theme preferences)</li>
+      </ul>
+      <p>You can control cookie settings through your browser. Note that disabling cookies may affect website functionality.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>9. International Data Transfers</h2>
+      <p>Your data may be transferred to, stored, and processed in countries other than your country of residence. These countries may have data protection laws that differ from your home country. By using our services, you consent to such transfers, which are made with appropriate safeguards including standard contractual clauses and adequacy decisions.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>10. Children's Privacy</h2>
+      <p>Linkrite services are not intended for individuals under 18 years of age. We do not knowingly collect personal information from children under 18. If we learn we have collected information from a child under 18, we will promptly delete such information. Parents or guardians who believe their child has provided information to us should contact us immediately.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>11. California & EU Resident Rights</h2>
+      <h3>11.1 California (CCPA)</h3>
+      <p>California residents have the right to know what personal data is collected, delete personal data, opt-out of the sale of personal data, and non-discrimination for exercising their rights. Submit requests to: hello@linkrite.com</p>
+
+      <h3>11.2 European Union (GDPR)</h3>
+      <p>EU residents have the right to access, rectify, erase, restrict processing, data portability, and object to processing. We process your data based on legitimate interests, contract fulfillment, or your explicit consent. Contact us at: hello@linkrite.com</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>12. Contact Us</h2>
+      <p>For questions, requests, or concerns about this Privacy Policy or our data practices:</p>
+      <ul>
+        <li><strong>Email:</strong> hello@linkrite.com</li>
+        <li><strong>Mailing Address:</strong> Linkrite HQ, [Your Address]</li>
+        <li><strong>Response Time:</strong> We respond to all requests within 30 days</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2>13. Policy Updates</h2>
+      <p>We may update this Privacy Policy periodically to reflect changes in our practices or for other operational, legal, or regulatory reasons. We will notify you of material changes via email or by posting a notice on our website. Your continued use of our services constitutes acceptance of updated terms.</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="about.html">About Us</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-conditions.html">Terms & Conditions</a>
+      <a href="help.html">Help</a>
+      <a href="index.html#services">Services</a>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Linkrite.com — All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

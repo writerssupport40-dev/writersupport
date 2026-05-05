@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Help & Support — Linkrite</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --green-deep: #132d1e;
+      --green-mid: #1e4a2f;
+      --green-light: #2a6642;
+      --gold: #c9a84c;
+      --gold-light: #e2c97e;
+      --cream: #f5f0e8;
+      --cream-dark: #ede6d6;
+      --white: #ffffff;
+      --text-dark: #0e1f15;
+      --text-muted: #5a7264;
+      --border: rgba(201,168,76,0.25);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+      background: rgba(19,45,30,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--cream);
+      text-decoration: none;
+    }
+    .logo span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(245,240,232,0.75);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── MAIN CONTENT ── */
+    .help-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 8rem 5% 5rem;
+    }
+
+    .help-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .help-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--green-deep);
+      margin-bottom: 0.75rem;
+    }
+
+    .help-header p {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    /* ── QUICK LINKS ── */
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .quick-link-card {
+      background: var(--white);
+      border: 1px solid var(--cream-dark);
+      border-radius: 4px;
+      padding: 1.75rem;
+      text-align: center;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .quick-link-card:hover {
+      background: rgba(201,168,76,0.05);
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .quick-link-icon {
+      font-size: 2rem;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .quick-link-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .quick-link-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── FAQ SECTION ── */
+    .faq-section {
+      margin-top: 4rem;
+    }
+
+    .faq-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .faq-item {
+      background: var(--white);
+      border: 1px solid var(--cream-dark);
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 1.25rem 1.5rem;
+      background: rgba(201,168,76,0.05);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s;
+    }
+
+    .faq-question:hover {
+      background: rgba(201,168,76,0.1);
+    }
+
+    .faq-question-text {
+      font-weight: 600;
+      color: var(--green-deep);
+      font-size: 0.95rem;
+    }
+
+    .faq-toggle {
+      color: var(--gold);
+      transition: transform 0.3s;
+      font-size: 1.2rem;
+    }
+
+    .faq-item.open .faq-toggle {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      padding: 1.5rem;
+      color: var(--text-dark);
+      font-size: 0.9rem;
+      line-height: 1.8;
+      display: none;
+      border-top: 1px solid var(--border);
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+    /* ── CONTACT SECTION ── */
+    .contact-section {
+      background: var(--green-deep);
+      border-radius: 4px;
+      padding: 2.5rem;
+      margin-top: 4rem;
+      text-align: center;
+      color: var(--cream);
+    }
+
+    .contact-section h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .contact-section p {
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      color: rgba(245,240,232,0.8);
+    }
+
+    .contact-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .contact-option {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 3px;
+      padding: 1.5rem;
+    }
+
+    .contact-option a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .contact-option a:hover {
+      color: var(--gold-light);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green-deep);
+      padding: 3rem 8% 1.5rem;
+      border-top: 1px solid var(--border);
+      margin-top: 4rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 0.85rem;
+      color: rgba(245,240,232,0.6);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(201,168,76,0.1);
+      font-size: 0.78rem;
+      color: rgba(245,240,232,0.35);
+    }
+
+    @media (max-width: 768px) {
+      .help-container { padding: 8rem 4% 3rem; }
+      .help-header h1 { font-size: 1.6rem; }
+      .quick-links { grid-template-columns: 1fr; }
+      .contact-options { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">Link<span>rite</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="index.html#store">Store</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="index.html#consult" class="nav-cta">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <div class="help-container">
+    <div class="help-header">
+      <h1>Help & Support Center</h1>
+      <p>Find answers to common questions and learn how to get the most from Linkrite services</p>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="quick-links">
+      <div class="quick-link-card">
+        <div class="quick-link-icon"><i class="bx bx-play-circle"></i></div>
+        <h3>Getting Started</h3>
+        <p>Learn how to submit your first service request and set up your account</p>
+      </div>
+      <div class="quick-link-card">
+        <div class="quick-link-icon"><i class="bx bx-file"></i></div>
+        <h3>Service Descriptions</h3>
+        <p>Detailed information about each service and what to expect</p>
+      </div>
+      <div class="quick-link-card">
+        <div class="quick-link-icon"><i class="bx bx-credit-card"></i></div>
+        <h3>Billing & Payments</h3>
+        <p>Payment methods, refund policies, and pricing information</p>
+      </div>
+      <div class="quick-link-card">
+        <div class="quick-link-icon"><i class="bx bx-shield"></i></div>
+        <h3>Data Security</h3>
+        <p>How we protect your research data and maintain confidentiality</p>
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <div class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span class="faq-question-text">What is your typical turnaround time?</span>
+          <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">Most services are completed within 5-10 business days depending on project complexity. Standard timelines are: Manuscript Editing (5-7 days), Statistical Analysis (7-10 days), Data Visualization (5-7 days), and Genomic Analysis (10-14 days). Rush services (24-48 hours) are available for an additional fee.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span class="faq-question-text">How much do your services cost?</span>
+          <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">Pricing varies based on service type and project scope. Manuscript editing typically starts at $50/hour. Statistical analysis and data visualization have hourly rates from $60-$80/hour. Genomic analysis is quoted individually based on complexity. Request a quote on our contact form for exact pricing.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span class="faq-question-text">Is my research data confidential?</span>
+          <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">Absolutely. All client manuscripts, research data, and project details are treated as strictly confidential. We never share data with third parties without explicit written consent, and we do not publish or use your research without permission. A comprehensive NDA is available upon request for additional protection.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span class="faq-question-text">What are your revision policies?</span>
+          <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">All services include up to 2 rounds of revisions at no additional cost. These revisions must be requested within 14 days of delivery. Additional revisions beyond the included rounds are charged at $50/hour. We want to ensure you're completely satisfied with your deliverables.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span class="faq-question-text">Do you offer refunds?</span>
+          <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">Yes! Refunds are available within 24 hours of payment if no work has begun. For projects in progress, pro-rated refunds are provided based on work completed (no refund if 50%+ complete). Rush services are non-refundable once work has started. If we fail to deliver within the agreed timeline, a full refund is provided.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span class="faq-question-text">Can you help with statistical analysis?</span>
+          <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">Yes! Our statistical analysis service covers descriptive statistics, regression analysis, ANOVA, survival analysis, multivariate analysis, and more. We work with SPSS, R, Python, and other statistical software. We provide detailed interpretation and publication-ready tables and figures.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span class="faq-question-text">What payment methods do you accept?</span>
+          <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">We accept Visa, Mastercard, American Express, PayPal, and bank transfers (wire). All payments are processed securely through PCI-DSS compliant processors. For institutional accounts, we offer Net 30 invoicing (subject to credit approval).</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span class="faq-question-text">Do you work with international clients?</span>
+          <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">Yes! We serve researchers and students worldwide. We accept international payments and work across time zones. Our team includes experts from multiple countries who understand diverse academic standards and publication requirements.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span class="faq-question-text">Can you help with genomic data analysis?</span>
+          <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">Yes! Our genomic analysis service includes NGS pipeline support, GWAS analysis, RNA-seq analysis, microbiome analysis, variant calling, annotation, and custom bioinformatics workflows. Projects are quoted individually based on data complexity and analysis scope.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span class="faq-question-text">How do I request a custom quote?</span>
+          <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">You can request a custom quote by selecting "Get a Quote" on specific service pages or by contacting us directly at hello@linkrite.com. Provide details about your project scope, timeline, and any special requirements. We'll respond within 24 hours with a customized quote valid for 14 days.</div>
+      </div>
+    </div>
+
+    <!-- CONTACT SECTION -->
+    <div class="contact-section">
+      <h3>Still Have Questions?</h3>
+      <p>Our support team is here to help. Reach out using any of these methods:</p>
+      <div class="contact-options">
+        <div class="contact-option">
+          <a href="mailto:hello@linkrite.com">
+            <i class="bx bx-envelope"></i> Email
+          </a>
+        </div>
+        <div class="contact-option">
+          <a href="index.html#consult">
+            <i class="bx bx-phone"></i> Request Call
+          </a>
+        </div>
+        <div class="contact-option">
+          <a href="#" onclick="alert('Chat support coming soon!')">
+            <i class="bx bx-chat"></i> Chat
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="about.html">About Us</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-conditions.html">Terms & Conditions</a>
+      <a href="help.html">Help</a>
+      <a href="index.html#services">Services</a>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Linkrite.com — All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- FAQ TOGGLE SCRIPT -->
+  <script>
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', () => {
+        const faqItem = question.closest('.faq-item');
+        faqItem.classList.toggle('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

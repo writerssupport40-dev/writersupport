@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login — Linkrite</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconsax@1.0.0/dist/iconsax.css">
+  <style>
+    :root {
+      --green-deep:  #132d1e;
+      --gold:        #c9a84c;
+      --gold-light:  #e2c97e;
+      --cream:       #f5f0e8;
+      --text-dark:   #0e1f15;
+      --text-muted:  #5a7264;
+      --border:      rgba(201,168,76,0.18);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { min-height: 100%; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: linear-gradient(135deg, #132d1e 0%, #1e4a2f 45%, #2a6642 100%);
+      color: var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(201,168,76,0.18), transparent 35%),
+                  radial-gradient(circle at bottom right, rgba(245,240,232,0.1), transparent 30%);
+      pointer-events: none;
+    }
+    .login-panel {
+      position: relative;
+      width: min(420px, 100%);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.25);
+    }
+    .brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+    .brand span { color: var(--gold); }
+    .sub {
+      font-size: 0.95rem;
+      color: rgba(245,240,232,0.8);
+      margin-bottom: 2rem;
+    }
+    .field {
+      display: block;
+      margin-bottom: 1.25rem;
+    }
+    .field label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.65);
+      margin-bottom: 0.5rem;
+    }
+    .field input {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.12);
+      color: var(--cream);
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .field input:focus { border-color: rgba(201,168,76,0.6); }
+    .submit-btn {
+      width: 100%;
+      padding: 1rem 1.1rem;
+      margin-top: 0.5rem;
+      border: none;
+      border-radius: 10px;
+      background: var(--gold);
+      color: var(--green-deep);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .submit-btn:hover { background: var(--gold-light); }
+    .login-error {
+      margin-top: 1rem;
+      color: #f7b1b1;
+      font-size: 0.88rem;
+      min-height: 1.2rem;
+    }
+    .hint {
+      margin-top: 1.5rem;
+      font-size: 0.78rem;
+      color: rgba(245,240,232,0.7);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-panel">
+    <div class="brand">Link<span>rite</span> Admin</div>
+    <p class="sub">Enter admin credentials to access the request dashboard.</p>
+    <div class="field">
+      <label for="loginUser">Username</label>
+      <input id="loginUser" type="text" placeholder="admin" autocomplete="username" />
+    </div>
+    <div class="field">
+      <label for="loginPass">Password</label>
+      <input id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter') submitLogin()" />
+    </div>
+    <button class="submit-btn" onclick="submitLogin()">Sign in →</button>
+    <div class="login-error" id="loginError"></div>
+    <div class="hint">Demo login: <strong>admin</strong> / <strong>Linkrite2026</strong></div>
+  </div>
+  <script>
+    async function submitLogin() {
+      const user = document.getElementById('loginUser').value.trim();
+      const pass = document.getElementById('loginPass').value;
+
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: user, password: pass })
+      });
+
+      if (res.ok) {
+        window.location.href = 'adminpanel.html';
+        return;
+      }
+
+      const payload = await res.json().catch(() => ({}));
+      document.getElementById('loginError').textContent = payload.message || 'Invalid username or password.';
+      document.getElementById('loginPass').value = '';
+    }
+
+    async function checkAuth() {
+      try {
+        const res = await fetch('/api/admin/verify', { credentials: 'include' });
+        if (res.ok) {
+          window.location.href = 'adminpanel.html';
+        }
+      } catch (err) {
+        // not authenticated
+      }
+    }
+
+    checkAuth();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/iconsax@1.0.0/dist/iconsax.js"></script>
+  <script>
+    iconsax.init();
+  </script>
+</body>
+</html>

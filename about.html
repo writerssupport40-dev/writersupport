@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About & Contact — Linkrite</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --green-deep:  #132d1e;
+      --green-mid:   #1e4a2f;
+      --green-light: #2a6642;
+      --gold:        #c9a84c;
+      --gold-light:  #e2c97e;
+      --cream:       #f5f0e8;
+      --cream-dark:  #ede6d6;
+      --white:       #ffffff;
+      --text-dark:   #0e1f15;
+      --text-muted:  #5a7264;
+      --border:      rgba(201,168,76,0.25);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+      background: rgba(19,45,30,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow 0.3s;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--cream);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .logo span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(245,240,232,0.75);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold) !important;
+      color: var(--green-deep) !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2px;
+      font-weight: 600 !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--cream); }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: var(--green-deep);
+      padding: 9rem 8% 6rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(42,102,66,0.35) 0%, transparent 70%);
+      right: -100px; top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .hero-grid-lines {
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(
+        90deg, transparent, transparent 79px,
+        rgba(201,168,76,0.04) 79px, rgba(201,168,76,0.04) 80px
+      );
+      pointer-events: none;
+    }
+
+    .breadcrumb {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.4);
+      margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: var(--gold); text-decoration: none; }
+
+    .page-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 4.5vw, 3.8rem);
+      font-weight: 800;
+      color: var(--cream);
+      line-height: 1.1;
+      position: relative;
+      z-index: 1;
+    }
+    .page-hero h1 em { font-style: italic; color: var(--gold); }
+
+    .page-hero-sub {
+      font-size: 1rem;
+      color: rgba(245,240,232,0.6);
+      line-height: 1.8;
+      margin-top: 1.25rem;
+      font-weight: 300;
+      max-width: 480px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── MISSION CARD ── */
+    .mission-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2.5rem;
+      backdrop-filter: blur(8px);
+      position: relative;
+      z-index: 1;
+    }
+
+    .mission-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .mission-card blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.6;
+      border-left: 2px solid var(--gold);
+      padding-left: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .mission-values {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .value-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.83rem;
+      color: rgba(245,240,232,0.65);
+    }
+
+    .value-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      background: var(--gold);
+      padding: 3rem 8%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+
+    .stat-item {
+      text-align: center;
+      border-right: 1px solid rgba(19,45,30,0.15);
+      padding-right: 2rem;
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--green-deep);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: rgba(19,45,30,0.65);
+      margin-top: 0.3rem;
+      font-weight: 500;
+    }
+
+    /* ── STORY SECTION ── */
+    .story-section {
+      padding: 7rem 8%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+      background: var(--cream);
+    }
+
+    .section-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .story-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      font-weight: 700;
+      color: var(--green-deep);
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    .story-section p {
+      font-size: 0.93rem;
+      color: var(--text-muted);
+      line-height: 1.85;
+      margin-bottom: 1.25rem;
+    }
+
+    .story-visual {
+      background: var(--green-deep);
+      border-radius: 4px;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .visual-item {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(201,168,76,0.1);
+    }
+    .visual-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .visual-icon {
+      width: 44px; height: 44px;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      color: var(--gold);
+    }
+
+    .visual-text strong {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 0.3rem;
+    }
+
+    .visual-text span {
+      font-size: 0.8rem;
+      color: rgba(245,240,232,0.5);
+      line-height: 1.6;
+    }
+
+    /* ── TEAM SECTION ── */
+    .team-section {
+      padding: 7rem 8%;
+      background: var(--cream-dark);
+    }
+
+    .team-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .team-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3vw, 2.6rem);
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 0.75rem;
+    }
+
+    .team-header p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .team-card {
+      background: var(--white);
+      border: 1px solid var(--cream-dark);
+      border-radius: 3px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .team-card:hover {
+      box-shadow: 0 8px 32px rgba(19,45,30,0.08);
+      transform: translateY(-3px);
+    }
+
+    .team-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--green-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      border: 2px solid var(--border);
+    }
+
+    .team-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 0.3rem;
+    }
+
+    .team-role {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .team-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .team-expertise {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      justify-content: center;
+      margin-top: 1.25rem;
+    }
+
+    .exp-tag {
+      font-size: 0.68rem;
+      background: var(--cream);
+      color: var(--text-muted);
+      border: 1px solid var(--cream-dark);
+      padding: 0.25rem 0.6rem;
+      border-radius: 100px;
+    }
+
+    /* ── CONTACT SECTION ── */
+    .contact-section {
+      padding: 7rem 8%;
+      background: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+
+    .contact-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      font-weight: 700;
+      color: var(--green-deep);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .contact-info > p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-channels {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .channel {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .channel-icon {
+      width: 42px; height: 42px;
+      background: var(--green-deep);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .channel-text strong {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--green-deep);
+      margin-bottom: 0.2rem;
+    }
+
+    .channel-text span {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .channel-text a {
+      color: var(--green-light);
+      text-decoration: none;
+    }
+    .channel-text a:hover { text-decoration: underline; }
+
+    .response-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(42,102,66,0.1);
+      border: 1px solid rgba(42,102,66,0.2);
+      color: var(--green-light);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 100px;
+    }
+
+    /* ── CONTACT FORM ── */
+    .contact-form-wrap {
+      background: var(--white);
+      border: 1px solid var(--cream-dark);
+      border-radius: 4px;
+      padding: 2.5rem;
+      box-shadow: 0 8px 40px rgba(19,45,30,0.06);
+    }
+
+    .form-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 0.35rem;
+    }
+
+    .form-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text-dark);
+      background: var(--cream);
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--green-light);
+      background: var(--white);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--green-deep);
+      color: var(--cream);
+      padding: 0.9rem;
+      border: none;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      letter-spacing: 0.02em;
+      margin-top: 0.25rem;
+    }
+    .btn-submit:hover { background: var(--green-mid); }
+
+    .form-note {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+    }
+
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2.5rem 1rem;
+    }
+    .form-success .check { font-size: 2.5rem; margin-bottom: 1rem; }
+    .form-success h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--green-deep);
+      margin-bottom: 0.5rem;
+    }
+    .form-success p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* ── POLICIES SECTION ── */
+    .policies-section {
+      padding: 5rem 8%;
+      background: var(--green-deep);
+    }
+
+    .policies-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .policies-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+
+    .policies-header p {
+      font-size: 0.88rem;
+      color: rgba(245,240,232,0.5);
+    }
+
+    .policies-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .policy-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 2rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .policy-card:hover { background: rgba(255,255,255,0.07); }
+
+    .policy-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--gold);
+    }
+
+    .policy-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+
+    .policy-card p {
+      font-size: 0.78rem;
+      color: rgba(245,240,232,0.5);
+      line-height: 1.65;
+      margin-bottom: 1.25rem;
+    }
+
+    .policy-link {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .policy-link:hover { opacity: 0.7; }
+
+    /* ── POLICY MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: var(--white);
+      border-radius: 4px;
+      width: 100%;
+      max-width: 640px;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-header {
+      background: var(--green-deep);
+      padding: 1.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+    }
+
+    .modal-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cream);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: rgba(245,240,232,0.6);
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: var(--cream); }
+
+    .modal-body {
+      padding: 2rem;
+    }
+
+    .modal-body h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin: 1.5rem 0 0.5rem;
+    }
+    .modal-body h4:first-child { margin-top: 0; }
+
+    .modal-body p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 0.75rem;
+    }
+
+    .modal-body ul {
+      padding-left: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .modal-body li {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      margin-bottom: 0.3rem;
+    }
+
+    /* ── CTA BAND ── */
+    .cta-band {
+      background: var(--gold);
+      padding: 4rem 8%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .cta-band h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      font-weight: 800;
+      color: var(--green-deep);
+    }
+
+    .cta-band p {
+      font-size: 0.9rem;
+      color: rgba(19,45,30,0.65);
+      margin-top: 0.4rem;
+    }
+
+    .btn-dark {
+      background: var(--green-deep);
+      color: var(--cream);
+      padding: 1rem 2.5rem;
+      border-radius: 2px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .btn-dark:hover { background: var(--green-mid); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green-deep);
+      padding: 5rem 8% 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-brand p {
+      font-size: 0.83rem;
+      color: rgba(245,240,232,0.5);
+      line-height: 1.7;
+      max-width: 280px;
+      margin-top: 1rem;
+    }
+
+    .footer-col h5 {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 0.6rem; }
+    .footer-col a {
+      font-size: 0.83rem;
+      color: rgba(245,240,232,0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--cream); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(201,168,76,0.1);
+      padding-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-bottom p { font-size: 0.78rem; color: rgba(245,240,232,0.35); }
+
+    .footer-socials { display: flex; gap: 1rem; }
+    .social-link {
+      width: 32px; height: 32px;
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      text-decoration: none;
+      color: rgba(245,240,232,0.5);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .social-link:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      background: var(--green-mid);
+      color: var(--cream);
+      padding: 1rem 1.5rem;
+      border-radius: 3px;
+      border-left: 3px solid var(--gold);
+      font-size: 0.85rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s;
+      z-index: 999;
+      max-width: 320px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast strong { display: block; margin-bottom: 0.2rem; color: var(--gold); }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .page-hero { grid-template-columns: 1fr; gap: 3rem; }
+      .mission-card { max-width: 560px; }
+      .stats-strip { grid-template-columns: repeat(2, 1fr); }
+      .story-section { grid-template-columns: 1fr; gap: 3rem; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .contact-section { grid-template-columns: 1fr; gap: 3rem; }
+      .policies-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .stats-strip { grid-template-columns: 1fr 1fr; }
+      .team-grid { grid-template-columns: 1fr; }
+      .cta-band { flex-direction: column; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+      .nav-links { display: none; position: absolute; top: 70px; left: 0; right: 0;
+        background: var(--green-deep); flex-direction: column;
+        padding: 2rem 6%; gap: 1.5rem; border-bottom: 1px solid var(--border); }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+      .form-row-2 { grid-template-columns: 1fr; }
+      .stat-item { border-right: none; padding-right: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════ NAV ════ -->
+  <nav id="mainNav">
+    <a href="index.html" class="logo">
+      <svg width="100" height="32" viewBox="0 0 100 32" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <style>
+            .logo-text { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 20px; }
+            .logo-lin { fill: #f5f0e8; }
+            .logo-rite { fill: #c9a84c; }
+          </style>
+        </defs>
+        <text x="0" y="22" class="logo-text logo-lin">Lin</text>
+        <text x="32" y="22" class="logo-text logo-rite">rite</text>
+      </svg>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="servicepage.html">Services</a></li>
+      <li><a href="store.html">Store</a></li>
+      <li><a href="index.html#workshop">Workshop</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="index.html#consult" class="nav-cta">Get Started</a></li>
+    </ul>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- ════ PAGE HERO ════ -->
+  <section class="page-hero">
+    <div class="hero-grid-lines"></div>
+    <div>
+      <div class="breadcrumb"><a href="Linkrite-landing.html">Home</a> / About</div>
+      <h1>Built for<br/><em>Researchers</em>,<br/>By Researchers</h1>
+      <p class="page-hero-sub">Linkrite was founded on a simple belief — that access to expert scientific editing, analysis, and publishing support should not be limited by geography or resources.</p>
+    </div>
+    <div class="mission-card">
+      <div class="mission-tag">// Our Mission</div>
+      <blockquote>"To empower every researcher with the tools, expertise, and knowledge they need to communicate their science clearly and publish with confidence."</blockquote>
+      <div class="mission-values">
+        <div class="value-row"><div class="value-dot"></div> Precision in every deliverable</div>
+        <div class="value-row"><div class="value-dot"></div> Confidentiality as a non-negotiable</div>
+        <div class="value-row"><div class="value-dot"></div> Accessibility for all researchers</div>
+        <div class="value-row"><div class="value-dot"></div> Continuous learning through our store</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ STATS STRIP ════ -->
+  <div class="stats-strip">
+    <div class="stat-item">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Expert Services</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">24h</div>
+      <div class="stat-label">Response Guarantee</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Confidential</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Growing E-book Library</div>
+    </div>
+  </div>
+
+  <!-- ════ STORY ════ -->
+  <section class="story-section">
+    <div class="reveal">
+      <div class="section-tag">// Our Story</div>
+      <h2>Why Linkrite Exists</h2>
+      <p>Too many researchers — especially in Africa and the Global South — produce excellent science but struggle with the writing, statistical interpretation, and visual presentation required to get published in top journals.</p>
+      <p>Linkrite was built to close that gap. We combine scientific expertise with a genuine passion for knowledge-sharing, offering services that go beyond editing to include statistical consulting, data visualization, and bioinformatics support.</p>
+      <p>Our store extends that mission further — curated, affordable e-books that teach researchers the skills they need to work independently and with confidence.</p>
+    </div>
+    <div class="story-visual reveal">
+      <div class="visual-item">
+        <div class="visual-icon"><i class="fas fa-pen"></i></div>
+        <div class="visual-text">
+          <strong>Expert Editing</strong>
+          <span>Every manuscript reviewed by specialists with hands-on research and publication experience.</span>
+        </div>
+      </div>
+      <div class="visual-item">
+        <div class="visual-icon"><i class="fas fa-chart-bar"></i></div>
+        <div class="visual-text">
+          <strong>Rigorous Analysis</strong>
+          <span>Statistical work performed to publication standard with full interpretation included.</span>
+        </div>
+      </div>
+      <div class="visual-item">
+        <div class="visual-icon"><i class="fas fa-book"></i></div>
+        <div class="visual-text">
+          <strong>Knowledge First</strong>
+          <span>Our e-book store exists to empower researchers who want to build their own skills.</span>
+        </div>
+      </div>
+      <div class="visual-item">
+        <div class="visual-icon"><i class="fas fa-globe"></i></div>
+        <div class="visual-text">
+          <strong>Built for Africa</strong>
+          <span>Pricing and delivery methods designed with Nigerian and African researchers in mind.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ CONTACT ════ -->
+  <section class="contact-section" id="contact">
+    <div class="contact-info reveal">
+      <div class="section-tag">// Contact Us</div>
+      <h2>Let's Start a Conversation</h2>
+      <p>Have a question about a service, a book, or just want to know if we can help with your project? Reach out — we respond to every message within 24 hours.</p>
+    </div>
+
+    <div class="contact-form-wrap reveal">
+      <div id="contactFormContent">
+        <div class="form-title">Send Us a Message</div>
+        <div class="form-sub">Fill in below and we'll get back to you promptly.</div>
+
+        <div class="form-row-2">
+          <div class="form-group"><label>First Name</label><input type="text" id="cfFirst" placeholder="John"/></div>
+          <div class="form-group"><label>Last Name</label><input type="text" id="cfLast" placeholder="Doe"/></div>
+        </div>
+
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="cfEmail" placeholder="you@example.com"/>
+        </div>
+
+        <div class="form-group">
+          <label>Subject</label>
+          <select id="cfSubject">
+            <option value="">— Select a topic —</option>
+            <option>Service Enquiry</option>
+            <option>E-book / Store Question</option>
+            <option>Workshop Registration</option>
+            <option>Partnership / Collaboration</option>
+            <option>General Question</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Message</label>
+          <textarea id="cfMessage" placeholder="Tell us what's on your mind..."></textarea>
+        </div>
+
+        <button class="btn-submit" onclick="submitContact()">Send Message →</button>
+        <div class="form-note">🔒 Your information is never shared with third parties</div>
+      </div>
+
+      <div class="form-success" id="contactSuccess">
+        <div class="check">✅</div>
+        <h3>Message Received!</h3>
+        <p>Thank you for reaching out. We'll review your message and get back to you within 24 hours.</p>
+        <br/>
+        <button onclick="resetContact()" style="font-size:0.8rem; color:var(--green-light); background:none; border:none; cursor:pointer; text-decoration:underline;">Send another message</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ POLICIES ════ -->
+  <section class="policies-section" id="policies">
+    <div class="policies-header reveal">
+      <div class="section-tag">// Legal & Policies</div>
+      <h2>Transparency You Can Trust</h2>
+      <p>Clear, plain-English policies — click any card to read in full.</p>
+    </div>
+    <div class="policies-grid">
+      <div class="policy-card reveal" onclick="openModal('privacy')">
+        <div class="policy-icon"><i class="fas fa-shield-alt"></i></div>
+        <h3>Privacy Policy</h3>
+        <p>How we collect, use, and protect your personal information. We never sell or share your data with third parties.</p>
+        <a class="policy-link">Read Policy →</a>
+      </div>
+      <div class="policy-card reveal" onclick="openModal('terms')">
+        <div class="policy-icon"><i class="fas fa-file-contract"></i></div>
+        <h3>Terms & Conditions</h3>
+        <p>The rules governing use of Linkrite.com and our services. Includes our refund and revision policy.</p>
+        <a class="policy-link">Read Terms →</a>
+      </div>
+      <div class="policy-card reveal" onclick="openModal('help')">
+        <div class="policy-icon"><i class="fas fa-circle-question"></i></div>
+        <h3>Help Center</h3>
+        <p>Answers to common questions about our services, store, delivery timelines, and how to submit your files.</p>
+        <a class="policy-link">Get Help →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ CTA ════ -->
+  <section class="cta-band">
+    <div>
+      <h2>Ready to Work Together?</h2>
+      <p>Browse our services or explore the store — we're here to help your research shine.</p>
+    </div>
+    <a href="Linkrite-services.html" class="btn-dark">Explore Services →</a>
+  </section>
+
+  <!-- ════ FOOTER ════ -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <svg width="100" height="32" viewBox="0 0 100 32" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <style>
+                .logo-text { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 20px; }
+                .logo-lin { fill: #f5f0e8; }
+                .logo-rite { fill: #c9a84c; }
+              </style>
+            </defs>
+            <text x="0" y="22" class="logo-text logo-lin">Lin</text>
+            <text x="32" y="22" class="logo-text logo-rite">rite</text>
+          </svg>
+        </a>
+        <p>Expert academic and scientific services for researchers, students, and institutions worldwide.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="Linkrite-services.html">Manuscript Editing</a></li>
+          <li><a href="Linkrite-services.html">Statistical Analysis</a></li>
+          <li><a href="Linkrite-services.html">Data Visualization</a></li>
+          <li><a href="Linkrite-services.html">Genomic Analysis</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Store</h5>
+        <ul>
+          <li><a href="Linkrite-store.html">All E-books</a></li>
+          <li><a href="https://selar.co" target="_blank">Selar Store</a></li>
+          <li><a href="#">Free Workshop</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="Linkrite-about.html">About Us</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+          <li><a href="#" onclick="openModal('privacy')">Privacy Policy</a></li>
+          <li><a href="#" onclick="openModal('terms')">Terms &amp; Conditions</a></li>
+          <li><a href="#" onclick="openModal('help')">Help</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Linkrite.com — All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-link">𝕏</a>
+        <a href="#" class="social-link">in</a>
+        <a href="#" class="social-link">ig</a>
+        <a href="#" class="social-link">@</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ════ POLICY MODALS ════ -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalTitle">Policy</h3>
+        <button class="modal-close" onclick="closeModalBtn()">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">
+    <strong>Message Sent ✓</strong>We'll be in touch within 24 hours.
+  </div>
+
+  <script>
+    // ── Mobile Menu ──
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('mainNav').style.boxShadow =
+        window.scrollY > 20 ? '0 4px 30px rgba(0,0,0,0.3)' : 'none';
+    });
+
+    // ── Contact Form ──
+    function submitContact() {
+      const first   = document.getElementById('cfFirst').value.trim();
+      const email   = document.getElementById('cfEmail').value.trim();
+      const subject = document.getElementById('cfSubject').value;
+      const message = document.getElementById('cfMessage').value.trim();
+
+      if (!first || !email || !subject || !message) {
+        alert('Please fill in all fields before submitting.');
+        return;
+      }
+
+      // Wire EmailJS here in production
+      document.getElementById('contactFormContent').style.display = 'none';
+      document.getElementById('contactSuccess').style.display = 'block';
+      showToast();
+    }
+
+    function resetContact() {
+      document.getElementById('contactFormContent').style.display = 'block';
+      document.getElementById('contactSuccess').style.display = 'none';
+      ['cfFirst','cfLast','cfEmail','cfMessage'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('cfSubject').value = '';
+    }
+
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 4000);
+    }
+
+    // ── Policy Modals ──
+    const policyContent = {
+      privacy: {
+        title: 'Privacy Policy',
+        body: `
+          <h4>1. Information We Collect</h4>
+          <p>We collect information you provide directly — name, email, and project details submitted through our contact and service request forms. We do not collect payment information directly; all transactions are processed by Selar or PayPal.</p>
+          <h4>2. How We Use Your Information</h4>
+          <ul>
+            <li>To respond to service requests and enquiries</li>
+            <li>To schedule consultations via Google Calendar</li>
+            <li>To send you project updates and deliverables</li>
+            <li>To improve our services</li>
+          </ul>
+          <h4>3. Data Sharing</h4>
+          <p>We never sell, rent, or share your personal information with third parties for marketing purposes. Data is only shared with service providers necessary to fulfil your request (e.g. Google Calendar for bookings).</p>
+          <h4>4. Confidentiality</h4>
+          <p>All manuscripts, datasets, and project materials shared with us are treated as strictly confidential. We can provide a signed Non-Disclosure Agreement (NDA) upon request.</p>
+          <h4>5. Data Retention</h4>
+          <p>We retain your contact information and project files for up to 12 months after project completion, after which they are securely deleted unless you request otherwise.</p>
+          <h4>6. Your Rights</h4>
+          <p>You may request access to, correction of, or deletion of your personal data at any time by emailing us at hello@Linkrite.com.</p>
+          <h4>7. Contact</h4>
+          <p>Questions about this policy? Email hello@Linkrite.com</p>
+        `
+      },
+      terms: {
+        title: 'Terms & Conditions',
+        body: `
+          <h4>1. Services</h4>
+          <p>Linkrite provides academic editing, statistical analysis, data visualization, and bioinformatics services. All services are subject to a scoping process before commencement. We reserve the right to decline any project at our discretion.</p>
+          <h4>2. Payment</h4>
+          <p>Pricing is agreed upon before work begins. Payment terms are typically 50% upfront and 50% upon delivery for larger projects. Smaller projects may require full payment upfront. Payment is made via PayPal invoice.</p>
+          <h4>3. Revisions</h4>
+          <p>Each service includes at least one round of revisions at no extra cost. Additional revisions beyond the agreed scope may be subject to a fee.</p>
+          <h4>4. Turnaround Times</h4>
+          <p>Standard turnaround is 3–7 business days. Rush delivery is available at an additional cost. Genomic analysis projects may require 1–2 weeks depending on complexity.</p>
+          <h4>5. Confidentiality</h4>
+          <p>We treat all submitted materials as strictly confidential. NDAs are available on request. We will never publish, share, or use your work without explicit written permission.</p>
+          <h4>6. Refunds</h4>
+          <p>Refunds are available if work has not yet commenced. Once a project is underway, refunds are assessed on a case-by-case basis. We are committed to client satisfaction and will work to resolve any concerns.</p>
+          <h4>7. Intellectual Property</h4>
+          <p>All work produced for you remains your intellectual property. We claim no ownership over edited manuscripts, figures, or analytical outputs delivered to clients.</p>
+          <h4>8. Limitation of Liability</h4>
+          <p>Linkrite is not responsible for publication outcomes, journal decisions, or consequences arising from use of our deliverables beyond the scope of our service agreement.</p>
+        `
+      },
+      help: {
+        title: 'Help Center',
+        body: `
+          <h4>How do I submit my files?</h4>
+          <p>After your request is confirmed and a quote is agreed, we'll send you a secure Google Drive link or email address for file submission. We accept .docx, .pdf, .xlsx, .csv, and most common data formats.</p>
+          <h4>How long will my project take?</h4>
+          <p>Standard turnaround is 3–7 business days. Complex projects (large manuscripts, extensive datasets, genomic pipelines) may take longer. Rush delivery in 24–48 hours is available for most services at a premium.</p>
+          <h4>Can I book a consultation before committing?</h4>
+          <p>Yes — and we encourage it. Use the service request form, select "General Enquiry", and mention you'd like a consultation. We'll schedule a free 20-minute call to discuss your project.</p>
+          <h4>How do I buy an e-book?</h4>
+          <p>Click "Get on Selar →" on any book card. You'll be taken to our Selar store where you can pay by card, bank transfer, or USSD. The PDF is delivered to your email immediately after payment.</p>
+          <h4>Can I get a free sample before buying?</h4>
+          <p>Yes — every book has a "Free Sample" button that gives you access to a preview chapter before purchase.</p>
+          <h4>Is my research kept confidential?</h4>
+          <p>Absolutely. All materials are handled with strict confidentiality. We can sign an NDA before any files are shared if required.</p>
+          <h4>How do I contact you?</h4>
+          <p>Use the contact form on this page, email hello@Linkrite.com, or reach out on X (Twitter) @Linkrite. We respond to all messages within 24 hours.</p>
+        `
+      }
+    };
+
+    function openModal(type) {
+      const content = policyContent[type];
+      document.getElementById('modalTitle').textContent = content.title;
+      document.getElementById('modalBody').innerHTML = content.body;
+      document.getElementById('modalOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(e) {
+      if (e.target === document.getElementById('modalOverlay')) closeModalBtn();
+    }
+
+    function closeModalBtn() {
+      document.getElementById('modalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ── Scroll Reveal ──
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

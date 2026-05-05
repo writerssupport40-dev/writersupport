@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Terms & Conditions — Linkrite</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green-deep: #132d1e;
+      --green-mid: #1e4a2f;
+      --green-light: #2a6642;
+      --gold: #c9a84c;
+      --gold-light: #e2c97e;
+      --cream: #f5f0e8;
+      --cream-dark: #ede6d6;
+      --white: #ffffff;
+      --text-dark: #0e1f15;
+      --text-muted: #5a7264;
+      --border: rgba(201,168,76,0.25);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+      background: rgba(19,45,30,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--cream);
+      text-decoration: none;
+    }
+    .logo span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(245,240,232,0.75);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── MAIN CONTENT ── */
+    .terms-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 8rem 5% 5rem;
+      line-height: 1.8;
+    }
+
+    .terms-header {
+      margin-bottom: 3rem;
+    }
+
+    .terms-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--green-deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .terms-header p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .terms-section {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .terms-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 1rem;
+    }
+
+    .terms-section h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--green-mid);
+      margin: 1.5rem 0 0.75rem;
+    }
+
+    .terms-section p {
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+    }
+
+    .terms-section ul, .terms-section ol {
+      margin: 1rem 0 1rem 1.5rem;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+    }
+
+    .terms-section li {
+      margin-bottom: 0.6rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green-deep);
+      padding: 3rem 8% 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 0.85rem;
+      color: rgba(245,240,232,0.6);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(201,168,76,0.1);
+      font-size: 0.78rem;
+      color: rgba(245,240,232,0.35);
+    }
+
+    @media (max-width: 768px) {
+      .terms-container { padding: 8rem 4% 3rem; }
+      .terms-header h1 { font-size: 1.6rem; }
+      .terms-section h2 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">Link<span>rite</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="index.html#store">Store</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" class="nav-cta">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- TERMS CONTENT -->
+  <div class="terms-container">
+    <div class="terms-header">
+      <h1>Terms & Conditions</h1>
+      <p>Effective Date: May 1, 2026 | Last Updated: May 4, 2026</p>
+    </div>
+
+    <div class="terms-section">
+      <h2>1. Acceptance of Terms</h2>
+      <p>By accessing and using Linkrite.com (the "Website") and engaging with Linkrite's services (the "Services"), you agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use our Website or Services.</p>
+    </div>
+
+    <div class="terms-section">
+      <h2>2. Services Description</h2>
+      <p>Linkrite provides professional academic and scientific services including:</p>
+      <ul>
+        <li>Manuscript review and editing</li>
+        <li>Statistical analysis and data interpretation</li>
+        <li>Graphics and data visualization</li>
+        <li>Genomic and bioinformatics analysis</li>
+        <li>Educational workshops and webinars</li>
+        <li>E-books and digital resources</li>
+        <li>Consultation and advisory services</li>
+      </ul>
+      <p>Service specifications, timelines, and pricing are provided at the time of service request. Linkrite reserves the right to modify services with advance notice.</p>
+    </div>
+
+    <div class="terms-section">
+      <h2>3. User Eligibility</h2>
+      <p>By using Linkrite services, you represent that:</p>
+      <ul>
+        <li>You are at least 18 years of age</li>
+        <li>You have the legal capacity to enter into binding contracts</li>
+        <li>You are using our services for legitimate academic or professional purposes</li>
+        <li>You comply with all applicable laws and regulations</li>
+      </ul>
+    </div>
+
+    <div class="terms-section">
+      <h2>4. Service Request & Agreement</h2>
+      <h3>4.1 Submission Process</h3>
+      <p>You can request services by completing our online form with accurate information. Upon submission, we will review your request and confirm within 24 hours.</p>
+
+      <h3>4.2 Service Agreement</h3>
+      <p>Once you submit a service request and we confirm acceptance, a binding service agreement is formed. This includes:</p>
+      <ul>
+        <li>Specific scope of work and deliverables</li>
+        <li>Project timeline and turnaround dates</li>
+        <li>Pricing and payment terms</li>
+        <li>Confidentiality and data handling protocols</li>
+      </ul>
+
+      <h3>4.3 Custom Quotes</h3>
+      <p>For complex projects (Genomic Analysis, bulk services), custom quotes are provided. These quotes are valid for 14 days. Quotes are not binding until formally accepted.</p>
+    </div>
+
+    <div class="terms-section">
+      <h2>5. Pricing & Payment</h2>
+      <h3>5.1 Pricing</h3>
+      <p>All prices are displayed in USD unless otherwise specified. Prices are subject to change with advance notice. Confirmed service requests retain the quoted price.</p>
+
+      <h3>5.2 Payment Terms</h3>
+      <p>Payment is due as follows:</p>
+      <ul>
+        <li><strong>Standard Services:</strong> 50% deposit upon service request confirmation, 50% upon delivery</li>
+        <li><strong>Rush Services:</strong> Full payment upfront</li>
+        <li><strong>Institutional Accounts:</strong> Net 30 terms (subject to credit approval)</li>
+      </ul>
+
+      <h3>5.3 Accepted Payment Methods</h3>
+      <p>We accept credit cards (Visa, Mastercard, American Express), bank transfers, and PayPal. All payments are processed securely through PCI-DSS compliant processors.</p>
+
+      <h3>5.4 Late Payments</h3>
+      <p>Unpaid invoices may accrue a late fee of 1.5% per month. Linkrite reserves the right to suspend services for accounts 30+ days overdue.</p>
+    </div>
+
+    <div class="terms-section">
+      <h2>6. Refund & Revision Policy</h2>
+      <h3>6.1 Refund Policy</h3>
+      <p>Refunds are available under the following conditions:</p>
+      <ul>
+        <li><strong>Before Work Begins:</strong> Full refund if requested within 24 hours of payment</li>
+        <li><strong>During Project:</strong> Pro-rated refund based on work completed (no refund if 50%+ complete)</li>
+        <li><strong>Upon Delivery:</strong> No refund; however, revision requests are honored</li>
+        <li><strong>Service Non-Delivery:</strong> Full refund if Linkrite fails to deliver within agreed timeline</li>
+      </ul>
+
+      <h3>6.2 Revision Policy</h3>
+      <p>All services include up to 2 rounds of revisions at no additional cost. Additional revisions are charged at $50/hour. Revision requests must be submitted within 14 days of delivery.</p>
+
+      <h3>6.3 Rush Services</h3>
+      <p>Rush services (delivery within 24-48 hours) are non-refundable once work has begun.</p>
+    </div>
+
+    <div class="terms-section">
+      <h2>7. Confidentiality & Intellectual Property</h2>
+      <h3>7.1 Client Data Confidentiality</h3>
+      <p>Linkrite treats all client manuscripts, research data, and project details as strictly confidential. We do not:</p>
+      <ul>
+        <li>Share your data with third parties without written consent</li>
+        <li>Use your work or findings for any purpose other than providing the requested service</li>
+        <li>Publish or disclose your research without explicit permission</li>
+      </ul>
+      <p>A comprehensive NDA is available upon request for additional confidentiality protection.</p>
+
+      <h3>7.2 Client Intellectual Property</h3>
+      <p>All original work, findings, and deliverables created for you belong to you. Linkrite retains no rights to the final output unless otherwise agreed in writing.</p>
+
+      <h3>7.3 Linkrite Intellectual Property</h3>
+      <p>All materials on our Website (templates, frameworks, methodologies, content) are our property or licensed to us. You may not reproduce, redistribute, or modify our IP without permission.</p>
+
+      <h3>7.4 Feedback & Reviews</h3>
+      <p>We may use anonymized testimonials and case study results for marketing purposes (unless you opt out). Your explicit permission is obtained before publication.</p>
+    </div>
+
+    <div class="terms-section">
+      <h2>8. Your Obligations</h2>
+      <p>As a client, you agree to:</p>
+      <ul>
+        <li>Provide accurate and complete information for service requests</li>
+        <li>Supply necessary files, data, and materials on time</li>
+        <li>Pay invoices according to agreed terms</li>
+        <li>Respond to consultation meetings and feedback requests in a timely manner</li>
+        <li>Comply with academic integrity and ethical standards</li>
+        <li>Not use our services for plagiarism, fraud, or misrepresentation</li>
+        <li>Not violate third-party copyrights or intellectual property rights</li>
+      </ul>
+    </div>
+
+    <div class="terms-section">
+      <h2>9. Prohibited Uses</h2>
+      <p>You agree NOT to use Linkrite services for:</p>
+      <ul>
+        <li>Plagiarism, ghost-writing, or academic dishonesty</li>
+        <li>Falsifying data, results, or findings</li>
+        <li>Violating academic integrity standards or institutional policies</li>
+        <li>Illegal activities or regulatory violations</li>
+        <li>Harassing, defaming, or threatening others</li>
+        <li>Breaching confidentiality or non-disclosure agreements</li>
+      </ul>
+      <p>Linkrite reserves the right to refuse services that appear unethical or illegal.</p>
+    </div>
+
+    <div class="terms-section">
+      <h2>10. Limitation of Liability</h2>
+      <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW:</p>
+      <ul>
+        <li><strong>Disclaimer:</strong> Our services are provided "as-is" without warranties of accuracy, completeness, or fitness for a particular purpose</li>
+        <li><strong>No Responsibility for Results:</strong> Linkrite is not responsible for journal rejection, publication delays, or editorial decisions</li>
+        <li><strong>Limited Liability:</strong> Linkrite's total liability shall not exceed the amount paid for the service in question</li>
+        <li><strong>No Consequential Damages:</strong> We are not liable for indirect, incidental, special, or consequential damages</li>
+      </ul>
+    </div>
+
+    <div class="terms-section">
+      <h2>11. Disclaimers</h2>
+      <h3>11.1 No Professional Relationships</h3>
+      <p>Linkrite services do not establish attorney-client, physician-patient, or accountant-client relationships. Clients must consult appropriate professionals for legal, medical, or financial advice.</p>
+
+      <h3>11.2 Academic Integrity</h3>
+      <p>Clients are responsible for ensuring their use of our services complies with their institution's academic integrity policies. We recommend full disclosure of editing services in acknowledgment sections.</p>
+
+      <h3>11.3 No Guarantees on Publication</h3>
+      <p>While we enhance manuscript quality, we do not guarantee journal acceptance or publication. Editorial decisions rest solely with journal editors.</p>
+    </div>
+
+    <div class="terms-section">
+      <h2>12. Turnaround Times</h2>
+      <p>Standard turnaround times are:</p>
+      <ul>
+        <li><strong>Manuscript Editing:</strong> 5-7 business days</li>
+        <li><strong>Statistical Analysis:</strong> 7-10 business days</li>
+        <li><strong>Data Visualization:</strong> 5-7 business days</li>
+        <li><strong>Genomic Analysis:</strong> 10-14 business days (custom projects may vary)</li>
+      </ul>
+      <p>Rush services (24-48 hours) are available at an additional fee. Linkrite will notify you if delays are anticipated.</p>
+    </div>
+
+    <div class="terms-section">
+      <h2>13. Termination of Services</h2>
+      <p>Linkrite may terminate services immediately if:</p>
+      <ul>
+        <li>You breach these Terms & Conditions</li>
+        <li>Suspected fraudulent or unethical use is detected</li>
+        <li>Payment is not received</li>
+        <li>The project involves illegal activities or content</li>
+      </ul>
+      <p>You may terminate services with written notice and receive a pro-rated refund based on work completed.</p>
+    </div>
+
+    <div class="terms-section">
+      <h2>14. Dispute Resolution</h2>
+      <h3>14.1 Good Faith Negotiation</h3>
+      <p>In case of disputes, both parties agree to attempt resolution through good faith negotiation within 30 days.</p>
+
+      <h3>14.2 Arbitration</h3>
+      <p>If negotiation fails, disputes shall be resolved through binding arbitration under the rules of the American Arbitration Association (AAA). Arbitration shall take place in [Your Location].</p>
+
+      <h3>14.3 Jurisdiction</h3>
+      <p>These Terms are governed by the laws of [Your Jurisdiction]. You irrevocably consent to the exclusive jurisdiction of courts in [Your Location].</p>
+    </div>
+
+    <div class="terms-section">
+      <h2>15. Indemnification</h2>
+      <p>You agree to indemnify and hold harmless Linkrite, its officers, employees, and agents from any claims, damages, losses, or expenses (including legal fees) arising from:</p>
+      <ul>
+        <li>Your use of our services</li>
+        <li>Violation of these Terms</li>
+        <li>Infringement of third-party rights</li>
+        <li>Breach of academic integrity or institutional policies</li>
+      </ul>
+    </div>
+
+    <div class="terms-section">
+      <h2>16. Entire Agreement</h2>
+      <p>These Terms & Conditions, along with our Privacy Policy, constitute the entire agreement between you and Linkrite regarding your use of our Website and Services. Any prior agreements or understandings are superseded by these Terms.</p>
+    </div>
+
+    <div class="terms-section">
+      <h2>17. Amendment of Terms</h2>
+      <p>Linkrite reserves the right to modify these Terms at any time. Continued use of our Website or Services constitutes acceptance of amended Terms. We will notify you of material changes via email.</p>
+    </div>
+
+    <div class="terms-section">
+      <h2>18. Contact for Questions</h2>
+      <p>For questions regarding these Terms & Conditions:</p>
+      <ul>
+        <li><strong>Email:</strong> hello@linkrite.com</li>
+        <li><strong>Response Time:</strong> We respond within 48 business hours</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="about.html">About Us</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-conditions.html">Terms & Conditions</a>
+      <a href="help.html">Help</a>
+      <a href="index.html#services">Services</a>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Linkrite.com — All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

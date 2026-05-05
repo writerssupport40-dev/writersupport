@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — Linkrite</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --green-deep:  #132d1e;
+      --green-mid:   #1e4a2f;
+      --green-light: #2a6642;
+      --gold:        #c9a84c;
+      --gold-light:  #e2c97e;
+      --cream:       #f5f0e8;
+      --cream-dark:  #ede6d6;
+      --white:       #ffffff;
+      --text-dark:   #0e1f15;
+      --text-muted:  #5a7264;
+      --border:      rgba(201,168,76,0.2);
+      --sidebar-w:   260px;
+      --status-pending:  #e07b2a;
+      --status-active:   #2a7be0;
+      --status-done:     #2a9e5c;
+      --status-bg-p:     rgba(224,123,42,0.1);
+      --status-bg-a:     rgba(42,123,224,0.1);
+      --status-bg-d:     rgba(42,158,92,0.1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: #f0ede8; color: var(--text-dark); overflow-x: hidden; }
+
+    /* LOGIN */
+    .login-screen { position:fixed; inset:0; background:var(--green-deep); display:flex; align-items:center; justify-content:center; z-index:1000; transition:opacity 0.5s,visibility 0.5s; }
+    .login-screen.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+    .login-box { background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:6px; padding:3rem; width:100%; max-width:400px; backdrop-filter:blur(12px); }
+    .login-logo { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:800; color:var(--cream); text-align:center; margin-bottom:0.4rem; }
+    .login-logo span { color:var(--gold); }
+    .login-tag { font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,240,232,0.4); text-align:center; margin-bottom:2.5rem; }
+    .login-group { margin-bottom:1.1rem; }
+    .login-group label { display:block; font-size:0.72rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:rgba(245,240,232,0.5); margin-bottom:0.4rem; }
+    .login-group input { width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.07); border:1.5px solid rgba(201,168,76,0.2); border-radius:3px; font-family:'DM Sans',sans-serif; font-size:0.9rem; color:var(--cream); outline:none; transition:border-color 0.2s; }
+    .login-group input:focus { border-color:var(--gold); }
+    .login-group input::placeholder { color:rgba(245,240,232,0.25); }
+    .login-btn { width:100%; background:var(--gold); color:var(--green-deep); padding:0.9rem; border:none; border-radius:3px; font-family:'DM Sans',sans-serif; font-size:0.9rem; font-weight:700; cursor:pointer; transition:background 0.2s; margin-top:0.5rem; }
+    .login-btn:hover { background:var(--gold-light); }
+    .login-error { color:#e07b7b; font-size:0.78rem; text-align:center; margin-top:0.75rem; min-height:1.2em; }
+    .login-hint { font-size:0.72rem; color:rgba(245,240,232,0.25); text-align:center; margin-top:1.5rem; font-family:'DM Mono',monospace; }
+
+    /* LAYOUT */
+    .admin-wrap { display:flex; min-height:100vh; }
+    .sidebar { width:var(--sidebar-w); background:var(--green-deep); border-right:1px solid var(--border); position:fixed; top:0; left:0; bottom:0; display:flex; flex-direction:column; z-index:50; transition:transform 0.3s; }
+    .sidebar-header { padding:1.75rem 1.5rem; border-bottom:1px solid var(--border); }
+    .sidebar-logo { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:800; color:var(--cream); text-decoration:none; }
+    .sidebar-logo span { color:var(--gold); }
+    .sidebar-badge { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(245,240,232,0.35); margin-top:0.2rem; }
+    .sidebar-nav { padding:1.5rem 0; flex:1; overflow-y:auto; }
+    .nav-section-label { font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,240,232,0.25); padding:0 1.5rem; margin-bottom:0.5rem; margin-top:1.25rem; }
+    .nav-section-label:first-child { margin-top:0; }
+    .nav-item { display:flex; align-items:center; gap:0.85rem; padding:0.7rem 1.5rem; font-size:0.85rem; color:rgba(245,240,232,0.55); cursor:pointer; transition:background 0.2s,color 0.2s; user-select:none; }
+    .nav-item:hover { background:rgba(255,255,255,0.05); color:var(--cream); }
+    .nav-item.active { background:rgba(201,168,76,0.1); color:var(--gold); border-right:2px solid var(--gold); }
+    .nav-item .bx { font-size:1.1rem; width:20px; text-align:center; }
+    .nav-badge { margin-left:auto; background:var(--gold); color:var(--green-deep); font-family:'DM Mono',monospace; font-size:0.6rem; font-weight:700; padding:0.1rem 0.4rem; border-radius:100px; min-width:18px; text-align:center; }
+    .sidebar-footer { padding:1.25rem 1.5rem; border-top:1px solid var(--border); display:flex; align-items:center; gap:0.85rem; }
+    .admin-avatar { width:32px; height:32px; background:rgba(201,168,76,0.2); border-radius:50%; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:0.8rem; color:var(--gold); font-weight:700; flex-shrink:0; }
+    .admin-info strong { display:block; font-size:0.8rem; color:var(--cream); font-weight:600; }
+    .admin-info span { font-size:0.7rem; color:rgba(245,240,232,0.35); }
+    .logout-btn { margin-left:auto; background:none; border:none; color:rgba(245,240,232,0.35); cursor:pointer; font-size:1.1rem; padding:0.25rem; transition:color 0.2s; }
+    .logout-btn:hover { color:#e07b7b; }
+
+    .main-content { margin-left:var(--sidebar-w); flex:1; min-height:100vh; }
+    .topbar { background:var(--white); border-bottom:1px solid var(--cream-dark); padding:0 2rem; height:64px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:40; }
+    .topbar-left { display:flex; align-items:center; gap:1rem; }
+    .page-title { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:700; color:var(--green-deep); }
+    .topbar-right { display:flex; align-items:center; gap:1rem; }
+    .topbar-date { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--text-muted); }
+    .topbar-action { background:var(--green-deep); color:var(--cream); padding:0.5rem 1.1rem; border:none; border-radius:2px; font-family:'DM Sans',sans-serif; font-size:0.8rem; font-weight:600; cursor:pointer; transition:background 0.2s; }
+    .topbar-action:hover { background:var(--green-mid); }
+    .hamburger-mob { display:none; cursor:pointer; padding:4px; color:var(--text-dark); font-size:1.4rem; }
+
+    /* MODE BANNER */
+    .mode-banner { background:rgba(201,168,76,0.08); border-bottom:1px solid var(--border); padding:0.5rem 2rem; display:flex; align-items:center; gap:0.75rem; font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:0.06em; color:var(--gold); }
+    .mode-banner.live { background:rgba(42,158,92,0.08); color:#2a9e5c; border-bottom-color:rgba(42,158,92,0.2); }
+    .mode-dot { width:6px; height:6px; border-radius:50%; background:currentColor; animation:pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* PANELS */
+    .panel { display:none; padding:2rem; }
+    .panel.active { display:block; }
+
+    /* SUMMARY */
+    .summary-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; margin-bottom:2rem; }
+    .summary-card { background:var(--white); border:1px solid var(--cream-dark); border-radius:3px; padding:1.5rem; position:relative; overflow:hidden; transition:box-shadow 0.2s; }
+    .summary-card:hover { box-shadow:0 4px 20px rgba(19,45,30,0.07); }
+    .summary-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+    .summary-card.c-gold::before   { background:var(--gold); }
+    .summary-card.c-blue::before   { background:#2a7be0; }
+    .summary-card.c-green::before  { background:#2a9e5c; }
+    .summary-card.c-orange::before { background:#e07b2a; }
+    .summary-label { font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.75rem; }
+    .summary-num { font-family:'Playfair Display',serif; font-size:2.4rem; font-weight:800; color:var(--green-deep); line-height:1; margin-bottom:0.4rem; }
+    .summary-sub { font-size:0.75rem; color:var(--text-muted); }
+
+    /* SECTION HEADER */
+    .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; gap:1rem; flex-wrap:wrap; }
+    .section-header h2 { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:700; color:var(--green-deep); }
+    .section-header p { font-size:0.78rem; color:var(--text-muted); margin-top:0.15rem; }
+    .header-actions { display:flex; gap:0.75rem; align-items:center; }
+    .filter-select { padding:0.45rem 0.85rem; border:1.5px solid var(--cream-dark); border-radius:2px; font-family:'DM Sans',sans-serif; font-size:0.8rem; color:var(--text-dark); background:var(--white); outline:none; cursor:pointer; }
+    .search-input { padding:0.45rem 0.85rem; border:1.5px solid var(--cream-dark); border-radius:2px; font-family:'DM Sans',sans-serif; font-size:0.8rem; color:var(--text-dark); background:var(--white); outline:none; width:200px; transition:border-color 0.2s; }
+    .search-input:focus { border-color:var(--green-light); }
+
+    /* TABLE */
+    .table-wrap { background:var(--white); border:1px solid var(--cream-dark); border-radius:3px; overflow:hidden; overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; }
+    thead { background:var(--green-deep); }
+    thead th { padding:0.85rem 1.25rem; text-align:left; font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(245,240,232,0.6); font-weight:400; white-space:nowrap; }
+    tbody tr { border-bottom:1px solid var(--cream-dark); transition:background 0.15s; }
+    tbody tr:last-child { border-bottom:none; }
+    tbody tr:hover { background:rgba(19,45,30,0.02); }
+    td { padding:1rem 1.25rem; font-size:0.83rem; color:var(--text-dark); vertical-align:middle; }
+    .td-name strong { display:block; font-weight:600; }
+    .td-name span { font-size:0.75rem; color:var(--text-muted); }
+    .td-service { font-size:0.78rem; max-width:180px; }
+    .td-date { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--text-muted); white-space:nowrap; }
+    .empty-row td { text-align:center; padding:3rem; color:var(--text-muted); font-size:0.85rem; }
+
+    /* STATUS */
+    .status-badge { display:inline-flex; align-items:center; gap:0.35rem; font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:0.08em; text-transform:uppercase; padding:0.3rem 0.7rem; border-radius:100px; font-weight:500; white-space:nowrap; }
+    .status-badge.pending { background:var(--status-bg-p); color:var(--status-pending); }
+    .status-badge.active  { background:var(--status-bg-a); color:var(--status-active); }
+    .status-badge.done    { background:var(--status-bg-d); color:var(--status-done); }
+    .status-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+    .pending .status-dot { background:var(--status-pending); }
+    .active  .status-dot { background:var(--status-active); }
+    .done    .status-dot { background:var(--status-done); }
+    .status-select { padding:0.3rem 0.5rem; border:1px solid var(--cream-dark); border-radius:2px; font-family:'DM Mono',monospace; font-size:0.65rem; background:var(--cream); cursor:pointer; outline:none; color:var(--text-dark); }
+
+    /* BTNS */
+    .action-btn { background:none; border:1px solid var(--cream-dark); color:var(--text-muted); padding:0.3rem 0.65rem; border-radius:2px; font-size:0.72rem; cursor:pointer; transition:border-color 0.2s,color 0.2s; margin-right:0.3rem; }
+    .action-btn:hover { border-color:var(--green-light); color:var(--green-deep); }
+    .action-btn.danger:hover { border-color:#e07b7b; color:#e07b7b; }
+
+    /* BOOKINGS */
+    .bookings-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.25rem; }
+    .booking-card { background:var(--white); border:1px solid var(--cream-dark); border-radius:3px; padding:1.5rem; display:flex; gap:1.25rem; align-items:flex-start; transition:box-shadow 0.2s; }
+    .booking-card:hover { box-shadow:0 4px 20px rgba(19,45,30,0.07); }
+    .booking-date-block { background:var(--green-deep); border-radius:3px; padding:0.75rem 1rem; text-align:center; flex-shrink:0; min-width:56px; }
+    .booking-day { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:800; color:var(--cream); line-height:1; }
+    .booking-month { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); margin-top:0.2rem; }
+    .booking-info { flex:1; }
+    .booking-name { font-weight:600; font-size:0.9rem; color:var(--green-deep); margin-bottom:0.2rem; }
+    .booking-service { font-size:0.75rem; color:var(--text-muted); margin-bottom:0.75rem; }
+    .booking-meta { display:flex; gap:0.75rem; flex-wrap:wrap; }
+    .booking-meta-item { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--text-muted); display:flex; align-items:center; gap:0.3rem; }
+
+    /* DETAIL MODAL */
+    .detail-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:200; align-items:center; justify-content:center; padding:2rem; }
+    .detail-overlay.open { display:flex; }
+    .detail-box { background:var(--white); border-radius:4px; width:100%; max-width:560px; max-height:85vh; overflow-y:auto; }
+    .detail-header { background:var(--green-deep); padding:1.5rem 2rem; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; }
+    .detail-header h3 { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--cream); }
+    .detail-close { background:none; border:none; color:rgba(245,240,232,0.5); font-size:1.2rem; cursor:pointer; }
+    .detail-body { padding:2rem; }
+    .detail-row { display:flex; gap:1rem; margin-bottom:1.25rem; padding-bottom:1.25rem; border-bottom:1px solid var(--cream-dark); align-items:flex-start; }
+    .detail-row:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+    .detail-key { font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); min-width:120px; padding-top:0.1rem; }
+    .detail-val { font-size:0.85rem; color:var(--text-dark); line-height:1.6; flex:1; }
+    .detail-actions { display:flex; gap:0.75rem; margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--cream-dark); }
+    .btn-detail-status { flex:1; padding:0.75rem; border:none; border-radius:2px; font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:600; cursor:pointer; transition:opacity 0.2s; }
+    .btn-detail-status:hover { opacity:0.85; }
+    .btn-set-active { background:var(--status-bg-a); color:var(--status-active); border:1px solid rgba(42,123,224,0.2); }
+    .btn-set-done   { background:var(--status-bg-d); color:var(--status-done);   border:1px solid rgba(42,158,92,0.2); }
+    .btn-delete-r   { background:rgba(224,123,123,0.1); color:#c0392b; border:1px solid rgba(192,57,43,0.2); }
+
+    /* ACTIVITY */
+    .activity-feed { background:var(--white); border:1px solid var(--cream-dark); border-radius:3px; overflow:hidden; }
+    .feed-header { padding:1rem 1.5rem; border-bottom:1px solid var(--cream-dark); font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); }
+    .feed-item { display:flex; align-items:flex-start; gap:1rem; padding:1rem 1.5rem; border-bottom:1px solid var(--cream-dark); }
+    .feed-item:last-child { border-bottom:none; }
+    .feed-dot { width:8px; height:8px; border-radius:50%; margin-top:0.35rem; flex-shrink:0; }
+    .feed-text { font-size:0.82rem; color:var(--text-dark); line-height:1.5; }
+    .feed-time { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--text-muted); margin-left:auto; white-space:nowrap; }
+
+    /* DASH GRID */
+    .dash-grid { display:grid; grid-template-columns:2fr 1fr; gap:1.5rem; margin-top:1.5rem; }
+    .quick-row { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.5rem; }
+    .quick-card { background:var(--white); border:1px solid var(--cream-dark); border-radius:3px; padding:1.25rem; display:flex; align-items:center; gap:1rem; }
+    .quick-icon { width:40px; height:40px; border-radius:3px; background:var(--green-deep); display:flex; align-items:center; justify-content:center; font-size:1.1rem; color:var(--cream); flex-shrink:0; }
+    .quick-label { font-size:0.75rem; color:var(--text-muted); }
+    .quick-val { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; color:var(--green-deep); line-height:1; }
+
+    /* TOAST */
+    .toast { position:fixed; bottom:2rem; right:2rem; background:var(--green-mid); color:var(--cream); padding:0.9rem 1.25rem; border-radius:3px; border-left:3px solid var(--gold); font-size:0.83rem; box-shadow:0 8px 32px rgba(0,0,0,0.2); transform:translateY(100px); opacity:0; transition:all 0.35s; z-index:999; max-width:300px; }
+    .toast.show { transform:translateY(0); opacity:1; }
+    .toast strong { display:block; color:var(--gold); margin-bottom:0.15rem; font-size:0.78rem; }
+
+    /* RESPONSIVE */
+    @media (max-width:1024px) { .summary-grid{grid-template-columns:repeat(2,1fr);} .dash-grid{grid-template-columns:1fr;} .bookings-grid{grid-template-columns:1fr;} }
+    @media (max-width:768px) {
+      :root { --sidebar-w:0px; }
+      .sidebar { transform:translateX(-260px); width:260px; }
+      .sidebar.open { transform:translateX(0); }
+      .main-content { margin-left:0; }
+      .summary-grid { grid-template-columns:1fr 1fr; }
+      .quick-row { grid-template-columns:1fr; }
+      .hamburger-mob { display:flex; }
+      .topbar-date { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">Link<span>rite</span></div>
+    <div class="login-tag">Admin Panel · Internal Access Only</div>
+    <div class="login-group">
+      <label>Username</label>
+      <input type="text" id="loginUser" placeholder="admin" autocomplete="username"/>
+    </div>
+    <div class="login-group">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign In →</button>
+    <div class="login-error" id="loginError"></div>
+    <div class="login-hint">Demo: admin / Linkrite2026</div>
+  </div>
+</div>
+
+<!-- ADMIN WRAP -->
+<div class="admin-wrap">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="index.html" class="sidebar-logo">Link<span>rite</span></a>
+      <div class="sidebar-badge">// Admin Dashboard</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <div class="nav-item active" onclick="showPanel('dashboard',this)"><i class="bx bx-bar-chart-alt"></i> Dashboard</div>
+      <div class="nav-section-label">Requests</div>
+      <div class="nav-item" onclick="showPanel('requests',this)"><i class="bx bx-detail"></i> Service Requests <span class="nav-badge" id="pendingBadge">0</span></div>
+      <div class="nav-item" onclick="showPanel('bookings',this)"><i class="bx bx-calendar"></i> Bookings</div>
+      <div class="nav-section-label">Management</div>
+      <div class="nav-item" onclick="showPanel('compose',this)"><i class="bx bx-plus-square"></i> Add Request</div>
+      <div class="nav-section-label">Site</div>
+      <div class="nav-item" onclick="window.open('index.html','_blank')"><i class="bx bx-globe"></i> View Live Site</div>
+      <div class="nav-item" onclick="window.open('Linkrite-services.html','_blank')"><i class="bx bx-cog"></i> Services Page</div>
+      <div class="nav-item" onclick="window.open('Linkrite-store.html','_blank')"><i class="bx bx-shopping-bag"></i> Store Page</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="admin-avatar">A</div>
+      <div class="admin-info"><strong>Admin</strong><span>Linkrite HQ</span></div>
+      <button class="logout-btn" onclick="doLogout()"><i class="bx bx-log-out"></i></button>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="hamburger-mob" onclick="toggleSidebar()"><i class="bx bx-menu"></i></div>
+        <div class="page-title" id="topbarTitle">Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-date" id="topbarDate"></div>
+        <button class="topbar-action" onclick="showPanel('compose',document.querySelectorAll('.nav-item')[3])">+ Add Request</button>
+      </div>
+    </div>
+
+    <!-- MODE BANNER -->
+    <div class="mode-banner" id="modeBanner">
+      <div class="mode-dot"></div>
+      <span id="modeText">MOCK MODE — localStorage active. Flip USE_REAL_API = true when backend is ready.</span>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="summary-grid">
+        <div class="summary-card c-gold"><div class="summary-label">Total Requests</div><div class="summary-num" id="statTotal">0</div><div class="summary-sub">All time</div></div>
+        <div class="summary-card c-orange"><div class="summary-label">Pending</div><div class="summary-num" id="statPending">0</div><div class="summary-sub">Awaiting action</div></div>
+        <div class="summary-card c-blue"><div class="summary-label">In Progress</div><div class="summary-num" id="statActive">0</div><div class="summary-sub">Currently active</div></div>
+        <div class="summary-card c-green"><div class="summary-label">Completed</div><div class="summary-num" id="statDone">0</div><div class="summary-sub">Delivered</div></div>
+      </div>
+      <div class="quick-row">
+        <div class="quick-card"><div class="quick-icon"><i class="bx bx-edit"></i></div><div><div class="quick-label">Editing</div><div class="quick-val" id="qEditing">0</div></div></div>
+        <div class="quick-card"><div class="quick-icon"><i class="bx bx-line-chart"></i></div><div><div class="quick-label">Statistics</div><div class="quick-val" id="qStats">0</div></div></div>
+        <div class="quick-card"><div class="quick-icon"><i class="bx bx-bar-chart-alt"></i></div><div><div class="quick-label">Graphics</div><div class="quick-val" id="qGraphics">0</div></div></div>
+      </div>
+      <div class="dash-grid">
+        <div>
+          <div class="section-header">
+            <div><h2>Recent Requests</h2><p>Latest 5 submissions</p></div>
+            <button class="topbar-action" onclick="showPanel('requests',document.querySelectorAll('.nav-item')[1])">View All</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Client</th><th>Service</th><th>Date</th><th>Status</th></tr></thead>
+              <tbody id="dashRecentBody"><tr class="empty-row"><td colspan="4">No requests yet.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="section-header"><div><h2>Activity</h2><p>Recent updates</p></div></div>
+          <div class="activity-feed">
+            <div class="feed-header">// Live Activity Log</div>
+            <div id="activityFeed">
+              <div class="feed-item"><div class="feed-dot" style="background:var(--gold)"></div><div class="feed-text">Admin panel initialised</div><div class="feed-time">Just now</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REQUESTS -->
+    <div class="panel" id="panel-requests">
+      <div class="section-header">
+        <div><h2>Service Requests</h2><p>Update status as work progresses</p></div>
+        <div class="header-actions">
+          <input class="search-input" type="text" placeholder="Search by name..." oninput="searchRequests(this.value)"/>
+          <select class="filter-select" onchange="filterRequests(this.value)">
+            <option value="all">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="active">In Progress</option>
+            <option value="done">Completed</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Client</th><th>Service</th><th>Message</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="requestsBody"><tr class="empty-row"><td colspan="7">No requests yet.</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div class="panel" id="panel-bookings">
+      <div class="section-header">
+        <div><h2>Consultation Bookings</h2><p>Upcoming and past consultations</p></div>
+        <button class="topbar-action" onclick="addBookingPrompt()">+ Add Booking</button>
+      </div>
+      <div class="bookings-grid" id="bookingsGrid"></div>
+    </div>
+
+    <!-- ADD REQUEST -->
+    <div class="panel" id="panel-compose">
+      <div class="section-header"><div><h2>Add New Request</h2><p>Manually log a client request</p></div></div>
+      <form style="background:var(--white);border:1px solid var(--cream-dark);border-radius:3px;padding:2rem;max-width:640px;" onsubmit="event.preventDefault(); addRequest();">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+          <div><label for="cmpFirst" style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--green-mid);margin-bottom:0.35rem;">First Name</label><input type="text" id="cmpFirst" placeholder="John" autocomplete="given-name" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--cream-dark);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;"/></div>
+          <div><label for="cmpLast" style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--green-mid);margin-bottom:0.35rem;">Last Name</label><input type="text" id="cmpLast" placeholder="Doe" autocomplete="family-name" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--cream-dark);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;"/></div>
+        </div>
+        <div style="margin-bottom:1rem;"><label for="cmpEmail" style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--green-mid);margin-bottom:0.35rem;">Email</label><input type="email" id="cmpEmail" placeholder="client@example.com" autocomplete="email" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--cream-dark);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;"/></div>
+        <div style="margin-bottom:1rem;"><label for="cmpService" style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--green-mid);margin-bottom:0.35rem;">Service</label>
+          <select id="cmpService" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--cream-dark);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;background:var(--white);">
+            <option value="">— Select —</option>
+            <option>Manuscript Review &amp; Editing</option>
+            <option>Statistical Analysis</option>
+            <option>Graphics &amp; Data Visualization</option>
+            <option>Genomic / Data Analysis</option>
+            <option>Free Workshop Registration</option>
+            <option>General Enquiry</option>
+          </select>
+        </div>
+        <div style="margin-bottom:1rem;"><label for="cmpNote" style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--green-mid);margin-bottom:0.35rem;">Notes</label><textarea id="cmpNote" placeholder="Client notes, project details..." style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--cream-dark);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;min-height:100px;resize:vertical;"></textarea></div>
+        <div style="margin-bottom:1.5rem;"><label for="cmpStatus" style="display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--green-mid);margin-bottom:0.35rem;">Initial Status</label>
+          <select id="cmpStatus" style="width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--cream-dark);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;background:var(--white);">
+            <option value="pending">Pending</option><option value="active">In Progress</option><option value="done">Completed</option>
+          </select>
+        </div>
+        <button type="submit" style="background:var(--green-deep);color:var(--cream);padding:0.85rem 2rem;border:none;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;">Save Request →</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetail(event)">
+  <div class="detail-box">
+    <div class="detail-header"><h3 id="detailName">Request Detail</h3><button class="detail-close" onclick="closeDetailBtn()">✕</button></div>
+    <div class="detail-body" id="detailBody"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><strong id="toastTitle">Done</strong><span id="toastMsg"></span></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  ▸ SWITCH: flip to true when your backend is ready
+//  ▸ The admin panel will then call /api/... instead of localStorage
+//  ▸ Your backend must expose these routes:
+//      GET  /api/requests
+//      POST /api/requests         { first, last, email, service, note, status }
+//      PUT  /api/requests/:id     { status }
+//      DELETE /api/requests/:id
+//      GET  /api/bookings
+//      POST /api/bookings         { name, service, date, time, email, status }
+//      POST /api/admin/login      { username, password }
+//      POST /api/admin/logout
+//      GET  /api/admin/verify
+// ═══════════════════════════════════════════════════════
+const USE_REAL_API = true;
+
+// ── Mock credentials (only used when USE_REAL_API = false) ──
+// Change these before sharing. When real API is on, auth is server-side.
+const MOCK_USER = 'admin';
+const MOCK_PASS = 'Linkrite2025';
+
+const KEY_REQ  = 'Linkrite_requests';
+const KEY_BOOK = 'Linkrite_bookings';
+const KEY_AUTH = 'Linkrite_auth';
+
+// ══════════════════════════
+//  MOCK API (localStorage)
+// ══════════════════════════
+const mockAPI = {
+  async getRequests() { return JSON.parse(localStorage.getItem(KEY_REQ)||'[]'); },
+  async postRequest(d) {
+    const list=[...await this.getRequests(),{...d,id:genId(),date:fmtDate(new Date())}];
+    localStorage.setItem(KEY_REQ,JSON.stringify(list)); return list.at(-1);
+  },
+  async putRequest(id,d) {
+    const list=await this.getRequests(), i=list.findIndex(r=>r.id===id);
+    if(i<0) throw new Error('Not found');
+    list[i]={...list[i],...d}; localStorage.setItem(KEY_REQ,JSON.stringify(list)); return list[i];
+  },
+  async deleteRequest(id) {
+    localStorage.setItem(KEY_REQ,JSON.stringify((await this.getRequests()).filter(r=>r.id!==id)));
+    return {ok:true};
+  },
+  async getBookings() {
+    const raw=localStorage.getItem(KEY_BOOK); return raw?JSON.parse(raw):defaultBookings();
+  },
+  async postBooking(d) {
+    const list=[...await this.getBookings(),{...d,id:genId()}];
+    localStorage.setItem(KEY_BOOK,JSON.stringify(list)); return list.at(-1);
+  },
+  async login(u,p) {
+    if(u===MOCK_USER&&p===MOCK_PASS){localStorage.setItem(KEY_AUTH,'1');return{ok:true};}
+    throw new Error('Invalid credentials');
+  },
+  async logout() { localStorage.removeItem(KEY_AUTH); },
+  async verify() { if(localStorage.getItem(KEY_AUTH)==='1')return{ok:true}; throw new Error('Unauthenticated'); }
+};
+
+// ══════════════════════════
+//  REAL API (fetch)
+// ══════════════════════════
+const realAPI = {
+  async _r(method,path,body) {
+    console.log(`🔗 ${method} ${path}`, body || '');
+    const opts={method,credentials:'include',headers:{}};
+    if(body){opts.headers['Content-Type']='application/json';opts.body=JSON.stringify(body);}
+    const res=await fetch(path,opts);
+    const data=await res.json();
+    console.log(`📡 Response (${res.status}):`, data);
+    if(!res.ok) throw new Error(data.message||data.error||`HTTP ${res.status}`);
+    return data;
+  },
+  getRequests()        { return this._r('GET','/api/requests'); },
+  postRequest(d)       { return this._r('POST','/api/requests',d); },
+  putRequest(id,d)     { return this._r('PUT',`/api/requests/${id}`,d); },
+  deleteRequest(id)    { return this._r('DELETE',`/api/requests/${id}`); },
+  getBookings()        { return this._r('GET','/api/bookings'); },
+  postBooking(d)       { return this._r('POST','/api/bookings',d); },
+  login(u,p)           { return this._r('POST','/api/admin/login',{username:u,password:p}); },
+  logout()             { return this._r('POST','/api/admin/logout'); },
+  verify()             { return this._r('GET','/api/admin/verify'); }
+};
+
+const api = USE_REAL_API ? realAPI : mockAPI;
+
+// ══════════════════════════
+//  SEED DATA
+// ══════════════════════════
+function defaultBookings() {
+  return [
+    {id:'b1',name:'Dr. Amaka Obi',  service:'Statistical Analysis Consultation',date:'2025-06-10',time:'10:00 AM',email:'amaka@example.com',status:'confirmed'},
+    {id:'b2',name:'Samuel Adeyemi', service:'Manuscript Editing Consultation',  date:'2025-06-14',time:'02:00 PM',email:'sam@example.com',  status:'confirmed'},
+    {id:'b3',name:'Chidi Nwosu',    service:'Data Visualization Brief',         date:'2025-06-18',time:'11:30 AM',email:'chidi@example.com',status:'pending'},
+  ];
+}
+
+async function seedRequests() {
+  const existing = await api.getRequests();
+  if (existing.length > 0) return;
+  const samples = [
+    {first:'Fatima', last:'Bello', email:'fatima@example.com', service:'Manuscript Review & Editing',   note:'MSc thesis — 12,000 words, APA format.',        status:'pending'},
+    {first:'Emeka',  last:'Eze',   email:'emeka@example.com',  service:'Statistical Analysis',          note:'ANOVA and regression for PhD dataset, SPSS.',    status:'active'},
+    {first:'Zainab', last:'Umar',  email:'zainab@example.com', service:'Graphics & Data Visualization', note:'5 publication figures — Nature journal format.', status:'done'},
+  ];
+  for (const s of samples) await api.postRequest(s);
+}
+
+// ══════════════════════════
+//  AUTH
+// ══════════════════════════
+async function doLogin() {
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value;
+  try {
+    await api.login(u,p);
+    document.getElementById('loginScreen').classList.add('hidden');
+    await init();
+  } catch {
+    document.getElementById('loginError').textContent='Incorrect username or password.';
+    document.getElementById('loginPass').value='';
+  }
+}
+
+async function doLogout() {
+  await api.logout();
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('loginPass').value='';
+  document.getElementById('loginError').textContent='';
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+  try { await api.verify(); document.getElementById('loginScreen').classList.add('hidden'); await init(); }
+  catch { /* show login */ }
+});
+
+// ══════════════════════════
+//  INIT
+// ══════════════════════════
+async function init() {
+  const banner=document.getElementById('modeBanner');
+  if (USE_REAL_API) {
+    banner.classList.add('live');
+    document.getElementById('modeText').textContent='LIVE MODE — connected to backend API.';
+  }
+  setDate();
+  if (!USE_REAL_API) await seedRequests();
+  await renderDashboard();
+  await renderRequests();
+  await renderBookings();
+}
+
+function setDate() {
+  document.getElementById('topbarDate').textContent=
+    new Date().toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+}
+
+// ══════════════════════════
+//  NAVIGATION
+// ══════════════════════════
+const titles={dashboard:'Dashboard',requests:'Service Requests',bookings:'Bookings',compose:'Add New Request'};
+function showPanel(id,el) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  document.getElementById('topbarTitle').textContent=titles[id]||id;
+  closeSidebar();
+}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');}
+
+// ══════════════════════════
+//  DASHBOARD
+// ══════════════════════════
+async function renderDashboard() {
+  const reqs=await api.getRequests();
+  const p=reqs.filter(r=>r.status==='pending').length;
+  const a=reqs.filter(r=>r.status==='active').length;
+  const d=reqs.filter(r=>r.status==='done').length;
+  document.getElementById('statTotal').textContent=reqs.length;
+  document.getElementById('statPending').textContent=p;
+  document.getElementById('statActive').textContent=a;
+  document.getElementById('statDone').textContent=d;
+  document.getElementById('pendingBadge').textContent=p;
+  document.getElementById('qEditing').textContent=reqs.filter(r=>r.service.includes('Editing')).length;
+  document.getElementById('qStats').textContent=reqs.filter(r=>r.service.includes('Statistical')).length;
+  document.getElementById('qGraphics').textContent=reqs.filter(r=>r.service.includes('Graphics')).length;
+  const tbody=document.getElementById('dashRecentBody');
+  const recent=[...reqs].reverse().slice(0,5);
+  tbody.innerHTML=recent.length===0
+    ?'<tr class="empty-row"><td colspan="4">No requests yet.</td></tr>'
+    :recent.map(r=>`<tr>
+        <td class="td-name"><strong>${r.first} ${r.last}</strong><span>${r.email}</span></td>
+        <td class="td-service">${r.service}</td>
+        <td class="td-date">${r.date}</td>
+        <td><span class="status-badge ${r.status}"><span class="status-dot"></span>${labelStatus(r.status)}</span></td>
+      </tr>`).join('');
+}
+
+// ══════════════════════════
+//  REQUESTS TABLE
+// ══════════════════════════
+let activeFilter='all', activeSearch='';
+async function renderRequests() {
+  const reqs=await api.getRequests();
+  const filtered=reqs.filter(r=>{
+    const ms=activeFilter==='all'||r.status===activeFilter;
+    const mq=activeSearch===''||`${r.first} ${r.last} ${r.email}`.toLowerCase().includes(activeSearch.toLowerCase());
+    return ms&&mq;
+  });
+  const tbody=document.getElementById('requestsBody');
+  tbody.innerHTML=filtered.length===0
+    ?'<tr class="empty-row"><td colspan="7">No requests match your filter.</td></tr>'
+    :filtered.map((r,i)=>`<tr>
+        <td class="td-date" style="color:var(--text-muted)">#${i+1}</td>
+        <td class="td-name"><strong>${r.first} ${r.last}</strong><span>${r.email}</span></td>
+        <td class="td-service">${r.service}</td>
+        <td style="max-width:200px;font-size:0.78rem;color:var(--text-muted);">${r.note?r.note.substring(0,60)+(r.note.length>60?'…':''):'—'}</td>
+        <td class="td-date">${r.date}</td>
+        <td>
+          <select class="status-select" onchange="updateStatus('${r.id}',this.value)">
+            <option value="pending" ${r.status==='pending'?'selected':''}>⏳ Pending</option>
+            <option value="active"  ${r.status==='active' ?'selected':''}>🔵 In Progress</option>
+            <option value="done"    ${r.status==='done'   ?'selected':''}>✅ Done</option>
+          </select>
+        </td>
+        <td>
+          <button class="action-btn" onclick="viewDetail('${r.id}')">View</button>
+          <button class="action-btn danger" onclick="deleteRequest('${r.id}')">Delete</button>
+        </td>
+      </tr>`).join('');
+}
+function filterRequests(v){activeFilter=v;renderRequests();}
+function searchRequests(v){activeSearch=v;renderRequests();}
+
+async function updateStatus(id,newStatus) {
+  try {
+    const req=(await api.getRequests()).find(r=>r.id===id);
+    await api.putRequest(id,{status:newStatus});
+    await renderDashboard(); await renderRequests();
+    if(req) logActivity(`Status → ${req.first} ${req.last}: ${labelStatus(newStatus)}`,statusColor(newStatus));
+    showToast('Updated',`${req?req.first+' '+req.last:id} → ${labelStatus(newStatus)}`);
+  } catch { showToast('Error','Failed to update status'); }
+}
+
+async function deleteRequest(id) {
+  if(!confirm('Delete this request? This cannot be undone.')) return;
+  try {
+    const req=(await api.getRequests()).find(r=>r.id===id);
+    await api.deleteRequest(id);
+    await renderDashboard(); await renderRequests();
+    if(req) logActivity(`Deleted: ${req.first} ${req.last}`,'#e07b7b');
+    showToast('Deleted','Request removed.');
+  } catch { showToast('Error','Failed to delete'); }
+}
+
+// ══════════════════════════
+//  ADD REQUEST
+// ══════════════════════════
+async function addRequest() {
+  const first=document.getElementById('cmpFirst').value.trim();
+  const last=document.getElementById('cmpLast').value.trim();
+  const email=document.getElementById('cmpEmail').value.trim();
+  const service=document.getElementById('cmpService').value;
+  const note=document.getElementById('cmpNote').value.trim();
+  const status=document.getElementById('cmpStatus').value;
+  if(!first||!email||!service){alert('Fill in First Name, Email, and Service at minimum.');return;}
+  
+  const payload = {first,last,email,service,note,status};
+  console.log('📤 Sending to API:', payload);
+  console.log('🔌 Using API mode:', USE_REAL_API ? 'REAL' : 'MOCK');
+  
+  try {
+    const result = await api.postRequest(payload);
+    console.log('✅ Request added:', result);
+    ['cmpFirst','cmpLast','cmpEmail','cmpNote'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('cmpService').value='';
+    document.getElementById('cmpStatus').value='pending';
+    await renderDashboard(); 
+    await renderRequests();
+    logActivity(`New request: ${first} ${last} — ${service}`,'#c9a84c');
+    showToast('Added',`${first} ${last} saved.`);
+    showPanel('requests',document.querySelectorAll('.nav-item')[1]);
+  } catch (err) { 
+    console.error('❌ Error adding request:', err);
+    showToast('Error','Failed to add request: ' + err.message); 
+  }
+}
+
+// ══════════════════════════
+//  DETAIL MODAL
+// ══════════════════════════
+async function viewDetail(id) {
+  try {
+    const req=(await api.getRequests()).find(r=>r.id===id); if(!req) return;
+    document.getElementById('detailName').textContent=`${req.first} ${req.last}`;
+    document.getElementById('detailBody').innerHTML=`
+      <div class="detail-row"><div class="detail-key">Full Name</div><div class="detail-val">${req.first} ${req.last}</div></div>
+      <div class="detail-row"><div class="detail-key">Email</div><div class="detail-val"><a href="mailto:${req.email}" style="color:var(--green-light)">${req.email}</a></div></div>
+      <div class="detail-row"><div class="detail-key">Service</div><div class="detail-val">${req.service}</div></div>
+      <div class="detail-row"><div class="detail-key">Notes</div><div class="detail-val">${req.note||'—'}</div></div>
+      <div class="detail-row"><div class="detail-key">Date</div><div class="detail-val">${req.date}</div></div>
+      <div class="detail-row"><div class="detail-key">Status</div><div class="detail-val"><span class="status-badge ${req.status}"><span class="status-dot"></span>${labelStatus(req.status)}</span></div></div>
+      <div class="detail-actions">
+        <button class="btn-detail-status btn-set-active" onclick="updateStatus('${req.id}','active');closeDetailBtn()">→ In Progress</button>
+        <button class="btn-detail-status btn-set-done"   onclick="updateStatus('${req.id}','done');closeDetailBtn()">✓ Complete</button>
+        <button class="btn-detail-status btn-delete-r"   onclick="deleteRequest('${req.id}');closeDetailBtn()">Delete</button>
+      </div>`;
+    document.getElementById('detailOverlay').classList.add('open');
+    document.body.style.overflow='hidden';
+  } catch { showToast('Error','Could not load request'); }
+}
+function closeDetail(e){if(e.target===document.getElementById('detailOverlay'))closeDetailBtn();}
+function closeDetailBtn(){document.getElementById('detailOverlay').classList.remove('open');document.body.style.overflow='';}
+
+// ══════════════════════════
+//  BOOKINGS
+// ══════════════════════════
+async function renderBookings() {
+  const bookings=await api.getBookings();
+  const grid=document.getElementById('bookingsGrid');
+  grid.innerHTML=bookings.length===0
+    ?'<p style="color:var(--text-muted);font-size:0.88rem;">No bookings yet.</p>'
+    :bookings.map(b=>{
+        const d=new Date(b.date);
+        return `<div class="booking-card">
+          <div class="booking-date-block">
+            <div class="booking-day">${d.getDate()}</div>
+            <div class="booking-month">${d.toLocaleDateString('en-GB',{month:'short'}).toUpperCase()}</div>
+          </div>
+          <div class="booking-info">
+            <div class="booking-name">${b.name}</div>
+            <div class="booking-service">${b.service}</div>
+            <div class="booking-meta">
+              <div class="booking-meta-item"><i class="bx bx-time"></i> ${b.time}</div>
+              <div class="booking-meta-item"><i class="bx bx-envelope"></i> ${b.email}</div>
+              <div class="booking-meta-item">
+                <span class="status-badge ${b.status==='confirmed'?'done':'pending'}">
+                  <span class="status-dot"></span>${b.status==='confirmed'?'Confirmed':'Pending'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+}
+
+async function addBookingPrompt() {
+  const name=prompt('Client Name:'); if(!name) return;
+  const service=prompt('Service / Reason:')||'General Consultation';
+  const date=prompt('Date (YYYY-MM-DD):',new Date().toISOString().split('T')[0]);
+  const time=prompt('Time:','10:00 AM')||'10:00 AM';
+  const email=prompt('Client Email:')||'';
+  try {
+    await api.postBooking({name,service,date:date||new Date().toISOString().split('T')[0],time,email,status:'confirmed'});
+    await renderBookings();
+    logActivity(`Booking: ${name} on ${date}`,'#c9a84c');
+    showToast('Booking Added',`${name} — ${date} at ${time}`);
+  } catch { showToast('Error','Failed to add booking'); }
+}
+
+// ══════════════════════════
+//  ACTIVITY LOG
+// ══════════════════════════
+const actLog=[];
+function logActivity(text,color) {
+  const time=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  actLog.unshift({text,color:color||'var(--gold)',time});
+  if(actLog.length>12) actLog.pop();
+  document.getElementById('activityFeed').innerHTML=
+    actLog.map(a=>`<div class="feed-item"><div class="feed-dot" style="background:${a.color}"></div><div class="feed-text">${a.text}</div><div class="feed-time">${a.time}</div></div>`).join('');
+}
+
+// ══════════════════════════
+//  TOAST
+// ══════════════════════════
+function showToast(title,msg) {
+  document.getElementById('toastTitle').textContent=title;
+  document.getElementById('toastMsg').textContent=msg;
+  const t=document.getElementById('toast'); t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ══════════════════════════
+//  HELPERS
+// ══════════════════════════
+function genId(){return Date.now().toString(36)+Math.random().toString(36).substr(2,5);}
+function fmtDate(d){return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function labelStatus(s){return s==='pending'?'Pending':s==='active'?'In Progress':'Completed';}
+function statusColor(s){return s==='pending'?'var(--status-pending)':s==='active'?'var(--status-active)':'var(--status-done)';}
+</script>
+</body>
+</html>

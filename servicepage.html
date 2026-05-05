@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Services — Linkrite</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green-deep:  #132d1e;
+      --green-mid:   #1e4a2f;
+      --green-light: #2a6642;
+      --gold:        #c9a84c;
+      --gold-light:  #e2c97e;
+      --cream:       #f5f0e8;
+      --cream-dark:  #ede6d6;
+      --white:       #ffffff;
+      --text-dark:   #0e1f15;
+      --text-muted:  #5a7264;
+      --border:      rgba(201,168,76,0.25);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+      background: rgba(19,45,30,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow 0.3s;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--cream);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .logo span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(245,240,232,0.75);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold) !important;
+      color: var(--green-deep) !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2px;
+      font-weight: 600 !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--cream);
+    }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: var(--green-deep);
+      padding: 9rem 8% 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-hero::before {
+      content: 'SERVICES';
+      position: absolute;
+      right: 4%;
+      bottom: -2rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 11rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.03);
+      line-height: 1;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .hero-grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          90deg,
+          transparent, transparent 79px,
+          rgba(201,168,76,0.04) 79px,
+          rgba(201,168,76,0.04) 80px
+        );
+      pointer-events: none;
+    }
+
+    .breadcrumb {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.4);
+      margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: var(--gold); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    .page-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      color: var(--cream);
+      line-height: 1.1;
+      max-width: 700px;
+      position: relative;
+      z-index: 1;
+    }
+    .page-hero h1 em { font-style: italic; color: var(--gold); }
+
+    .page-hero p {
+      font-size: 1rem;
+      color: rgba(245,240,232,0.6);
+      max-width: 520px;
+      line-height: 1.75;
+      margin-top: 1.25rem;
+      font-weight: 300;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── SERVICE TABS ── */
+    .tabs-bar {
+      background: var(--green-mid);
+      padding: 0 8%;
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs-bar::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.5);
+      padding: 1.1rem 1.75rem;
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .tab-btn:hover { color: var(--cream); }
+    .tab-btn.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    /* ── SERVICES DETAIL ── */
+    .services-detail {
+      padding: 5rem 8%;
+    }
+
+    .service-block {
+      display: none;
+      animation: fadeUp 0.4s ease forwards;
+    }
+    .service-block.active { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .service-info {}
+
+    .service-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .service-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700;
+      color: var(--green-deep);
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+    }
+
+    .service-info p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    .deliverables {
+      margin-bottom: 2rem;
+    }
+
+    .deliverables h4 {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 1rem;
+    }
+
+    .deliverable-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .deliverable-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.88rem;
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    .deliverable-list li::before {
+      content: '→';
+      color: var(--gold);
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+
+    .tools-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .tool-pill {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      background: var(--green-deep);
+      color: var(--gold-light);
+      padding: 0.3rem 0.75rem;
+      border-radius: 2px;
+    }
+
+    .price-note {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      background: rgba(201,168,76,0.08);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 2px 2px 0;
+      font-size: 0.83rem;
+      color: var(--text-muted);
+    }
+    .price-note strong { color: var(--green-deep); }
+
+    /* ── REQUEST FORM ── */
+    .request-form-wrap {
+      position: sticky;
+      top: 90px;
+    }
+
+    .request-form {
+      background: var(--white);
+      border: 1px solid var(--cream-dark);
+      border-radius: 4px;
+      padding: 2.5rem;
+      box-shadow: 0 8px 40px rgba(19,45,30,0.07);
+    }
+
+    .form-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--cream-dark);
+    }
+
+    .form-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 0.3rem;
+    }
+
+    .form-header p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .form-group {
+      margin-bottom: 1.1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.72rem 1rem;
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text-dark);
+      background: var(--cream);
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--green-light);
+      background: var(--white);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 90px; }
+
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--green-deep);
+      color: var(--cream);
+      padding: 0.9rem;
+      border: none;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      letter-spacing: 0.02em;
+      margin-top: 0.25rem;
+    }
+    .btn-submit:hover { background: var(--green-mid); }
+
+    .secure-note {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+    }
+
+    /* ── FORM SUCCESS ── */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    .form-success .check { font-size: 2.5rem; margin-bottom: 1rem; }
+    .form-success h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--green-deep);
+      margin-bottom: 0.5rem;
+    }
+    .form-success p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+    .btn-reset {
+      margin-top: 1.25rem;
+      display: inline-block;
+      font-size: 0.8rem;
+      color: var(--green-light);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* ── ALL SERVICES OVERVIEW ── */
+    .overview-section {
+      padding: 5rem 8%;
+      background: var(--green-deep);
+    }
+
+    .overview-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .overview-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700;
+      color: var(--cream);
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: rgba(201,168,76,0.1);
+    }
+
+    .overview-card {
+      background: var(--green-deep);
+      padding: 2.5rem 2rem;
+      cursor: pointer;
+      transition: background 0.3s;
+      position: relative;
+    }
+    .overview-card:hover { background: var(--green-mid); }
+
+    .ov-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 800;
+      color: rgba(201,168,76,0.15);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .ov-icon { font-size: 1.5rem; margin-bottom: 1rem; }
+
+    .overview-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+
+    .overview-card p {
+      font-size: 0.78rem;
+      color: rgba(245,240,232,0.5);
+      line-height: 1.65;
+    }
+
+    .ov-arrow {
+      position: absolute;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      color: var(--gold);
+      font-size: 1rem;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .overview-card:hover .ov-arrow { opacity: 1; transform: translateX(4px); }
+
+    /* ── PROCESS TIMELINE ── */
+    .process-section {
+      padding: 6rem 8%;
+      background: var(--cream-dark);
+    }
+
+    .process-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .process-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 700;
+      color: var(--green-deep);
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      position: relative;
+      gap: 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.3;
+    }
+
+    .timeline-step {
+      text-align: center;
+      padding: 0 1rem;
+      position: relative;
+    }
+
+    .step-dot {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--green-deep);
+      border: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline-step h4 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--green-deep);
+      margin-bottom: 0.4rem;
+    }
+
+    .timeline-step p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ── FAQ ── */
+    .faq-section {
+      padding: 6rem 8%;
+      background: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 5rem;
+    }
+
+    .faq-left h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+      font-weight: 700;
+      color: var(--green-deep);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .faq-left p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .faq-list { display: flex; flex-direction: column; gap: 0; }
+
+    .faq-item {
+      border-bottom: 1px solid var(--cream-dark);
+    }
+
+    .faq-q {
+      padding: 1.25rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--green-deep);
+      user-select: none;
+    }
+
+    .faq-q .arrow {
+      color: var(--gold);
+      transition: transform 0.3s;
+      flex-shrink: 0;
+      margin-left: 1rem;
+    }
+
+    .faq-q.open .arrow { transform: rotate(180deg); }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s;
+      font-size: 0.87rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+
+    .faq-a.open {
+      max-height: 200px;
+      padding-bottom: 1.25rem;
+    }
+
+    /* ── CTA BAND ── */
+    .cta-band {
+      background: var(--gold);
+      padding: 4rem 8%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .cta-band h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      font-weight: 800;
+      color: var(--green-deep);
+      line-height: 1.2;
+    }
+
+    .cta-band p {
+      font-size: 0.9rem;
+      color: rgba(19,45,30,0.65);
+      margin-top: 0.4rem;
+    }
+
+    .btn-dark {
+      background: var(--green-deep);
+      color: var(--cream);
+      padding: 1rem 2.5rem;
+      border-radius: 2px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .btn-dark:hover { background: var(--green-mid); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green-deep);
+      padding: 5rem 8% 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-brand p {
+      font-size: 0.83rem;
+      color: rgba(245,240,232,0.5);
+      line-height: 1.7;
+      max-width: 280px;
+      margin-top: 1rem;
+    }
+
+    .footer-col h5 {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 0.6rem; }
+    .footer-col a {
+      font-size: 0.83rem;
+      color: rgba(245,240,232,0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--cream); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(201,168,76,0.1);
+      padding-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-bottom p {
+      font-size: 0.78rem;
+      color: rgba(245,240,232,0.35);
+    }
+
+    .footer-socials { display: flex; gap: 1rem; }
+
+    .social-link {
+      width: 32px; height: 32px;
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      text-decoration: none;
+      color: rgba(245,240,232,0.5);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .social-link:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      background: var(--green-mid);
+      color: var(--cream);
+      padding: 1rem 1.5rem;
+      border-radius: 3px;
+      border-left: 3px solid var(--gold);
+      font-size: 0.85rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s;
+      z-index: 999;
+      max-width: 320px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast strong { display: block; margin-bottom: 0.2rem; color: var(--gold); }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .overview-grid { grid-template-columns: repeat(2, 1fr); }
+      .timeline { grid-template-columns: repeat(3, 1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .service-block.active { grid-template-columns: 1fr; }
+      .request-form-wrap { position: static; }
+      .overview-grid { grid-template-columns: 1fr; }
+      .timeline { grid-template-columns: 1fr; }
+      .timeline::before { display: none; }
+      .faq-section { grid-template-columns: 1fr; gap: 2rem; }
+      .cta-band { flex-direction: column; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+      .nav-links { display: none; position: absolute; top: 70px; left: 0; right: 0;
+        background: var(--green-deep); flex-direction: column;
+        padding: 2rem 6%; gap: 1.5rem; border-bottom: 1px solid var(--border); }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+      .form-row-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════ NAV ════ -->
+  <nav id="mainNav">
+    <a href="index.html" class="logo">
+      <svg width="100" height="32" viewBox="0 0 100 32" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <style>
+            .logo-text { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 20px; }
+            .logo-lin { fill: #f5f0e8; }
+            .logo-rite { fill: #c9a84c; }
+          </style>
+        </defs>
+        <text x="0" y="22" class="logo-text logo-lin">Lin</text>
+        <text x="32" y="22" class="logo-text logo-rite">rite</text>
+      </svg>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="servicepage.html" class="active">Services</a></li>
+      <li><a href="store.html">Store</a></li>
+      <li><a href="index.html#workshop">Workshop</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="index.html#consult" class="nav-cta">Get Started</a></li>
+    </ul>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- ════ PAGE HERO ════ -->
+  <section class="page-hero">
+    <div class="hero-grid-lines"></div>
+    <div class="breadcrumb"><a href="Linkrite-landing.html">Home</a> / Services</div>
+    <h1>What We <em>Do</em><br/>Best for You</h1>
+    <p>End-to-end academic and scientific support — from raw data to publishable manuscript. Choose a service below and request yours today.</p>
+  </section>
+
+  <!-- ════ TABS ════ -->
+  <div class="tabs-bar" id="tabsBar">
+    <button class="tab-btn active" onclick="switchTab('editing', this)">Manuscript Editing</button>
+    <button class="tab-btn" onclick="switchTab('stats', this)">Statistical Analysis</button>
+    <button class="tab-btn" onclick="switchTab('graphics', this)">Graphics & Visualization</button>
+    <button class="tab-btn" onclick="switchTab('genomics', this)">Data & Genomic Analysis</button>
+  </div>
+
+  <!-- ════ SERVICE DETAIL BLOCKS ════ -->
+  <section class="services-detail">
+
+    <!-- EDITING -->
+    <div class="service-block active" id="block-editing">
+      <div class="service-info">
+        <div class="service-tag">// Service 01</div>
+        <h2>Manuscript Review &amp; Editing</h2>
+        <p>Whether it's a thesis, journal article, conference paper, or grant proposal — we provide thorough, expert editing that improves clarity, structure, grammar, and style. We follow journal-specific guidelines including APA, AMA, Vancouver, and more.</p>
+
+        <div class="deliverables">
+          <h4>What you receive</h4>
+          <ul class="deliverable-list">
+            <li>Line-by-line grammar and language editing</li>
+            <li>Structural and logical flow improvement</li>
+            <li>Abstract and conclusion refinement</li>
+            <li>Reference formatting (any citation style)</li>
+            <li>Track-changes version + clean final copy</li>
+            <li>Revision summary report</li>
+          </ul>
+        </div>
+
+        <div class="tools-row">
+          <span class="tool-pill">Microsoft Word</span>
+          <span class="tool-pill">APA / AMA / Vancouver</span>
+          <span class="tool-pill">Grammarly Pro</span>
+          <span class="tool-pill">Turnitin Check</span>
+        </div>
+
+        <div class="price-note">
+          💬 &nbsp;<div><strong>Custom pricing</strong> — based on word count and turnaround time. Fill the form for a free quote.</div>
+        </div>
+      </div>
+
+      <div class="request-form-wrap" id="request">
+        <div class="request-form">
+          <div id="form-editing-content">
+            <div class="form-header">
+              <h3>Request This Service</h3>
+              <p>We'll respond within 24 hours with a quote.</p>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group"><label>First Name</label><input type="text" placeholder="John"/></div>
+              <div class="form-group"><label>Last Name</label><input type="text" placeholder="Doe"/></div>
+            </div>
+            <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com"/></div>
+            <div class="form-group">
+              <label>Document Type</label>
+              <select>
+                <option value="">— Select —</option>
+                <option>Journal Article</option>
+                <option>Thesis / Dissertation</option>
+                <option>Conference Paper</option>
+                <option>Grant Proposal</option>
+                <option>Book Chapter</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Word Count (approx.)</label>
+              <select>
+                <option value="">— Select range —</option>
+                <option>Under 3,000 words</option>
+                <option>3,000 – 7,000 words</option>
+                <option>7,000 – 15,000 words</option>
+                <option>15,000+ words</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Deadline</label>
+              <input type="date"/>
+            </div>
+            <div class="form-group">
+              <label>Additional Notes</label>
+              <textarea placeholder="Journal name, citation style, specific concerns..."></textarea>
+            </div>
+            <button class="btn-submit" onclick="submitServiceForm('editing')">Send Request →</button>
+            <div class="secure-note">🔒 Your files and information are kept strictly confidential</div>
+          </div>
+          <div class="form-success" id="form-editing-success">
+            <div class="check">✅</div>
+            <h3>Request Sent!</h3>
+            <p>We'll review your submission and reach out within 24 hours with a personalised quote.</p>
+            <div class="btn-reset" onclick="resetServiceForm('editing')">Submit another request</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="service-block" id="block-stats">
+      <div class="service-info">
+        <div class="service-tag">// Service 02</div>
+        <h2>Statistical Analysis</h2>
+        <p>From descriptive statistics to complex multivariate analyses — we handle your data with precision, using industry-standard tools and producing fully interpreted, publication-ready results with visualizations.</p>
+
+        <div class="deliverables">
+          <h4>What you receive</h4>
+          <ul class="deliverable-list">
+            <li>Full statistical analysis tailored to your study design</li>
+            <li>Descriptive stats, hypothesis testing, regression models</li>
+            <li>ANOVA, MANOVA, survival analysis, factor analysis</li>
+            <li>Publication-ready tables and figures</li>
+            <li>Written interpretation for results section</li>
+            <li>SPSS / R / Python output files included</li>
+          </ul>
+        </div>
+
+        <div class="tools-row">
+          <span class="tool-pill">SPSS</span>
+          <span class="tool-pill">R / RStudio</span>
+          <span class="tool-pill">Python (SciPy)</span>
+          <span class="tool-pill">Excel</span>
+          <span class="tool-pill">GraphPad Prism</span>
+        </div>
+
+        <div class="price-note">
+          💬 &nbsp;<div><strong>Custom pricing</strong> — based on dataset size and analysis complexity. Fill the form for a free quote.</div>
+        </div>
+      </div>
+
+      <div class="request-form-wrap">
+        <div class="request-form">
+          <div id="form-stats-content">
+            <div class="form-header">
+              <h3>Request This Service</h3>
+              <p>We'll respond within 24 hours with a quote.</p>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group"><label>First Name</label><input type="text" placeholder="John"/></div>
+              <div class="form-group"><label>Last Name</label><input type="text" placeholder="Doe"/></div>
+            </div>
+            <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com"/></div>
+            <div class="form-group">
+              <label>Analysis Type</label>
+              <select>
+                <option value="">— Select —</option>
+                <option>Descriptive Statistics</option>
+                <option>Regression Analysis</option>
+                <option>ANOVA / MANOVA</option>
+                <option>Survival Analysis</option>
+                <option>Factor / Cluster Analysis</option>
+                <option>Not sure — need advice</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Software Preference</label>
+              <select>
+                <option value="">— Select —</option>
+                <option>SPSS</option>
+                <option>R / RStudio</option>
+                <option>Python</option>
+                <option>No preference</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Dataset Size</label>
+              <select>
+                <option value="">— Select —</option>
+                <option>Under 100 rows</option>
+                <option>100 – 1,000 rows</option>
+                <option>1,000 – 10,000 rows</option>
+                <option>10,000+ rows</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Additional Notes</label>
+              <textarea placeholder="Describe your study, variables, and what you need..."></textarea>
+            </div>
+            <button class="btn-submit" onclick="submitServiceForm('stats')">Send Request →</button>
+            <div class="secure-note">🔒 Your data is kept strictly confidential</div>
+          </div>
+          <div class="form-success" id="form-stats-success">
+            <div class="check">✅</div>
+            <h3>Request Sent!</h3>
+            <p>We'll review your dataset needs and respond within 24 hours.</p>
+            <div class="btn-reset" onclick="resetServiceForm('stats')">Submit another request</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRAPHICS -->
+    <div class="service-block" id="block-graphics">
+      <div class="service-info">
+        <div class="service-tag">// Service 03</div>
+        <h2>Graphics &amp; Data Visualization</h2>
+        <p>Beautiful, accurate, publication-ready scientific figures, charts, and infographics. Designed specifically for journals, grant applications, conference posters, and research presentations.</p>
+
+        <div class="deliverables">
+          <h4>What you receive</h4>
+          <ul class="deliverable-list">
+            <li>Custom charts: bar, scatter, box plots, heatmaps, Kaplan-Meier, etc.</li>
+            <li>Scientific infographics and graphical abstracts</li>
+            <li>Conference poster design (A0 / A1)</li>
+            <li>High-resolution files (300 dpi TIFF, EPS, PDF, PNG)</li>
+            <li>Editable source files on request</li>
+            <li>Journal submission–ready formatting</li>
+          </ul>
+        </div>
+
+        <div class="tools-row">
+          <span class="tool-pill">Python (Matplotlib)</span>
+          <span class="tool-pill">R (ggplot2)</span>
+          <span class="tool-pill">Adobe Illustrator</span>
+          <span class="tool-pill">BioRender</span>
+          <span class="tool-pill">Tableau</span>
+        </div>
+
+        <div class="price-note">
+          💬 &nbsp;<div><strong>Custom pricing</strong> — based on number of figures and complexity. Fill the form to get started.</div>
+        </div>
+      </div>
+
+      <div class="request-form-wrap">
+        <div class="request-form">
+          <div id="form-graphics-content">
+            <div class="form-header">
+              <h3>Request This Service</h3>
+              <p>Tell us what you need visualised.</p>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group"><label>First Name</label><input type="text" placeholder="John"/></div>
+              <div class="form-group"><label>Last Name</label><input type="text" placeholder="Doe"/></div>
+            </div>
+            <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com"/></div>
+            <div class="form-group">
+              <label>Output Type</label>
+              <select>
+                <option value="">— Select —</option>
+                <option>Journal Figures</option>
+                <option>Graphical Abstract</option>
+                <option>Conference Poster</option>
+                <option>Presentation Slides</option>
+                <option>Infographic</option>
+                <option>Multiple / Not sure</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Number of Figures</label>
+              <select>
+                <option value="">— Select —</option>
+                <option>1 – 3</option>
+                <option>4 – 8</option>
+                <option>9 – 15</option>
+                <option>15+</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Additional Notes</label>
+              <textarea placeholder="Describe your data, journal target, colour preferences..."></textarea>
+            </div>
+            <button class="btn-submit" onclick="submitServiceForm('graphics')">Send Request →</button>
+            <div class="secure-note">🔒 Your files and information are kept strictly confidential</div>
+          </div>
+          <div class="form-success" id="form-graphics-success">
+            <div class="check">✅</div>
+            <h3>Request Sent!</h3>
+            <p>We'll reach out within 24 hours to discuss your visualization needs.</p>
+            <div class="btn-reset" onclick="resetServiceForm('graphics')">Submit another request</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GENOMICS -->
+    <div class="service-block" id="block-genomics">
+      <div class="service-info">
+        <div class="service-tag">// Service 04</div>
+        <h2>Data &amp; Genomic Analysis</h2>
+        <p>Advanced bioinformatics and genomic data analysis — from raw sequencing output to biological insight. We support NGS pipelines, variant calling, expression analysis, and more. Custom quotes based on project scope.</p>
+
+        <div class="deliverables">
+          <h4>What you receive</h4>
+          <ul class="deliverable-list">
+            <li>NGS quality control and preprocessing</li>
+            <li>RNA-seq differential expression analysis</li>
+            <li>Variant calling and annotation (WGS / WES)</li>
+            <li>Metagenomics analysis and diversity metrics</li>
+            <li>Custom bioinformatics pipeline development</li>
+            <li>Full results report with biological interpretation</li>
+          </ul>
+        </div>
+
+        <div class="tools-row">
+          <span class="tool-pill">Python (Biopython)</span>
+          <span class="tool-pill">R (Bioconductor)</span>
+          <span class="tool-pill">GATK</span>
+          <span class="tool-pill">DESeq2</span>
+          <span class="tool-pill">QIIME2</span>
+          <span class="tool-pill">Galaxy</span>
+        </div>
+
+        <div class="price-note">
+          💬 &nbsp;<div><strong>Quote on request</strong> — this is a highly specialised service. Describe your project and we'll get back to you.</div>
+        </div>
+      </div>
+
+      <div class="request-form-wrap">
+        <div class="request-form">
+          <div id="form-genomics-content">
+            <div class="form-header">
+              <h3>Request a Quote</h3>
+              <p>Describe your project — we'll tailor a solution.</p>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group"><label>First Name</label><input type="text" placeholder="John"/></div>
+              <div class="form-group"><label>Last Name</label><input type="text" placeholder="Doe"/></div>
+            </div>
+            <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com"/></div>
+            <div class="form-group">
+              <label>Analysis Type</label>
+              <select>
+                <option value="">— Select —</option>
+                <option>RNA-seq / Transcriptomics</option>
+                <option>WGS / Whole Genome Sequencing</option>
+                <option>WES / Whole Exome Sequencing</option>
+                <option>16S Metagenomics</option>
+                <option>Shotgun Metagenomics</option>
+                <option>Custom Pipeline</option>
+                <option>Not sure</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Organism</label>
+              <input type="text" placeholder="e.g. Homo sapiens, E. coli, mixed community..."/>
+            </div>
+            <div class="form-group">
+              <label>Project Description</label>
+              <textarea placeholder="Describe your dataset, research question, and goals..."></textarea>
+            </div>
+            <button class="btn-submit" onclick="submitServiceForm('genomics')">Send Request →</button>
+            <div class="secure-note">🔒 Your data is kept strictly confidential</div>
+          </div>
+          <div class="form-success" id="form-genomics-success">
+            <div class="check">✅</div>
+            <h3>Request Sent!</h3>
+            <p>A specialist will review your project and respond within 24–48 hours.</p>
+            <div class="btn-reset" onclick="resetServiceForm('genomics')">Submit another request</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ════ ALL SERVICES OVERVIEW ════ -->
+  <section class="overview-section">
+    <div class="overview-header reveal">
+      <div class="section-tag">// All Services</div>
+      <h2>Everything We Offer at a Glance</h2>
+    </div>
+    <div class="overview-grid">
+      <div class="overview-card reveal" onclick="scrollToTab('editing')">
+        <div class="ov-num">01</div>
+        <div class="ov-icon">📝</div>
+        <h3>Manuscript Review &amp; Editing</h3>
+        <p>Grammar, structure, style — polished for any journal.</p>
+        <span class="ov-arrow">→</span>
+      </div>
+      <div class="overview-card reveal" onclick="scrollToTab('stats')">
+        <div class="ov-num">02</div>
+        <div class="ov-icon">📊</div>
+        <h3>Statistical Analysis</h3>
+        <p>SPSS, R, Python — interpreted and ready to publish.</p>
+        <span class="ov-arrow">→</span>
+      </div>
+      <div class="overview-card reveal" onclick="scrollToTab('graphics')">
+        <div class="ov-num">03</div>
+        <div class="ov-icon">📈</div>
+        <h3>Graphics &amp; Visualization</h3>
+        <p>Publication-ready figures, posters, and infographics.</p>
+        <span class="ov-arrow">→</span>
+      </div>
+      <div class="overview-card reveal" onclick="scrollToTab('genomics')">
+        <div class="ov-num">04</div>
+        <div class="ov-icon">🧬</div>
+        <h3>Data &amp; Genomic Analysis</h3>
+        <p>NGS pipelines, RNA-seq, variant calling, metagenomics.</p>
+        <span class="ov-arrow">→</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ PROCESS TIMELINE ════ -->
+  <section class="process-section">
+    <div class="process-header reveal">
+      <div class="section-tag">// How It Works</div>
+      <h2>From Request to Delivery</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-step reveal">
+        <div class="step-dot">01</div>
+        <h4>Submit Request</h4>
+        <p>Fill the service form with your project details</p>
+      </div>
+      <div class="timeline-step reveal">
+        <div class="step-dot">02</div>
+        <h4>We Review</h4>
+        <p>Our team reviews and sends a quote within 24h</p>
+      </div>
+      <div class="timeline-step reveal">
+        <div class="step-dot">03</div>
+        <h4>Consultation</h4>
+        <p>Optional call via Google Calendar to align on goals</p>
+      </div>
+      <div class="timeline-step reveal">
+        <div class="step-dot">04</div>
+        <h4>We Deliver</h4>
+        <p>Work completed to agreed deadline and standard</p>
+      </div>
+      <div class="timeline-step reveal">
+        <div class="step-dot">05</div>
+        <h4>Revisions</h4>
+        <p>We offer revisions until you're fully satisfied</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ FAQ ════ -->
+  <section class="faq-section">
+    <div class="faq-left reveal">
+      <div class="section-tag">// FAQ</div>
+      <h2>Common Questions</h2>
+      <p>Everything you need to know before submitting a request.</p>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          How long does turnaround take? <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a">Standard turnaround is 3–7 business days depending on scope. Rush delivery (24–48h) is available at an additional fee. Genomic analysis projects may take 1–2 weeks.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Is my research kept confidential? <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a">Absolutely. All submissions are treated with strict confidentiality. We can sign a Non-Disclosure Agreement (NDA) upon request before any files are shared.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          How do I share my files with you? <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a">After your request is confirmed, we'll provide a secure Google Drive link or email address for file submission. We accept Word docs, Excel sheets, raw data files, and more.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Do you offer revisions? <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a">Yes. All services include at least one round of revisions at no extra cost. Additional revision rounds can be arranged if needed.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          How is payment handled? <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a">After we agree on scope and price, we'll send you a PayPal invoice. Payment is typically split — 50% upfront, 50% on delivery — for larger projects.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Can I request a consultation before committing? <span class="arrow">▾</span>
+        </div>
+        <div class="faq-a">Yes — and we encourage it. Select "Book a Consultation" in the form and we'll schedule a free 20-minute call via Google Calendar to discuss your project.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ CTA ════ -->
+  <section class="cta-band">
+    <div>
+      <h2>Ready to Get Started?</h2>
+      <p>Pick a service above, fill the form, and we'll be in touch within 24 hours.</p>
+    </div>
+    <a href="#request" class="btn-dark">Send a Request →</a>
+  </section>
+
+  <!-- ════ FOOTER ════ -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="Linkrite-landing.html" class="logo" style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:800;color:var(--cream);text-decoration:none;">Lin<span style="color:var(--gold)">rite</span></a>
+        <p>Expert academic and scientific services for researchers, students, and institutions worldwide.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="#" onclick="switchTabByName('editing')">Manuscript Editing</a></li>
+          <li><a href="#" onclick="switchTabByName('stats')">Statistical Analysis</a></li>
+          <li><a href="#" onclick="switchTabByName('graphics')">Data Visualization</a></li>
+          <li><a href="#" onclick="switchTabByName('genomics')">Genomic Analysis</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Store</h5>
+        <ul>
+          <li><a href="Linkrite-store.html">E-books</a></li>
+          <li><a href="https://selar.co" target="_blank">Selar Store</a></li>
+          <li><a href="#">Free Workshop</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="index.html#consult">Contact Us</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="terms-conditions.html">Terms &amp; Conditions</a></li>
+          <li><a href="help.html">Help</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Linkrite.com — All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-link">𝕏</a>
+        <a href="#" class="social-link">in</a>
+        <a href="#" class="social-link">ig</a>
+        <a href="#" class="social-link">@</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">
+    <strong>Request Sent ✓</strong>We'll be in touch within 24 hours.
+  </div>
+
+  <script>
+    // ── Mobile Menu ──
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+
+    // ── Nav scroll shadow ──
+    window.addEventListener('scroll', () => {
+      document.getElementById('mainNav').style.boxShadow =
+        window.scrollY > 20 ? '0 4px 30px rgba(0,0,0,0.3)' : 'none';
+    });
+
+    // ── Tab switching ──
+    function switchTab(id, btn) {
+      document.querySelectorAll('.service-block').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('block-' + id).classList.add('active');
+      if (btn) btn.classList.add('active');
+    }
+
+    function switchTabByName(id) {
+      const btns = document.querySelectorAll('.tab-btn');
+      const map = { editing: 0, stats: 1, graphics: 2, genomics: 3 };
+      switchTab(id, btns[map[id]]);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return false;
+    }
+
+    function scrollToTab(id) {
+      switchTabByName(id);
+      document.querySelector('.tabs-bar').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ── Form submit ──
+    function submitServiceForm(id) {
+      document.getElementById('form-' + id + '-content').style.display = 'none';
+      document.getElementById('form-' + id + '-success').style.display = 'block';
+      showToast();
+    }
+
+    function resetServiceForm(id) {
+      document.getElementById('form-' + id + '-content').style.display = 'block';
+      document.getElementById('form-' + id + '-success').style.display = 'none';
+    }
+
+    // ── FAQ accordion ──
+    function toggleFaq(el) {
+      const ans = el.nextElementSibling;
+      const isOpen = ans.classList.contains('open');
+      document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+      document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+      if (!isOpen) { ans.classList.add('open'); el.classList.add('open'); }
+    }
+
+    // ── Toast ──
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 4000);
+    }
+
+    // ── Scroll reveal ──
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

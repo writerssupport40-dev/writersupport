@@ -1,0 +1,17 @@
+{
+  "name": "Linkrite-admin-backend",
+  "version": "1.0.0",
+  "description": "Backend server for Linkrite admin authentication and dashboard access.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^8.0.7",
+    "sqlite3": "^5.1.6"
+  }
+}

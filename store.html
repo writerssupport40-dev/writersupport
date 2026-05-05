@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Store — Linkrite</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green-deep:  #132d1e;
+      --green-mid:   #1e4a2f;
+      --green-light: #2a6642;
+      --gold:        #c9a84c;
+      --gold-light:  #e2c97e;
+      --cream:       #f5f0e8;
+      --cream-dark:  #ede6d6;
+      --white:       #ffffff;
+      --text-dark:   #0e1f15;
+      --text-muted:  #5a7264;
+      --border:      rgba(201,168,76,0.25);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+      background: rgba(19,45,30,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow 0.3s;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--cream);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .logo span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(245,240,232,0.75);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold) !important;
+      color: var(--green-deep) !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2px;
+      font-weight: 600 !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--cream); }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: var(--green-deep);
+      padding: 9rem 8% 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-hero::before {
+      content: 'STORE';
+      position: absolute;
+      right: 4%;
+      bottom: -1rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 13rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.03);
+      pointer-events: none;
+    }
+
+    .hero-grid-lines {
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(
+        90deg, transparent, transparent 79px,
+        rgba(201,168,76,0.04) 79px, rgba(201,168,76,0.04) 80px
+      );
+      pointer-events: none;
+    }
+
+    .breadcrumb {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.4);
+      margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: var(--gold); text-decoration: none; }
+
+    .page-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      color: var(--cream);
+      line-height: 1.1;
+      max-width: 680px;
+      position: relative;
+      z-index: 1;
+    }
+    .page-hero h1 em { font-style: italic; color: var(--gold); }
+
+    .page-hero p {
+      font-size: 1rem;
+      color: rgba(245,240,232,0.6);
+      max-width: 520px;
+      line-height: 1.75;
+      margin-top: 1.25rem;
+      font-weight: 300;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-selar-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 2rem;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid var(--border);
+      padding: 0.6rem 1.1rem;
+      border-radius: 2px;
+      font-size: 0.8rem;
+      color: var(--gold-light);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--cream-dark);
+      padding: 0 8%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      position: sticky;
+      top: 70px;
+      z-index: 50;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter-tabs::-webkit-scrollbar { display: none; }
+
+    .filter-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 1.1rem 1.5rem;
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .filter-btn:hover { color: var(--green-deep); }
+    .filter-btn.active { color: var(--green-deep); border-bottom-color: var(--gold); font-weight: 500; }
+
+    .book-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* ── FEATURED BOOK ── */
+    .featured-section {
+      padding: 4rem 8% 0;
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .featured-card {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      background: var(--green-deep);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 4rem;
+    }
+
+    .featured-cover {
+      height: 100%;
+      min-height: 340px;
+      background: linear-gradient(145deg, #1a3d28, #0d2418);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .featured-cover::before {
+      content: '';
+      position: absolute;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.15), transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .cover-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--cream);
+      text-align: center;
+      line-height: 1.25;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-line {
+      width: 40px; height: 2px;
+      background: var(--gold);
+      margin: 1.25rem auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-author {
+      font-size: 0.8rem;
+      color: rgba(245,240,232,0.5);
+      letter-spacing: 0.08em;
+      position: relative;
+      z-index: 1;
+    }
+
+    .featured-info {
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .featured-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(201,168,76,0.15);
+      border: 1px solid var(--border);
+      color: var(--gold);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+      margin-bottom: 1.25rem;
+      width: fit-content;
+    }
+
+    .featured-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .featured-info p {
+      font-size: 0.9rem;
+      color: rgba(245,240,232,0.6);
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+
+    .featured-meta {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .meta-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.35);
+    }
+
+    .meta-value {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--cream);
+    }
+
+    .featured-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--green-deep);
+      padding: 0.8rem 1.75rem;
+      border-radius: 2px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+    .btn-ghost {
+      border: 1px solid rgba(245,240,232,0.2);
+      color: rgba(245,240,232,0.7);
+      padding: 0.8rem 1.75rem;
+      border-radius: 2px;
+      font-size: 0.88rem;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+      display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── BOOKS GRID ── */
+    .books-section {
+      padding: 0 8% 6rem;
+    }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .book-card {
+      background: var(--white);
+      border: 1px solid var(--cream-dark);
+      border-radius: 3px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      display: none;
+    }
+    .book-card.visible { display: flex; flex-direction: column; }
+    .book-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(19,45,30,0.1);
+      border-color: rgba(201,168,76,0.35);
+    }
+
+    .book-cover {
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .book-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.3));
+    }
+
+    .bc-1  { background: linear-gradient(135deg, #1e3a2f, #2d6645); }
+    .bc-2  { background: linear-gradient(135deg, #2a2010, #7a5520); }
+    .bc-3  { background: linear-gradient(135deg, #1a1a2e, #2e2e6a); }
+    .bc-4  { background: linear-gradient(135deg, #2d1a1a, #6a2e2e); }
+    .bc-5  { background: linear-gradient(135deg, #1a2a1a, #3a5a3a); }
+    .bc-6  { background: linear-gradient(135deg, #201a2d, #4a3a6a); }
+    .bc-7  { background: linear-gradient(135deg, #1e2a3a, #2e4a6a); }
+    .bc-8  { background: linear-gradient(135deg, #2a1e1a, #5a3a1a); }
+
+    .cover-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--cream);
+      text-align: center;
+      line-height: 1.3;
+      position: relative;
+      z-index: 1;
+    }
+
+    .new-badge {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: var(--gold);
+      color: var(--green-deep);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border-radius: 100px;
+      z-index: 2;
+    }
+
+    .book-body {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .book-cat {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+
+    .book-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+
+    .book-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      flex: 1;
+      margin-bottom: 1.25rem;
+    }
+
+    .book-footer {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .btn-sample {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border: 1px solid var(--cream-dark);
+      padding: 0.45rem 1rem;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-sample:hover { border-color: var(--green-light); color: var(--green-deep); }
+
+    .btn-selar {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--green-deep);
+      background: var(--gold);
+      padding: 0.45rem 1rem;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.2s;
+      flex: 1;
+      text-align: center;
+    }
+    .btn-selar:hover { background: var(--gold-light); }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      display: none;
+      text-align: center;
+      padding: 5rem 2rem;
+      grid-column: 1 / -1;
+    }
+    .empty-state.show { display: block; }
+    .empty-state p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* ── SAMPLE SECTION ── */
+    .sample-section {
+      padding: 5rem 8%;
+      background: var(--green-mid);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .sample-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .sample-section p {
+      font-size: 0.9rem;
+      color: rgba(245,240,232,0.6);
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+
+    .sample-steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .sample-step {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 0.88rem;
+      color: rgba(245,240,232,0.7);
+      line-height: 1.6;
+      padding-top: 0.2rem;
+    }
+
+    .sample-preview {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .preview-header {
+      background: rgba(0,0,0,0.3);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .preview-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .preview-dot.red   { background: #e06c75; }
+    .preview-dot.amber { background: #e5c07b; }
+    .preview-dot.green { background: #98c379; }
+
+    .preview-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      color: rgba(245,240,232,0.4);
+      margin-left: 0.5rem;
+    }
+
+    .preview-body {
+      padding: 1.5rem;
+    }
+
+    .preview-line {
+      height: 10px;
+      background: rgba(245,240,232,0.1);
+      border-radius: 100px;
+      margin-bottom: 0.6rem;
+    }
+    .preview-line.w-full { width: 100%; }
+    .preview-line.w-80   { width: 80%; }
+    .preview-line.w-60   { width: 60%; }
+    .preview-line.w-90   { width: 90%; }
+    .preview-line.w-70   { width: 70%; }
+
+    .preview-gold {
+      height: 2px;
+      background: var(--gold);
+      opacity: 0.3;
+      margin: 1.25rem 0;
+    }
+
+    .preview-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.25rem;
+    }
+
+    .preview-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .preview-btn {
+      background: var(--gold);
+      color: var(--green-deep);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.35rem 0.85rem;
+      border-radius: 2px;
+    }
+
+    /* ── SELAR BANNER ── */
+    .selar-banner {
+      padding: 5rem 8%;
+      background: var(--cream-dark);
+      text-align: center;
+    }
+
+    .selar-banner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 1rem;
+    }
+
+    .selar-banner p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.75;
+    }
+
+    .selar-features {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+
+    .selar-feature {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.83rem;
+      color: var(--text-muted);
+    }
+
+    .selar-feature span { color: var(--green-light); font-weight: 600; }
+
+    .btn-selar-main {
+      display: inline-block;
+      background: var(--green-deep);
+      color: var(--cream);
+      padding: 1rem 2.5rem;
+      border-radius: 2px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-selar-main:hover { background: var(--green-mid); }
+
+    /* ── CTA BAND ── */
+    .cta-band {
+      background: var(--gold);
+      padding: 4rem 8%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .cta-band h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      font-weight: 800;
+      color: var(--green-deep);
+    }
+
+    .cta-band p {
+      font-size: 0.9rem;
+      color: rgba(19,45,30,0.65);
+      margin-top: 0.4rem;
+    }
+
+    .btn-dark {
+      background: var(--green-deep);
+      color: var(--cream);
+      padding: 1rem 2.5rem;
+      border-radius: 2px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .btn-dark:hover { background: var(--green-mid); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green-deep);
+      padding: 5rem 8% 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-brand p {
+      font-size: 0.83rem;
+      color: rgba(245,240,232,0.5);
+      line-height: 1.7;
+      max-width: 280px;
+      margin-top: 1rem;
+    }
+
+    .footer-col h5 {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 0.6rem; }
+    .footer-col a {
+      font-size: 0.83rem;
+      color: rgba(245,240,232,0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--cream); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(201,168,76,0.1);
+      padding-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-bottom p { font-size: 0.78rem; color: rgba(245,240,232,0.35); }
+
+    .footer-socials { display: flex; gap: 1rem; }
+    .social-link {
+      width: 32px; height: 32px;
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      text-decoration: none;
+      color: rgba(245,240,232,0.5);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .social-link:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .featured-card { grid-template-columns: 240px 1fr; }
+      .books-grid { grid-template-columns: repeat(2, 1fr); }
+      .sample-section { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .featured-card { grid-template-columns: 1fr; }
+      .featured-cover { min-height: 220px; }
+      .books-grid { grid-template-columns: 1fr; }
+      .filter-bar { flex-direction: column; align-items: flex-start; padding: 0 6%; }
+      .cta-band { flex-direction: column; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+      .nav-links { display: none; position: absolute; top: 70px; left: 0; right: 0;
+        background: var(--green-deep); flex-direction: column;
+        padding: 2rem 6%; gap: 1.5rem; border-bottom: 1px solid var(--border); }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+      .sample-preview { display: none; }
+      .selar-features { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════ NAV ════ -->
+  <nav id="mainNav">
+    <a href="index.html" class="logo">
+      <svg width="100" height="32" viewBox="0 0 100 32" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <style>
+            .logo-text { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 20px; }
+            .logo-lin { fill: #f5f0e8; }
+            .logo-rite { fill: #c9a84c; }
+          </style>
+        </defs>
+        <text x="0" y="22" class="logo-text logo-lin">Lin</text>
+        <text x="32" y="22" class="logo-text logo-rite">rite</text>
+      </svg>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="servicepage.html">Services</a></li>
+      <li><a href="store.html" class="active">Store</a></li>
+      <li><a href="index.html#workshop">Workshop</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="index.html#consult" class="nav-cta">Get Started</a></li>
+    </ul>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- ════ PAGE HERO ════ -->
+  <section class="page-hero">
+    <div class="hero-grid-lines"></div>
+    <div class="breadcrumb"><a href="Linkrite-landing.html">Home</a> / Store</div>
+    <h1>Books That <em>Build</em><br/>Better Researchers</h1>
+    <p>Curated e-books across microbiology, chemistry, research methods and data analysis. Read a free sample — then get the full book on Selar.</p>
+    <div class="hero-selar-badge">
+      📦 &nbsp; All purchases are completed securely on Selar.co — payments, delivery, and receipts handled for you.
+    </div>
+  </section>
+
+  <!-- ════ FILTER BAR ════ -->
+  <div class="filter-bar">
+    <div class="filter-tabs">
+      <button class="filter-btn active" onclick="filterBooks('all', this)">All Books</button>
+      <button class="filter-btn" onclick="filterBooks('microbiology', this)">Microbiology</button>
+      <button class="filter-btn" onclick="filterBooks('chemistry', this)">Chemistry</button>
+      <button class="filter-btn" onclick="filterBooks('research', this)">Research Methods</button>
+      <button class="filter-btn" onclick="filterBooks('data', this)">Data Analysis</button>
+    </div>
+    <div class="book-count" id="bookCount">Showing 8 books</div>
+  </div>
+
+  <!-- ════ FEATURED BOOK ════ -->
+  <section class="featured-section">
+    <div class="section-label">// Featured Book</div>
+    <div class="featured-card">
+      <div class="featured-cover">
+        <div class="cover-label">Linkrite Press</div>
+        <div class="cover-title">Principles of Scientific Writing</div>
+        <div class="cover-line"></div>
+        <div class="cover-author">Linkrite Editorial Team</div>
+      </div>
+      <div class="featured-info">
+        <div class="featured-badge">⭐ Editor's Pick</div>
+        <h2>The Researcher's Guide to Writing Papers That Get Published</h2>
+        <p>A comprehensive, practical guide that walks you through every section of a scientific manuscript — from crafting a compelling abstract to structuring your discussion and navigating the peer review process. Written for students, postgrads, and early-career researchers.</p>
+        <div class="featured-meta">
+          <div class="meta-item">
+            <div class="meta-label">Category</div>
+            <div class="meta-value">Research Methods</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Format</div>
+            <div class="meta-value">PDF E-book</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Pages</div>
+            <div class="meta-value">~180 pages</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Delivery</div>
+            <div class="meta-value">Instant (Selar)</div>
+          </div>
+        </div>
+        <div class="featured-actions">
+          <!-- Replace href with your actual Selar product link -->
+          <a href="https://selar.co" target="_blank" class="btn-primary">Get Full Book on Selar →</a>
+          <a href="#" class="btn-ghost" onclick="openSample('Principles of Scientific Writing')">Read Free Sample</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ ALL BOOKS ════ -->
+  <section class="books-section" id="booksSection">
+    <div class="section-label">// All E-Books</div>
+    <div class="books-grid" id="booksGrid">
+
+      <!-- BOOK 1 — Research Methods -->
+      <div class="book-card visible" data-cat="research">
+        <div class="book-cover bc-1">
+          <div class="cover-text">Writing for Science</div>
+        </div>
+        <div class="book-body">
+          <div class="book-cat">Research Methods</div>
+          <div class="book-title">Writing for Science: From Notes to Publication</div>
+          <div class="book-desc">A step-by-step guide for converting raw research into a polished, publishable scientific article — including how to handle reviewer comments.</div>
+          <div class="book-footer">
+            <a href="#" class="btn-sample" onclick="openSample('Writing for Science')">Free Sample</a>
+            <!-- Replace href below with your Selar product link -->
+            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOOK 2 — Microbiology -->
+      <div class="book-card visible" data-cat="microbiology">
+        <div class="book-cover bc-2">
+          <div class="new-badge">New</div>
+          <div class="cover-text">Microbiology Data Analysis</div>
+        </div>
+        <div class="book-body">
+          <div class="book-cat">Microbiology</div>
+          <div class="book-title">Microbiology Data Analysis: A Practical Handbook</div>
+          <div class="book-desc">Techniques for analyzing microbiological datasets — growth curves, MIC values, antimicrobial susceptibility, and zone of inhibition data.</div>
+          <div class="book-footer">
+            <a href="#" class="btn-sample" onclick="openSample('Microbiology Data Analysis')">Free Sample</a>
+            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOOK 3 — Chemistry -->
+      <div class="book-card visible" data-cat="chemistry">
+        <div class="book-cover bc-3">
+          <div class="cover-text">Chemistry Lab Statistics</div>
+        </div>
+        <div class="book-body">
+          <div class="book-cat">Chemistry</div>
+          <div class="book-title">Chemistry Lab Statistics: Error, Calibration & Reporting</div>
+          <div class="book-desc">Statistical methods tailored for chemistry labs — error propagation, calibration curves, limit of detection, and data reporting standards.</div>
+          <div class="book-footer">
+            <a href="#" class="btn-sample" onclick="openSample('Chemistry Lab Statistics')">Free Sample</a>
+            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOOK 4 — Data Analysis -->
+      <div class="book-card visible" data-cat="data">
+        <div class="book-cover bc-4">
+          <div class="new-badge">New</div>
+          <div class="cover-text">R for Researchers</div>
+        </div>
+        <div class="book-body">
+          <div class="book-cat">Data Analysis</div>
+          <div class="book-title">R for Researchers: Statistical Analysis Without the Jargon</div>
+          <div class="book-desc">A friendly, practical introduction to R for life scientists — from importing datasets to running ANOVAs, visualizing data, and exporting results.</div>
+          <div class="book-footer">
+            <a href="#" class="btn-sample" onclick="openSample('R for Researchers')">Free Sample</a>
+            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOOK 5 — Microbiology -->
+      <div class="book-card visible" data-cat="microbiology">
+        <div class="book-cover bc-5">
+          <div class="cover-text">Clinical Microbiology Essentials</div>
+        </div>
+        <div class="book-body">
+          <div class="book-cat">Microbiology</div>
+          <div class="book-title">Clinical Microbiology Essentials for Students</div>
+          <div class="book-desc">Core concepts in diagnostic microbiology — specimen processing, culture interpretation, antibiogram reading, and case-based learning.</div>
+          <div class="book-footer">
+            <a href="#" class="btn-sample" onclick="openSample('Clinical Microbiology Essentials')">Free Sample</a>
+            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOOK 6 — Research Methods -->
+      <div class="book-card visible" data-cat="research">
+        <div class="book-cover bc-6">
+          <div class="cover-text">The Grant Writing Playbook</div>
+        </div>
+        <div class="book-body">
+          <div class="book-cat">Research Methods</div>
+          <div class="book-title">The Grant Writing Playbook: Proposals That Win Funding</div>
+          <div class="book-desc">Practical strategies for writing competitive research grant proposals — from understanding the call to crafting a budget justification and impact statement.</div>
+          <div class="book-footer">
+            <a href="#" class="btn-sample" onclick="openSample('The Grant Writing Playbook')">Free Sample</a>
+            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOOK 7 — Chemistry -->
+      <div class="book-card visible" data-cat="chemistry">
+        <div class="book-cover bc-7">
+          <div class="cover-text">Analytical Chemistry Methods</div>
+        </div>
+        <div class="book-body">
+          <div class="book-cat">Chemistry</div>
+          <div class="book-title">Analytical Chemistry Methods: A Student's Reference</div>
+          <div class="book-desc">HPLC, UV-Vis, AAS, GC-MS — concise, exam-ready explanations of key analytical chemistry techniques, principles, and data interpretation.</div>
+          <div class="book-footer">
+            <a href="#" class="btn-sample" onclick="openSample('Analytical Chemistry Methods')">Free Sample</a>
+            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOOK 8 — Data Analysis -->
+      <div class="book-card visible" data-cat="data">
+        <div class="book-cover bc-8">
+          <div class="cover-text">SPSS for Beginners</div>
+        </div>
+        <div class="book-body">
+          <div class="book-cat">Data Analysis</div>
+          <div class="book-title">SPSS for Beginners: A Complete Research Toolkit</div>
+          <div class="book-desc">Covers data entry, cleaning, descriptive statistics, t-tests, ANOVA, correlation, and regression — with screenshots and worked examples.</div>
+          <div class="book-footer">
+            <a href="#" class="btn-sample" onclick="openSample('SPSS for Beginners')">Free Sample</a>
+            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state" id="emptyState">
+        <p>No books in this category yet — check back soon!</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════ HOW SAMPLES WORK ════ -->
+  <section class="sample-section">
+    <div class="reveal">
+      <div class="section-label" style="color:var(--gold-light)">// Free Samples</div>
+      <h2>Read Before You Buy</h2>
+      <p>Every book includes a free sample chapter so you can assess quality and relevance before purchasing. No signup required.</p>
+      <ul class="sample-steps">
+        <li class="sample-step">
+          <div class="step-num">1</div>
+          <div class="step-text">Click <strong style="color:var(--cream)">"Free Sample"</strong> on any book card — a preview PDF opens instantly.</div>
+        </li>
+        <li class="sample-step">
+          <div class="step-num">2</div>
+          <div class="step-text">Read the sample chapter to see if the book is right for you.</div>
+        </li>
+        <li class="sample-step">
+          <div class="step-num">3</div>
+          <div class="step-text">Click <strong style="color:var(--cream)">"Get on Selar →"</strong> to purchase and receive the full book instantly via email.</div>
+        </li>
+      </ul>
+    </div>
+    <div class="sample-preview reveal">
+      <div class="preview-header">
+        <div class="preview-dot red"></div>
+        <div class="preview-dot amber"></div>
+        <div class="preview-dot green"></div>
+        <div class="preview-title">sample_chapter_1.pdf</div>
+      </div>
+      <div class="preview-body">
+        <div class="preview-line w-60" style="height:14px; background:rgba(245,240,232,0.15); margin-bottom:1rem;"></div>
+        <div class="preview-line w-full"></div>
+        <div class="preview-line w-90"></div>
+        <div class="preview-line w-80"></div>
+        <div class="preview-line w-full"></div>
+        <div class="preview-line w-70"></div>
+        <div class="preview-gold"></div>
+        <div class="preview-line w-full"></div>
+        <div class="preview-line w-80"></div>
+        <div class="preview-line w-60"></div>
+        <div class="preview-line w-90"></div>
+        <div class="preview-cta">
+          <div class="preview-tag">End of sample →</div>
+          <div class="preview-btn">Get Full Book</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ SELAR BANNER ════ -->
+  <section class="selar-banner">
+    <div class="reveal">
+      <div class="section-label">// Powered by Selar</div>
+      <h2>Safe, Simple, Instant Delivery</h2>
+      <p>All purchases are processed securely through Selar.co — Nigeria's leading digital product platform. Pay with card, bank transfer, or USSD and receive your e-book immediately.</p>
+      <div class="selar-features">
+        <div class="selar-feature"><span>✓</span> Secure payment processing</div>
+        <div class="selar-feature"><span>✓</span> Instant PDF delivery</div>
+        <div class="selar-feature"><span>✓</span> Bank transfer, card &amp; USSD</div>
+        <div class="selar-feature"><span>✓</span> Automatic receipt &amp; invoice</div>
+        <div class="selar-feature"><span>✓</span> No account required to buy</div>
+      </div>
+      <a href="https://selar.co" target="_blank" class="btn-selar-main">Visit Our Selar Store →</a>
+    </div>
+  </section>
+
+  <!-- ════ CTA ════ -->
+  <section class="cta-band">
+    <div>
+      <h2>Need More Than a Book?</h2>
+      <p>Our expert team offers editing, statistical analysis, and data visualization services.</p>
+    </div>
+    <a href="Linkrite-services.html" class="btn-dark">Explore Services →</a>
+  </section>
+
+  <!-- ════ FOOTER ════ -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <svg width="100" height="32" viewBox="0 0 100 32" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <style>
+                .logo-text { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 20px; }
+                .logo-lin { fill: #f5f0e8; }
+                .logo-rite { fill: #c9a84c; }
+              </style>
+            </defs>
+            <text x="0" y="22" class="logo-text logo-lin">Lin</text>
+            <text x="32" y="22" class="logo-text logo-rite">rite</text>
+          </svg>
+        </a>
+        <p>Expert academic and scientific services for researchers, students, and institutions worldwide.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="Linkrite-services.html">Manuscript Editing</a></li>
+          <li><a href="Linkrite-services.html">Statistical Analysis</a></li>
+          <li><a href="Linkrite-services.html">Data Visualization</a></li>
+          <li><a href="Linkrite-services.html">Genomic Analysis</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Store</h5>
+        <ul>
+          <li><a href="Linkrite-store.html">All E-books</a></li>
+          <li><a href="#" onclick="filterBooks('microbiology', null)">Microbiology</a></li>
+          <li><a href="#" onclick="filterBooks('chemistry', null)">Chemistry</a></li>
+          <li><a href="https://selar.co" target="_blank">Selar Store</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="index.html#consult">Contact Us</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="terms-conditions.html">Terms &amp; Conditions</a></li>
+          <li><a href="help.html">Help</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Linkrite.com — All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-link">𝕏</a>
+        <a href="#" class="social-link">in</a>
+        <a href="#" class="social-link">ig</a>
+        <a href="#" class="social-link">@</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sample Modal -->
+  <div id="sampleModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:200; align-items:center; justify-content:center;">
+    <div style="background:var(--white); border-radius:4px; padding:2.5rem; max-width:480px; width:90%; position:relative;">
+      <button onclick="closeSample()" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--text-muted);">✕</button>
+      <div style="font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); margin-bottom:0.75rem;">// Free Sample</div>
+      <h3 id="sampleTitle" style="font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--green-deep); margin-bottom:1rem;"></h3>
+      <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.7; margin-bottom:1.5rem;">
+        Your free sample chapter will open as a PDF. Add your actual sample PDF link in the code where indicated.
+        <br/><br/>
+        For now, this placeholder confirms the button is working correctly.
+      </p>
+      <div style="display:flex; gap:0.75rem;">
+        <!-- Replace href with your actual sample PDF link per book -->
+        <a href="https://selar.co" target="_blank" style="flex:1; background:var(--green-deep); color:var(--cream); text-align:center; padding:0.8rem; border-radius:2px; font-weight:600; font-size:0.85rem; text-decoration:none;">Open Sample PDF</a>
+        <a href="https://selar.co" target="_blank" style="flex:1; background:var(--gold); color:var(--green-deep); text-align:center; padding:0.8rem; border-radius:2px; font-weight:600; font-size:0.85rem; text-decoration:none;">Get Full Book →</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── Mobile Menu ──
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+
+    // ── Nav shadow ──
+    window.addEventListener('scroll', () => {
+      document.getElementById('mainNav').style.boxShadow =
+        window.scrollY > 20 ? '0 4px 30px rgba(0,0,0,0.3)' : 'none';
+    });
+
+    // ── Filter books ──
+    function filterBooks(cat, btn) {
+      const cards = document.querySelectorAll('.book-card');
+      let count = 0;
+
+      cards.forEach(card => {
+        const match = cat === 'all' || card.dataset.cat === cat;
+        card.classList.toggle('visible', match);
+        if (match) count++;
+      });
+
+      const empty = document.getElementById('emptyState');
+      empty.classList.toggle('show', count === 0);
+
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const label = cat === 'all' ? 'All Books' : cat.charAt(0).toUpperCase() + cat.slice(1);
+      document.getElementById('bookCount').textContent =
+        count > 0 ? `Showing ${count} book${count !== 1 ? 's' : ''}` : 'No books found';
+    }
+
+    // ── Sample modal ──
+    function openSample(title) {
+      document.getElementById('sampleTitle').textContent = title;
+      const modal = document.getElementById('sampleModal');
+      modal.style.display = 'flex';
+    }
+
+    function closeSample() {
+      document.getElementById('sampleModal').style.display = 'none';
+    }
+
+    document.getElementById('sampleModal').addEventListener('click', function(e) {
+      if (e.target === this) closeSample();
+    });
+
+    // ── Scroll reveal ──
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

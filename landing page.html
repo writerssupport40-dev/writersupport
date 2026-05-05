@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Linkrite — Polish. Analyze. Publish.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --green-deep:   #132d1e;
+      --green-mid:    #1e4a2f;
+      --green-light:  #2a6642;
+      --gold:         #c9a84c;
+      --gold-light:   #e2c97e;
+      --cream:        #f5f0e8;
+      --cream-dark:   #ede6d6;
+      --white:        #ffffff;
+      --text-dark:    #0e1f15;
+      --text-muted:   #5a7264;
+      --border:       rgba(201,168,76,0.25);
+      --error:        #d32f2f;
+      --success:      #388e3c;
+      --warning:      #f57c00;
+      --info:         #1976d2;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    /* ══════════════════════════════
+       NAV
+    ══════════════════════════════ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+      background: rgba(19,45,30,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--cream);
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+    .logo span {
+      color: var(--gold);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(245,240,232,0.75);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--green-deep) !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2px;
+      font-weight: 600 !important;
+      color: var(--green-deep);
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; color: var(--green-deep) !important; }
+
+    /* ══════════════════════════════
+       HERO
+    ══════════════════════════════ */
+    .hero {
+      min-height: 100vh;
+      background: var(--green-deep);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-circle {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(42,102,66,0.4) 0%, transparent 70%);
+      right: -150px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .hero-bg-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 79px,
+          rgba(201,168,76,0.04) 79px,
+          rgba(201,168,76,0.04) 80px
+        );
+      pointer-events: none;
+    }
+
+    .hero-content {
+      padding: 10rem 5% 6rem 8%;
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.9s ease forwards;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.85rem;
+      border-radius: 2px;
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: rgba(245,240,232,0.65);
+      line-height: 1.7;
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--green-deep);
+      padding: 0.85rem 2rem;
+      border-radius: 2px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+    .btn-outline {
+      border: 1px solid rgba(245,240,232,0.3);
+      color: var(--cream);
+      padding: 0.85rem 2rem;
+      border-radius: 2px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+      display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--gold); background: rgba(201,168,76,0.08); }
+
+    .hero-right {
+      padding: 10rem 8% 6rem 2%;
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.9s 0.2s ease both;
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 4px;
+      padding: 2rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-card-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-item {
+      border-left: 2px solid var(--gold);
+      padding-left: 1rem;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--cream);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: rgba(245,240,232,0.55);
+      margin-top: 0.25rem;
+    }
+
+    .service-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .pill {
+      font-size: 0.75rem;
+      background: rgba(201,168,76,0.12);
+      color: var(--gold-light);
+      border: 1px solid rgba(201,168,76,0.2);
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+    }
+
+    /* ══════════════════════════════
+       SECTION COMMONS
+    ══════════════════════════════ */
+    section { position: relative; z-index: 1; }
+
+    .section-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--green-deep);
+    }
+
+    .section-title.light { color: var(--cream); }
+
+    .section-sub {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-top: 0.75rem;
+    }
+
+    .section-sub.light { color: rgba(245,240,232,0.65); }
+
+    /* ══════════════════════════════
+       HOW IT WORKS STRIP
+    ══════════════════════════════ */
+    .strip {
+      background: var(--green-mid);
+      padding: 3rem 8%;
+      display: flex;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .strip-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 0 2rem;
+      border-right: 1px solid rgba(201,168,76,0.15);
+    }
+    .strip-item:first-child { padding-left: 0; }
+    .strip-item:last-child { border-right: none; }
+
+    .strip-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: rgba(201,168,76,0.25);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .strip-text strong {
+      display: block;
+      color: var(--cream);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+
+    .strip-text span {
+      color: rgba(245,240,232,0.5);
+      font-size: 0.8rem;
+    }
+
+    /* ══════════════════════════════
+       SERVICES
+    ══════════════════════════════ */
+    .services-section {
+      padding: 7rem 8%;
+      background: var(--cream);
+    }
+
+    .services-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3.5rem;
+      gap: 2rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5px;
+      background: var(--cream-dark);
+      border: 1.5px solid var(--cream-dark);
+    }
+
+    .service-card {
+      background: var(--cream);
+      padding: 2.5rem 2rem;
+      transition: background 0.3s;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--gold);
+      transition: width 0.4s;
+    }
+
+    .service-card:hover { background: var(--white); }
+    .service-card:hover::after { width: 100%; }
+
+    .service-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--green-deep);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+      color: var(--gold);
+    }
+
+    .service-icon i {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .service-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+
+    .service-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+    }
+
+    .service-link {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--green-light);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: gap 0.2s, color 0.2s;
+    }
+    .service-link:hover { color: var(--gold); gap: 0.7rem; }
+
+    /* ══════════════════════════════
+       STORE PREVIEW
+    ══════════════════════════════ */
+    .store-section {
+      padding: 7rem 8%;
+      background: var(--green-deep);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .store-section::before {
+      content: 'STORE';
+      position: absolute;
+      right: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Playfair Display', serif;
+      font-size: 14rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.03);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .store-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3rem;
+    }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .book-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 3px;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .book-card:hover { transform: translateY(-4px); border-color: rgba(201,168,76,0.4); }
+
+    .book-cover {
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-style: italic;
+      color: var(--cream);
+      text-align: center;
+      padding: 1.5rem;
+      line-height: 1.3;
+    }
+
+    .book-cover.c1 { background: linear-gradient(135deg, #1e3a2f, #2d6645); }
+    .book-cover.c2 { background: linear-gradient(135deg, #2a2010, #6b4c1a); }
+    .book-cover.c3 { background: linear-gradient(135deg, #1a1a2e, #2e2e5a); }
+
+    .book-info {
+      padding: 1.25rem 1.5rem;
+    }
+
+    .book-category {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+
+    .book-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+
+    .book-desc {
+      font-size: 0.78rem;
+      color: rgba(245,240,232,0.5);
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+    }
+
+    .book-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn-sample {
+      font-size: 0.75rem;
+      color: rgba(245,240,232,0.6);
+      text-decoration: none;
+      border: 1px solid rgba(245,240,232,0.15);
+      padding: 0.4rem 0.85rem;
+      border-radius: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-sample:hover { border-color: rgba(245,240,232,0.4); color: var(--cream); }
+
+    .btn-selar {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--green-deep);
+      background: var(--gold);
+      padding: 0.4rem 0.85rem;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-selar:hover { background: var(--gold-light); }
+
+    /* ══════════════════════════════
+       FREE WORKSHOP BANNER
+    ══════════════════════════════ */
+    .workshop-section {
+      padding: 5rem 8%;
+      background: var(--gold);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 3rem;
+    }
+
+    .workshop-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 800;
+      color: var(--green-deep);
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+
+    .workshop-section p {
+      font-size: 1rem;
+      color: rgba(19,45,30,0.7);
+      max-width: 560px;
+    }
+
+    .btn-dark {
+      background: var(--green-deep);
+      color: var(--cream);
+      padding: 1rem 2.5rem;
+      border-radius: 2px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s;
+      display: inline-block;
+    }
+    .btn-dark:hover { background: var(--green-mid); }
+
+    /* ══════════════════════════════
+       BOOKING / CONSULTATION
+    ══════════════════════════════ */
+    .booking-section {
+      padding: 7rem 8%;
+      background: var(--cream-dark);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .booking-form {
+      background: var(--white);
+      border: 1px solid var(--cream-dark);
+      border-radius: 4px;
+      padding: 2.5rem;
+      box-shadow: 0 4px 40px rgba(19,45,30,0.06);
+    }
+
+    .form-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+      background: var(--cream);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--green-light);
+      background: var(--white);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--green-deep);
+      color: var(--cream);
+      padding: 0.9rem;
+      border: none;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+      letter-spacing: 0.02em;
+    }
+    .btn-submit:hover { background: var(--green-mid); }
+
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .form-success .check {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-success h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--green-deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-success p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* ══════════════════════════════
+       TRUST SIGNALS
+    ══════════════════════════════ */
+    .trust-section {
+      padding: 5rem 8%;
+      background: var(--white);
+    }
+
+    .trust-header { text-align: center; margin-bottom: 3.5rem; }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .trust-item {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      border: 1px solid var(--cream-dark);
+      border-radius: 3px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .trust-item:hover {
+      border-color: rgba(201,168,76,0.4);
+      box-shadow: 0 4px 24px rgba(19,45,30,0.06);
+    }
+
+    .trust-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--green-deep);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      color: var(--gold);
+    }
+
+    .trust-icon i {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .trust-item:hover .trust-icon {
+      background: var(--green-mid);
+    }
+
+    /* ── SHIELD ICON ANIMATION ── */
+    @keyframes shieldGlow {
+      0%, 100% { 
+        fill: var(--gold);
+        filter: drop-shadow(0 0 0px rgba(201,168,76,0.3));
+      }
+      50% { 
+        fill: var(--gold-light);
+        filter: drop-shadow(0 0 6px rgba(201,168,76,0.5));
+      }
+    }
+
+    .icon-shield { 
+      animation: shieldGlow 3s ease-in-out infinite;
+    }
+
+    /* ── TIMER ICON ANIMATION ── */
+    @keyframes timerTick {
+      0%, 100% { 
+        stroke: var(--gold);
+        transform: rotate(0deg);
+      }
+      50% { 
+        stroke: var(--gold-light);
+        transform: rotate(6deg);
+      }
+    }
+
+    .icon-timer { 
+      animation: timerTick 2s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    /* ── VERIFIED ICON ANIMATION ── */
+    @keyframes verifiedPulse {
+      0%, 100% { 
+        fill: var(--gold);
+        transform: scale(1);
+      }
+      50% { 
+        fill: var(--gold-light);
+        transform: scale(1.05);
+      }
+    }
+
+    .icon-verified { 
+      animation: verifiedPulse 2.8s ease-in-out infinite;
+    }
+
+    .trust-item h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .trust-item p {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    footer {
+      background: var(--green-deep);
+      padding: 5rem 8% 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-brand .logo {
+      display: block;
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+    }
+
+    .footer-brand p {
+      font-size: 0.83rem;
+      color: rgba(245,240,232,0.5);
+      line-height: 1.7;
+      max-width: 280px;
+    }
+
+    .footer-col h5 {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 0.6rem; }
+    .footer-col a {
+      font-size: 0.83rem;
+      color: rgba(245,240,232,0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--cream); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(201,168,76,0.1);
+      padding-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-bottom p {
+      font-size: 0.78rem;
+      color: rgba(245,240,232,0.35);
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-link {
+      width: 32px;
+      height: 32px;
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      text-decoration: none;
+      color: rgba(245,240,232,0.5);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .social-link:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ══════════════════════════════
+       MOBILE MENU
+    ══════════════════════════════ */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--cream);
+      transition: all 0.3s;
+    }
+
+    /* ══════════════════════════════
+       ANIMATIONS
+    ══════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ══════════════════════════════
+       NOTIFICATION TOAST
+    ══════════════════════════════ */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--green-mid);
+      color: var(--cream);
+      padding: 1rem 1.5rem;
+      border-radius: 3px;
+      border-left: 3px solid var(--gold);
+      font-size: 0.85rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s;
+      z-index: 999;
+      max-width: 320px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast strong { display: block; margin-bottom: 0.2rem; color: var(--gold); }
+
+    /* ══════════════════════════════
+       FORM VALIDATION & ERRORS
+    ══════════════════════════════ */
+    .form-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(201,168,76,0.1);
+    }
+
+    .form-group.error input,
+    .form-group.error select,
+    .form-group.error textarea {
+      border-color: var(--error);
+      box-shadow: 0 0 0 2px rgba(211,47,47,0.1);
+    }
+
+    .form-error {
+      display: none;
+      color: var(--error);
+      font-size: 0.75rem;
+      margin-top: 0.3rem;
+      font-weight: 500;
+    }
+
+    .form-group.error .form-error {
+      display: block;
+    }
+
+    .form-group.success input,
+    .form-group.success select,
+    .form-group.success textarea {
+      border-color: var(--success);
+      box-shadow: 0 0 0 2px rgba(56,142,60,0.1);
+    }
+
+    /* ══════════════════════════════
+       LOADING SPINNER
+    ══════════════════════════════ */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: var(--white);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 0.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .btn-submit.loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 1024px) {
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .books-grid { grid-template-columns: repeat(2, 1fr); }
+      .trust-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-content { padding: 8rem 6% 5rem; }
+      .strip { flex-direction: column; gap: 2rem; }
+      .strip-item { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.15); padding: 0 0 1.5rem; }
+      .strip-item:last-child { border-bottom: none; }
+      .services-header { flex-direction: column; align-items: flex-start; }
+      .services-grid { grid-template-columns: 1fr; }
+      .books-grid { grid-template-columns: 1fr; }
+      .workshop-section { grid-template-columns: 1fr; }
+      .booking-section { grid-template-columns: 1fr; }
+      .trust-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+      .nav-links { display: none; position: absolute; top: 70px; left: 0; right: 0; background: var(--green-deep); flex-direction: column; padding: 2rem 6%; gap: 1.5rem; border-bottom: 1px solid var(--border); }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════ NAV ════ -->
+  <nav>
+    <a href="#" class="logo">
+      <svg width="140" height="44" viewBox="0 0 100 32" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <style>
+            .logo-text { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 28px; }
+            .logo-lin { fill: #f5f0e8; }
+            .logo-rite { fill: #c9a84c; }
+          </style>
+        </defs>
+        <text x="0" y="22" class="logo-text logo-lin">Lin</text>
+        <text x="32" y="22" class="logo-text logo-rite">rite</text>
+      </svg>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#store">Store</a></li>
+      <li><a href="#workshop">Workshop</a></li>
+      <li><a href="#consult">Book a Call</a></li>
+      <li><a href="#consult" class="nav-cta">Get Started</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- ════ HERO ════ -->
+  <section class="hero">
+    <div class="hero-bg-circle"></div>
+    <div class="hero-bg-lines"></div>
+
+    <div class="hero-content">
+      <div class="hero-tag">✦ Academic &amp; Scientific Services</div>
+      <h1>Polish.<br/><em>Analyze.</em><br/>Publish.</h1>
+      <p class="hero-sub">
+        Professional manuscript editing, statistical analysis, data visualization,
+        and scientific consulting — built for researchers, students, and institutions.
+      </p>
+      <div class="hero-actions">
+        <a href="#services" class="btn-primary">Explore Services →</a>
+        <a href="#store" class="btn-outline">Browse the Store</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-card">
+        <div class="hero-card-title">// What we do</div>
+        <div class="stat-row">
+          <div class="stat-item">
+            <div class="stat-num">4</div>
+            <div class="stat-label">Core Services</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">∞</div>
+            <div class="stat-label">E-books Available</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">24h</div>
+            <div class="stat-label">Response Time</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">100%</div>
+            <div class="stat-label">Confidential</div>
+          </div>
+        </div>
+        <div class="service-pills">
+          <span class="pill">Manuscript Editing</span>
+          <span class="pill">Statistical Analysis</span>
+          <span class="pill">Data Visualization</span>
+          <span class="pill">Genomic Analysis</span>
+          <span class="pill">E-books</span>
+          <span class="pill">Workshops</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ HOW IT WORKS ════ -->
+  <div class="strip">
+    <div class="strip-item">
+      <div class="strip-num">01</div>
+      <div class="strip-text">
+        <strong>Choose a Service</strong>
+        <span>Browse our expert offerings</span>
+      </div>
+    </div>
+    <div class="strip-item">
+      <div class="strip-num">02</div>
+      <div class="strip-text">
+        <strong>Submit Your Request</strong>
+        <span>Fill a quick form — we respond in 24h</span>
+      </div>
+    </div>
+    <div class="strip-item">
+      <div class="strip-num">03</div>
+      <div class="strip-text">
+        <strong>Book a Consultation</strong>
+        <span>Discuss details via Google Calendar</span>
+      </div>
+    </div>
+    <div class="strip-item">
+      <div class="strip-num">04</div>
+      <div class="strip-text">
+        <strong>Get Results</strong>
+        <span>Receive polished, publishable work</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ SERVICES ════ -->
+  <section class="services-section" id="services">
+    <div class="services-header reveal">
+      <div>
+        <div class="section-tag">// Our Services</div>
+        <h2 class="section-title">Expert Help,<br/>Every Step of the Way</h2>
+      </div>
+      <p class="section-sub">
+        From raw data to published manuscript — we cover the full research pipeline with precision and care.
+      </p>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon"><i class="bx bx-edit"></i></div>
+        <h3>Manuscript Review &amp; Editing</h3>
+        <p>Comprehensive editing for grammar, structure, clarity, and journal-specific style guides. From thesis to peer-reviewed papers.</p>
+        <a href="#consult" class="service-link">Request Service <span>→</span></a>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon"><i class="bx bx-bar-chart-alt"></i></div>
+        <h3>Statistical Analysis</h3>
+        <p>SPSS, R, Python-based analysis. Descriptive stats, regression, ANOVA, survival analysis, and more — with full interpretation.</p>
+        <a href="#consult" class="service-link">Request Service <span>→</span></a>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon"><i class="bx bx-line-chart"></i></div>
+        <h3>Graphics &amp; Data Visualization</h3>
+        <p>Publication-ready charts, infographics, and scientific figures. Designed for journals, presentations, and grant applications.</p>
+        <a href="#consult" class="service-link">Request Service <span>→</span></a>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon"><i class="bx bx-virus"></i></div>
+        <h3>Data &amp; Genomic Analysis</h3>
+        <p>NGS pipeline support, bioinformatics consultation, genomic data interpretation, and custom analytical workflows.</p>
+        <a href="#consult" class="service-link">Get a Quote <span>→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ STORE ════ -->
+  <section class="store-section" id="store">
+    <div class="store-header reveal">
+      <div>
+        <div class="section-tag">// Linkrite Store</div>
+        <h2 class="section-title light">Knowledge You<br/>Can Keep</h2>
+        <p class="section-sub light">Curated e-books across microbiology, chemistry, and research methods. Preview free samples — buy on Selar.</p>
+      </div>
+      <a href="https://selar.co" target="_blank" class="btn-outline" style="white-space:nowrap;">View All Books →</a>
+    </div>
+
+    <div class="books-grid">
+      <div class="book-card reveal">
+        <div class="book-cover c1">Principles of<br/>Scientific Writing</div>
+        <div class="book-info">
+          <div class="book-category">Research Methods</div>
+          <div class="book-title">Principles of Scientific Writing</div>
+          <div class="book-desc">A practical guide to writing manuscripts that get published — from abstract to references.</div>
+          <div class="book-actions">
+            <a href="#" class="btn-sample">Free Sample</a>
+            <a href="https://selar.co" target="_blank" class="btn-selar">Get Full Book →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card reveal">
+        <div class="book-cover c2">Microbiology<br/>Data Analysis</div>
+        <div class="book-info">
+          <div class="book-category">Microbiology</div>
+          <div class="book-title">Microbiology Data Analysis</div>
+          <div class="book-desc">Techniques for analyzing microbiological datasets, growth curves, and antimicrobial data.</div>
+          <div class="book-actions">
+            <a href="#" class="btn-sample">Free Sample</a>
+            <a href="https://selar.co" target="_blank" class="btn-selar">Get Full Book →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card reveal">
+        <div class="book-cover c3">Chemistry Lab<br/>Statistics</div>
+        <div class="book-info">
+          <div class="book-category">Chemistry</div>
+          <div class="book-title">Chemistry Lab Statistics</div>
+          <div class="book-desc">Statistical methods tailored for chemistry experiments — error analysis, calibration, and reporting.</div>
+          <div class="book-actions">
+            <a href="#" class="btn-sample">Free Sample</a>
+            <a href="https://selar.co" target="_blank" class="btn-selar">Get Full Book →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ FREE WORKSHOP ════ -->
+  <section class="workshop-section" id="workshop">
+    <div>
+      <h2>Free Workshop — Master the Art of Publishing</h2>
+      <p>Join our next live workshop and discover the exact framework used by published researchers. No cost. No catch.</p>
+    </div>
+    <a href="#consult" class="btn-dark">Reserve Your Spot →</a>
+  </section>
+
+  <!-- ════ TRUST ════ -->
+  <section class="trust-section">
+    <div class="trust-header reveal">
+      <div class="section-tag">// Why Linkrite</div>
+      <h2 class="section-title">Built on Trust &amp; Precision</h2>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-item reveal">
+        <div class="trust-icon"><i class="bx bx-lock"></i></div>
+        <h4>100% Confidential</h4>
+        <p>Your research, data, and manuscripts are never shared. Full NDA available on request.</p>
+      </div>
+      <div class="trust-item reveal">
+        <div class="trust-icon"><i class="bx bx-bolt"></i></div>
+        <h4>Fast Turnaround</h4>
+        <p>We respond to all requests within 24 hours. Rush delivery available for urgent projects.</p>
+      </div>
+      <div class="trust-item reveal">
+        <div class="trust-icon"><i class="bx bxs-graduation"></i></div>
+        <h4>Expert-Led</h4>
+        <p>Every service is handled by specialists with hands-on experience in research and publication.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ CONSULTATION FORM ════ -->
+  <section class="booking-section" id="consult">
+    <div class="reveal">
+      <div class="section-tag">// Book a Consultation</div>
+      <h2 class="section-title">Let's Talk About<br/>Your Project</h2>
+      <p class="section-sub" style="margin-top:1rem;">
+        Fill the form and we'll reach out within 24 hours to schedule a call and discuss exactly how we can help you.
+      </p>
+      <br/><br/>
+      <div class="trust-item" style="text-align:left; max-width:340px; background:var(--white);">
+        <p style="font-size:0.83rem; color:var(--text-muted); line-height:1.7;">
+          📅 &nbsp;<strong>Google Calendar integration</strong> — once confirmed, a calendar invite is sent directly to your email.
+        </p>
+      </div>
+    </div>
+
+    <div class="booking-form reveal">
+      <div id="formContent">
+        <div class="form-title">Request a Service</div>
+        <div class="form-sub">We'll get back to you within 24 hours.</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name *</label>
+            <input type="text" id="firstName" placeholder="John" />
+            <div class="form-error">First name is required</div>
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="lastName" placeholder="Doe" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" id="email" placeholder="you@example.com" />
+          <div class="form-error">Please enter a valid email address</div>
+        </div>
+
+        <div class="form-group">
+          <label>Service Needed *</label>
+          <select id="service">
+            <option value="">— Select a service —</option>
+            <option value="Manuscript Review &amp; Editing">Manuscript Review &amp; Editing</option>
+            <option value="Statistical Analysis">Statistical Analysis</option>
+            <option value="Graphics &amp; Data Visualization">Graphics &amp; Data Visualization</option>
+            <option value="Genomic / Data Analysis">Genomic / Data Analysis</option>
+            <option value="Free Workshop Registration">Free Workshop Registration</option>
+            <option value="Other / General Enquiry">Other / General Enquiry</option>
+          </select>
+          <div class="form-error">Please select a service</div>
+        </div>
+
+        <div class="form-group">
+          <label>Tell us about your project *</label>
+          <textarea id="message" placeholder="Briefly describe what you need help with..." minlength="10"></textarea>
+          <div class="form-error">Please provide more details (at least 10 characters)</div>
+        </div>
+
+        <button class="btn-submit" onclick="submitForm()">
+          <span class="spinner" style="display:none;"></span>
+          <span class="btn-text">Send Request →</span>
+        </button>
+      </div>
+
+      <div class="form-success" id="formSuccess">
+        <div class="check">✅</div>
+        <h3>Request Received!</h3>
+        <p>We'll review your submission and reach out within 24 hours to schedule your consultation.</p>
+        <br/>
+        <a href="#" class="btn-primary" style="font-size:0.85rem;" onclick="resetForm(event)">Submit Another Request</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ FOOTER ════ -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <svg width="100" height="32" viewBox="0 0 100 32" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <style>
+                .logo-text { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 20px; }
+                .logo-lin { fill: #f5f0e8; }
+                .logo-rite { fill: #c9a84c; }
+              </style>
+            </defs>
+            <text x="0" y="22" class="logo-text logo-lin">Link</text>
+            <text x="58" y="22" class="logo-text logo-rite">rite</text>
+          </svg>
+        </a>
+        <p>Expert academic and scientific services for researchers, students, and institutions worldwide.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="#services">Manuscript Editing</a></li>
+          <li><a href="#services">Statistical Analysis</a></li>
+          <li><a href="#services">Data Visualization</a></li>
+          <li><a href="#services">Genomic Analysis</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Store</h5>
+        <ul>
+          <li><a href="#store">E-books</a></li>
+          <li><a href="https://selar.co" target="_blank">Selar Store</a></li>
+          <li><a href="#workshop">Free Workshop</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="index.html#consult">Contact Us</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="terms-conditions.html">Terms &amp; Conditions</a></li>
+          <li><a href="help.html">Help</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 Linkrite.com — All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-link" title="X / Twitter">𝕏</a>
+        <a href="#" class="social-link" title="LinkedIn">in</a>
+        <a href="#" class="social-link" title="Instagram">ig</a>
+        <a href="#" class="social-link" title="Email">@</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <strong>Message Sent ✓</strong>
+    We'll be in touch within 24 hours.
+  </div>
+
+  <script>
+    // ── Mobile Menu ──
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+
+    // ── Scroll Reveal ──
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    // ── Form Validation ──
+    function validateForm() {
+      const first = document.getElementById('firstName');
+      const email = document.getElementById('email');
+      const service = document.getElementById('service');
+      const message = document.getElementById('message');
+      let isValid = true;
+
+      // Reset all error states
+      [first, email, service, message].forEach(field => {
+        field.parentElement.classList.remove('error', 'success');
+      });
+
+      // First name validation
+      if (!first.value.trim()) {
+        first.parentElement.classList.add('error');
+        isValid = false;
+      } else {
+        first.parentElement.classList.add('success');
+      }
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email.value.trim() || !emailRegex.test(email.value)) {
+        email.parentElement.classList.add('error');
+        isValid = false;
+      } else {
+        email.parentElement.classList.add('success');
+      }
+
+      // Service validation
+      if (!service.value) {
+        service.parentElement.classList.add('error');
+        isValid = false;
+      } else {
+        service.parentElement.classList.add('success');
+      }
+
+      // Message validation
+      if (!message.value.trim() || message.value.trim().length < 10) {
+        message.parentElement.classList.add('error');
+        isValid = false;
+      } else {
+        message.parentElement.classList.add('success');
+      }
+
+      return isValid;
+    }
+
+    // ── Real-time validation ──
+    document.addEventListener('DOMContentLoaded', () => {
+      const inputs = ['firstName', 'email', 'service', 'message'];
+      inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('blur', validateForm);
+          el.addEventListener('input', validateForm);
+        }
+      });
+    });
+
+    // ── Form Submit ──
+    async function submitForm() {
+      if (!validateForm()) {
+        showToast('⚠️ Please fix the errors above.', true);
+        return;
+      }
+
+      const first   = document.getElementById('firstName').value.trim();
+      const last    = document.getElementById('lastName').value.trim();
+      const email   = document.getElementById('email').value.trim();
+      const service = document.getElementById('service').value;
+      const message = document.getElementById('message').value.trim();
+
+      const btn = document.querySelector('.btn-submit');
+      const spinner = btn.querySelector('.spinner');
+      const btnText = btn.querySelector('.btn-text');
+
+      // Show loading spinner
+      spinner.style.display = 'inline-block';
+      btn.classList.add('loading');
+      btnText.textContent = 'Sending...';
+
+      try {
+        console.log('📤 Submitting to backend:', { first, last, email, service, note: message });
+        
+        const response = await fetch('/api/public/requests', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ first, last, email, service, note: message, status: 'pending' })
+        });
+
+        const data = await response.json();
+        console.log('📡 Backend response:', data);
+
+        if (!response.ok) {
+          throw new Error(data.message || data.error || `HTTP ${response.status}`);
+        }
+
+        // Success
+        document.getElementById('formContent').style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+        showToast('✅ Request sent! Check your email for confirmation.');
+        
+      } catch (err) {
+        console.error('❌ Submission failed:', err);
+        showToast('❌ Failed to submit. Please try again.', true);
+      } finally {
+        // Hide spinner
+        spinner.style.display = 'none';
+        btn.classList.remove('loading');
+        btnText.textContent = 'Send Request →';
+      }
+    }
+
+    function resetForm(e) {
+      e.preventDefault();
+      document.getElementById('formContent').style.display = 'block';
+      document.getElementById('formSuccess').style.display = 'none';
+      const inputs = ['firstName', 'lastName', 'email', 'service', 'message'];
+      inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.value = '';
+          el.parentElement.classList.remove('error', 'success');
+        }
+      });
+    }
+
+    // ── Toast ──
+    function showToast(msg, isWarn) {
+      const t = document.getElementById('toast');
+      t.innerHTML = `<strong>${msg}</strong>`;
+      t.style.borderLeftColor = isWarn ? '#d32f2f' : 'var(--gold)';
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 4000);
+    }
+
+    // ── Nav scroll effect ──
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('nav');
+      nav.style.boxShadow = window.scrollY > 20
+        ? '0 4px 30px rgba(0,0,0,0.3)'
+        : 'none';
+    });
+  </script>
+</body>
+</html>
