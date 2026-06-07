@@ -4,7 +4,8 @@
   "description": "Backend server for Linkrite admin authentication and dashboard access.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "postinstall": "npm rebuild"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
