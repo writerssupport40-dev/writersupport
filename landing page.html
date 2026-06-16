@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Writers Support — Polish. Analyze. Publish.</title>
+  <link rel="icon" type="image/png" href="Book store/logo.png"/>
   <!-- Professional Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -472,6 +473,75 @@
     }
     .form-success i { font-size: 4rem; color: #28a745; margin-bottom: 1.5rem; }
 
+    /* SUCCESS MODAL */
+    .success-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .success-modal.show {
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+    }
+    .success-modal-content {
+      background: var(--white);
+      padding: 3rem 2.5rem;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 520px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    }
+    .success-modal-content h2 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.8rem;
+      color: var(--blue-primary);
+      margin-bottom: 1rem;
+    }
+    .success-modal-content .success-subtitle {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #28a745;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .success-modal-content p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .success-modal-content .confirm-details {
+      background: #f0f5ff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      text-align: left;
+    }
+    .success-modal-content .btn-submit {
+      background: var(--blue-primary);
+      color: var(--white);
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .success-modal-content .btn-submit:hover {
+      background: var(--oxblood);
+      transform: translateY(-2px);
+    }
+
     .section-tag {
       display: inline-block;
       font-weight: 700;
@@ -537,6 +607,82 @@
       .footer-grid { grid-template-columns: 1fr; }
       .footer-bottom { flex-direction: column; gap: 1.5rem; }
     }
+
+    /* ── TOAST NOTIFICATION ── */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      color: white;
+      padding: 1.5rem 2rem;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      gap: 1rem;
+      max-width: 400px;
+      animation: slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      font-weight: 500;
+    }
+
+    .toast.show {
+      display: flex !important;
+    }
+
+    .toast.error {
+      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    }
+
+    .toast i {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .toast-message {
+      flex: 1;
+    }
+
+    .toast-close {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOutRight {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .toast {
+        left: 20px;
+        right: 20px;
+        max-width: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -546,7 +692,7 @@
     <a href="index.html" class="logo">Writers<span>Support</span></a>
     <ul class="nav-links">
       <li><a href="servicepage.html">Services</a></li>
-      <li><a href="linrite-store.html">Store</a></li>
+      <li><a href="store.html">Store</a></li>
       <li><a href="#workshop">Workshop</a></li>
       <li><a href="about.html">About Us</a></li>
       <li><a href="about.html#contact" class="nav-cta">Get Started</a></li>
@@ -720,7 +866,7 @@
           <textarea id="srMessage" placeholder="Brief overview of your research and what you need..." style="resize: vertical; min-height: 120px;"></textarea>
         </div>
 
-        <button class="btn-submit" onclick="submitServiceRequest()">Submit Request</button>
+        <button type="button" class="btn-submit" onclick="event.preventDefault(); submitServiceRequest()">Submit Request</button>
         <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 1.5rem;">
           <i class="fas fa-lock"></i> Your information is handled with strict confidentiality.
         </p>
@@ -803,17 +949,32 @@
           })
         });
 
-        const data = await response.json();
+        // ✅ CHECK STATUS FIRST before parsing JSON
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || 'Server error ' + response.status);
+        }
 
-        if (response.ok) {
-          document.getElementById('serviceFormContent').style.display = 'none';
-          document.getElementById('serviceSuccess').style.display = 'block';
-        } else {
-          alert('Error submitting request: ' + (data.error || 'Unknown error'));
+        const data = await response.json();
+        console.log('✅ Service request submitted successfully:', data);
+
+        // Clear form first
+        ['srFirst', 'srLast', 'srEmail', 'srMessage'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.value = '';
+        });
+        document.getElementById('srService').value = '';
+
+        // Show success toast
+        showToast('✓ Request submitted! Check your email for confirmation.', false);
+
+        // Show success modal
+        if (typeof window.openSuccessModal === 'function') {
+          window.openSuccessModal();
         }
       } catch (err) {
-        console.error('Form submission error:', err);
-        alert('Error submitting your request. Please try again.');
+        console.error('❌ Form submission error:', err);
+        showToast('Error: ' + err.message, true);
       }
     }
 
@@ -826,7 +987,80 @@
       });
       document.getElementById('srService').value = '';
     }
+
+    // Toast Notification System
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('appToast');
+      const toastMessage = toast.querySelector('.toast-message');
+      const toastIcon = toast.querySelector('i');
+      
+      toastMessage.textContent = message;
+      
+      if (isError) {
+        toast.classList.add('error');
+        toastIcon.className = 'fas fa-exclamation-circle';
+      } else {
+        toast.classList.remove('error');
+        toastIcon.className = 'fas fa-check-circle';
+      }
+      
+      toast.classList.add('show');
+      console.log('✅ Toast displayed:', message);
+    }
+
+    // Success Modal Functions
+    document.addEventListener('DOMContentLoaded', function() {
+      const overlay = document.getElementById('successModal');
+      const dialog = overlay ? overlay.querySelector('.success-modal-content') : null;
+      const closeBtn = overlay ? overlay.querySelector('.btn-submit') : null;
+      let lastFocused = null;
+
+      window.openSuccessModal = function() {
+        if (!overlay || !dialog) return;
+        lastFocused = document.activeElement;
+        overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        dialog.focus();
+      };
+
+      window.closeSuccessModal = function() {
+        if (!overlay) return;
+        overlay.classList.remove('show');
+        document.body.style.overflow = '';
+        if (lastFocused) try { lastFocused.focus(); } catch (e) {}
+      };
+
+      if (closeBtn) closeBtn.addEventListener('click', closeSuccessModal);
+
+      document.addEventListener('keydown', function(e) {
+        if (!overlay || !overlay.classList.contains('show')) return;
+        if (e.key === 'Escape') closeSuccessModal();
+      });
+    });
   </script>
+
+  <!-- Success Modal (Professional) -->
+  <div class="success-modal" id="successModal">
+    <div class="success-modal-content">
+      <div class="success-subtitle">SUCCESS</div>
+      <h2>Your Request Has Been Received</h2>
+      <p>Thank you for reaching out! We've successfully received your service request and a confirmation email has been sent to your inbox.</p>
+      <div class="confirm-details">
+        <p style="margin: 0.5rem 0;"><strong>✓ Request saved to our system</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>✓ Confirmation email sent</strong></p>
+        <p style="margin: 0.5rem 0;"><strong>✓ Response within 24 hours</strong></p>
+      </div>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 1.5rem;">Our team is reviewing your request and will contact you shortly.</p>
+      <button class="btn-submit" onclick="closeSuccessModal()">Done</button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="appToast">
+    <i class="fas fa-check-circle"></i>
+    <div class="toast-message">Message sent successfully!</div>
+    <button class="toast-close" onclick="document.getElementById('appToast').classList.remove('show');">&times;</button>
+  </div>
 
 </body>
 </html>

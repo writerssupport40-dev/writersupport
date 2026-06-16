@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>About & Contact — Writers Support</title>
+  <link rel="icon" type="image/png" href="Book store/logo.png"/>
   <!-- Professional Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -838,6 +839,71 @@
       footer { padding: 2rem 3% 1rem; }
       .footer-brand .logo { font-size: 1rem; }
     }
+
+    /* ── TOAST NOTIFICATION ── */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      color: white;
+      padding: 1.5rem 2rem;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      gap: 1rem;
+      max-width: 400px;
+      animation: slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      font-weight: 500;
+    }
+
+    .toast.show {
+      display: flex !important;
+    }
+
+    .toast.error {
+      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    }
+
+    .toast i {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .toast-message {
+      flex: 1;
+    }
+
+    .toast-close {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .toast {
+        left: 20px;
+        right: 20px;
+        max-width: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1000,7 +1066,7 @@
           <textarea id="cfMessage" placeholder="How can we help with your research?"></textarea>
         </div>
 
-        <button class="btn-submit" onclick="submitContact()">Send Message</button>
+        <button type="button" class="btn-submit" onclick="event.preventDefault(); submitContact()">Send Message</button>
         <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 1.5rem;">
           <i class="fas fa-lock"></i> Your information is handled with strict confidentiality.
         </p>
@@ -1156,14 +1222,21 @@
           message: message
         })
       })
-      .then(function(res) { 
-        console.log('✅ Contact form submitted successfully, response status:', res.status);
-        return res.json(); 
+      .then(function(res) {
+        // ✅ CHECK STATUS FIRST before parsing JSON
+        if (!res.ok) {
+          return res.json().then(function(data) {
+            throw new Error(data.error || 'Server error ' + res.status);
+          }).catch(function(parseErr) {
+            throw new Error('Server error ' + res.status);
+          });
+        }
+        return res.json();
       })
       .then(function(data) {
-        console.log('✅ API response:', data);
+        console.log('✅ Contact form submitted successfully:', data);
         
-        // Clear form fields first
+        // Clear form fields
         ['cfFirst','cfLast','cfEmail','cfMessage'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.value = '';
@@ -1171,42 +1244,40 @@
         const subjectEl = document.getElementById('cfSubject');
         if (subjectEl) subjectEl.value = '';
         
-        // Show success modal with delay to ensure DOM is ready
-        setTimeout(function() {
-          try {
-            if (typeof window.openSuccessModal === 'function') {
-              window.openSuccessModal();
-              console.log('✅ Opened success modal');
-            } else {
-              console.error('❌ openSuccessModal function not found');
-              alert('Message sent successfully! We will reach out to you shortly.');
-            }
-          } catch (e) {
-            console.error('❌ Error showing modal:', e);
-            alert('Message sent successfully! We will reach out to you shortly.');
-          }
-        }, 100);
+        // Show success toast
+        showToast('✓ Message sent! We\'ll respond within 24 hours.', false);
+
+        // Also show the modal for accessibility
+        if (typeof window.openSuccessModal === 'function') {
+          window.openSuccessModal();
+        }
       })
       .catch(function(err) {
-        console.error('❌ Error:', err);
-        alert('Error submitting message. Please try again or contact us directly.');
+        console.error('❌ Contact form error:', err);
+        showToast('Error: ' + err.message, true);
       });
     }
 
     // Accessible modal open/close with focus trap
-    (function() {
+    document.addEventListener('DOMContentLoaded', function() {
       const overlay = document.getElementById('successModal');
       const dialog = overlay ? overlay.querySelector('.success-modal-content') : null;
       const closeBtn = overlay ? overlay.querySelector('.btn-submit') : null;
       let lastFocused = null;
 
+      console.log('🔍 Modal elements found:', { overlay: !!overlay, dialog: !!dialog, closeBtn: !!closeBtn });
+
       window.openSuccessModal = function() {
-        if (!overlay || !dialog) return;
+        if (!overlay || !dialog) {
+          console.error('❌ Modal elements not found when opening');
+          return;
+        }
         lastFocused = document.activeElement;
         overlay.classList.add('show');
         document.body.style.overflow = 'hidden';
         dialog.setAttribute('tabindex', '-1');
         dialog.focus();
+        console.log('✅ Modal opened successfully');
       };
 
       window.closeSuccessModal = function() {
@@ -1217,11 +1288,6 @@
       };
 
       if (closeBtn) closeBtn.addEventListener('click', closeSuccessModal);
-
-      // click outside to close
-      if (overlay) overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) closeSuccessModal();
-      });
 
       // keyboard handling (ESC + focus trap)
       document.addEventListener('keydown', function(e) {
@@ -1238,7 +1304,7 @@
           e.preventDefault(); first.focus();
         }
       });
-    })();
+    });
 
     function resetContact() {
       document.getElementById('contactFormContent').style.display = 'block';
@@ -1298,6 +1364,26 @@
       document.getElementById('modalOverlay').classList.remove('open');
       document.body.style.overflow = '';
     }
+
+    // Toast Notification System
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('appToast');
+      const toastMessage = toast.querySelector('.toast-message');
+      const toastIcon = toast.querySelector('i');
+      
+      toastMessage.textContent = message;
+      
+      if (isError) {
+        toast.classList.add('error');
+        toastIcon.className = 'fas fa-exclamation-circle';
+      } else {
+        toast.classList.remove('error');
+        toastIcon.className = 'fas fa-check-circle';
+      }
+      
+      toast.classList.add('show');
+      console.log('✅ Toast displayed:', message);
+    }
   </script>
 
   <!-- Success Modal (Professional) -->
@@ -1315,6 +1401,13 @@
       <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 1.5rem;">Our team is reviewing your message and will contact you shortly. If you have any urgent questions, please email us directly.</p>
       <button class="btn-submit" onclick="closeSuccessModal()">Done</button>
     </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="appToast">
+    <i class="fas fa-check-circle"></i>
+    <div class="toast-message">Message sent successfully!</div>
+    <button class="toast-close" onclick="document.getElementById('appToast').classList.remove('show');">&times;</button>
   </div>
 
 </body>

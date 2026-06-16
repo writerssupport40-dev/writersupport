@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Store — Writers Support</title>
+  <link rel="icon" type="image/png" href="Book store/logo.png"/>
   <!-- Professional Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -369,8 +370,11 @@
     }
 
     .book-cover {
-      height: 200px;
+      height: 320px;
       background: var(--blue-primary);
+      background-size: contain !important;
+      background-repeat: no-repeat !important;
+      background-position: center !important;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -712,7 +716,7 @@
       
       .books-grid { grid-template-columns: 1fr; gap: 1.5rem; }
       .book-card { border-radius: 8px; }
-      .book-cover { height: 150px; }
+      .book-cover { height: 280px; }
       .book-info { padding: 1.2rem; }
       .book-title { font-size: 1rem; }
       
@@ -755,7 +759,7 @@
       
       .books-section { padding: 2rem 3%; }
       .books-grid { grid-template-columns: 1fr; gap: 1rem; }
-      .book-cover { height: 120px; font-size: 0.9rem; }
+      .book-cover { height: 240px; font-size: 0.9rem; }
       .book-category { font-size: 0.65rem; }
       .book-title { font-size: 0.9rem; }
       .book-actions { gap: 0.5rem; }
@@ -789,51 +793,43 @@
   <!-- PAGE HERO -->
   <section class="page-hero">
     <div class="breadcrumb"><a href="index.html">Home</a> / Store</div>
-    <h1>Books That <em>Build</em> Better Researchers</h1>
-    <p>Curated e-books across microbiology, chemistry, research methods and data analysis. Read a free sample, then get the full book on Selar.</p>
+    <h1>Books That <em>Transform</em> Academic Careers</h1>
+    <p>Curated e-books covering academic excellence, career advancement, and personal development. Discover proven strategies from Matthew C. Enebe and get instant access on Amazon.</p>
     <div class="hero-selar-badge">
-      <i class="fas fa-shield-alt"></i> &nbsp; Secure purchases via Selar.co — Instant delivery to your inbox.
+      <i class="fas fa-shield-alt"></i> &nbsp; Secure purchases via Amazon — Instant delivery to your inbox.
     </div>
   </section>
 
   <!-- FILTER BAR -->
-  <div class="filter-bar">
-    <div class="filter-tabs">
-      <button class="filter-btn active" onclick="filterBooks('all', this)">All Books</button>
-      <button class="filter-btn" onclick="filterBooks('microbiology', this)">Microbiology</button>
-      <button class="filter-btn" onclick="filterBooks('chemistry', this)">Chemistry</button>
-      <button class="filter-btn" onclick="filterBooks('research', this)">Research Methods</button>
-      <button class="filter-btn" onclick="filterBooks('data', this)">Data Analysis</button>
+  <div class="filter-bar" style="border-bottom: none; padding: 0 8%; background: var(--white);">
+    <div style="width: 100%; text-align: center; padding: 2rem 0;">
+      <h2 style="font-family: 'Libre Baskerville', serif; font-size: 2.2rem; color: var(--blue-primary); margin-bottom: 0.5rem;">Our Complete Book Collection</h2>
+      <p style="color: var(--text-muted); font-size: 1rem;">Explore all our premium e-books on academic excellence and career development</p>
     </div>
-    <div class="book-count" id="bookCount">Showing 8 books</div>
   </div>
 
   <!-- FEATURED BOOK -->
   <section class="featured-section">
     <span class="section-label">Featured Publication</span>
     <div class="featured-card">
-      <div class="featured-cover">
-        <div class="cover-label">Writers Support Press</div>
-        <div class="cover-title">Principles of Scientific Writing</div>
-        <div class="cover-line"></div>
-        <div class="cover-author">Writers Support Editorial Team</div>
+      <div class="featured-cover" style="background-image: url('Book store/ultimate academic excellence.jpg'); background-size: contain; background-repeat: no-repeat; background-position: center; background-color: var(--blue-primary);">
       </div>
       <div class="featured-info">
-        <div class="featured-badge">Editor's Choice</div>
-        <h2>The Researcher's Guide to Writing Papers That Get Published</h2>
-        <p>A comprehensive, practical guide that walks you through every section of a scientific manuscript, from crafting a compelling abstract to structuring your discussion and navigating the peer review process.</p>
+        <div class="featured-badge">Reader's Favorite</div>
+        <h2>The Complete Guide to Achieving Academic Excellence</h2>
+        <p>Transform your academic journey with proven strategies and practical insights. This comprehensive e-book provides a clear roadmap to success across all levels of study, from undergraduate to postgraduate pursuits.</p>
         <div class="featured-meta">
           <div class="meta-item">
             <span class="meta-label">Category</span>
-            <span class="meta-value">Research Methods</span>
+            <span class="meta-value">Academic Excellence</span>
           </div>
           <div class="meta-item">
             <span class="meta-label">Format</span>
             <span class="meta-value">PDF E-book</span>
           </div>
           <div class="meta-item">
-            <span class="meta-label">Pages</span>
-            <span class="meta-value">~180 pages</span>
+            <span class="meta-label">Author</span>
+            <span class="meta-value">Matthew C. Enebe</span>
           </div>
           <div class="meta-item">
             <span class="meta-label">Delivery</span>
@@ -841,8 +837,7 @@
           </div>
         </div>
         <div class="featured-actions">
-          <a href="https://selar.co" target="_blank" class="btn-primary">Get Full Book on Selar</a>
-          <a href="#" class="btn-ghost" onclick="openSample('Principles of Scientific Writing')">Read Free Sample</a>
+          <a href="https://www.amazon.com/Road-Ultimate-Academic-Excellence-University-ebook/dp/B06XNZ1NFN" target="_blank" class="btn-primary">Get Full Book on Amazon</a>
         </div>
       </div>
     </div>
@@ -850,151 +845,108 @@
 
   <!-- ALL BOOKS -->
   <section class="books-section" id="all-books">
-    <span class="section-label">All E-Books</span>
     <div class="books-grid" id="booksGrid">
-      <!-- BOOK 1 -->
-      <div class="book-card visible" data-cat="research">
-        <div class="book-cover bc-1">
-          <div class="cover-text">Writing for Science</div>
+      <!-- BOOK 1: Ultimate Academic Excellence -->
+      <div class="book-card visible" data-cat="academic">
+        <div class="book-cover bc-1" style="background-image: url('Book store/ultimate academic excellence.jpg'); background-size: cover; background-position: center;">
+          <div class="new-badge">Bestseller</div>
         </div>
         <div class="book-body">
-          <div class="book-cat">Research Methods</div>
-          <div class="book-title">Writing for Science: From Notes to Publication</div>
-          <p class="book-desc">A step-by-step guide for converting raw research into a polished, publishable scientific article.</p>
+          <div class="book-cat">Academic Excellence</div>
+          <div class="book-title">Ultimate Academic Excellence - E-Book Version</div>
+          <p class="book-desc">A comprehensive guide to achieving excellence in your academic journey. Master the strategies that separate top performers from the rest.</p>
           <div class="book-footer">
-            <a href="#" class="btn-sample" onclick="openSample('Writing for Science')">Sample</a>
-            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar</a>
+            <a href="https://www.amazon.com/Road-Ultimate-Academic-Excellence-University-ebook/dp/B06XNZ1NFN" target="_blank" class="btn-selar">Get on Amazon</a>
           </div>
         </div>
       </div>
-      <!-- BOOK 2 -->
-      <div class="book-card visible" data-cat="microbiology">
-        <div class="book-cover bc-2">
+      <!-- BOOK 2: Prepare to Win -->
+      <div class="book-card visible" data-cat="academic">
+        <div class="book-cover bc-2" style="background-image: url('Book store/Graphic2.JPG'); background-size: cover; background-position: center;">
           <div class="new-badge">New</div>
-          <div class="cover-text">Microbiology Data Analysis</div>
         </div>
         <div class="book-body">
-          <div class="book-cat">Microbiology</div>
-          <div class="book-title">Microbiology Data Analysis: A Practical Handbook</div>
-          <p class="book-desc">Techniques for analyzing microbiological datasets, growth curves, MIC values, and Susceptibility data..</p>
+          <div class="book-cat">Academic Excellence</div>
+          <div class="book-title">Prepare to Win: Preparation Gives Access and Control</div>
+          <p class="book-desc">Preparation is the key to success. Learn how strategic preparation unlocks opportunities and puts you in control of your academic destiny.</p>
           <div class="book-footer">
-            <a href="#" class="btn-sample" onclick="openSample('Microbiology Data Analysis')">Sample</a>
-            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar</a>
+            <a href="https://www.amazon.com/PREPARE-WIN-Preparation-access-control-ebook/dp/B075WXMKVJ/ref=sr_1_1?crid=2WW1EJGECUSSG&dib=eyJ2IjoiMSJ9.-qgGUJTBn2uNK3tKR08ZBg.RVeNjgyW7yfm-EOYXyR_ATuve574kP8W-0hqgJ9BZG8&dib_tag=se&keywords=PREPARE+TO+WIN%3A+Preparation+gives+access+and+access+is+power.+If+you+have+it%2C+you%27re+in+control&nsdOptOutParam=true&qid=1781118869&s=digital-text&sprefix=prepare+to+win+preparation+gives+access+and+access+is+power.+if+you+have+it%2C+you%27re+in+control%2Cdigital-text%2C141&sr=1-1" target="_blank" class="btn-selar">Get on Amazon</a>
           </div>
         </div>
       </div>
-      <!-- BOOK 3 -->
-      <div class="book-card visible" data-cat="chemistry">
-        <div class="book-cover bc-3">
-          <div class="cover-text">Chemistry Lab Statistics</div>
+      <!-- BOOK 3: The 22 Laws of Academic Career -->
+      <div class="book-card visible" data-cat="academic">
+        <div class="book-cover bc-3" style="background-image: url('Book store/the 22 laws of academic career promotion.jpg'); background-size: cover; background-position: center;">
         </div>
         <div class="book-body">
-          <div class="book-cat">Chemistry</div>
-          <div class="book-title">Chemistry Lab Statistics: Error & Calibration</div>
-          <p class="book-desc">Statistical methods tailored for chemistry labs, error propagation and calibration standards.</p>
+          <div class="book-cat">Career Development</div>
+          <div class="book-title">The 22 Laws of Academic Career Excellence</div>
+          <p class="book-desc">Master the ultimate secrets of double jumping in academic career promotion. Discover the proven laws that accelerate your professional advancement.</p>
           <div class="book-footer">
-            <a href="#" class="btn-sample" onclick="openSample('Chemistry Lab Statistics')">Sample</a>
-            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar</a>
+            <a href="https://www.amazon.com/LAWS-ACADEMIC-CAREER-EXCELLENCE-Mastering-ebook/dp/B073LGXZF5/ref=sr_1_1?crid=31ZKBYZZILN68&dib=eyJ2IjoiMSJ9.Zp8snM_Pbsm6SGoByMp5-g.HNQy42ytmf23QLSeOW8sUH56JSkysWMxxRxDCPJPwfw&dib_tag=se&keywords=%3A+Mastering+the+ultimate+secrets+of+double+jumping+in+academic+career+promotion+by+Matthew+C+Enebe&nsdOptOutParam=true&qid=1781118700&s=books&sprefix=mastering+the+ultimate+secrets+of+double+jumping+in+academic+career+promotion+by+matthew+c+enebe%2Cstripbooks-intl-ship%2C156&sr=1-1" target="_blank" class="btn-selar">Get on Amazon</a>
           </div>
         </div>
       </div>
-      <!-- BOOK 4 -->
-      <div class="book-card visible" data-cat="data">
-        <div class="book-cover bc-4">
-          <div class="new-badge">New</div>
-          <div class="cover-text">R for Researchers</div>
+      <!-- BOOK 4: The Nursing Mother -->
+      <div class="book-card visible" data-cat="academic">
+        <div class="book-cover bc-4" style="background-image: url('Book store/the nursing mother.JPG'); background-size: cover; background-position: center;">
         </div>
         <div class="book-body">
-          <div class="book-cat">Data Analysis</div>
-          <div class="book-title">R for Researchers: Statistics Without Jargon</div>
-          <p class="book-desc">A friendly, practical introduction to R for life scientists, from datasets to visualization.</p>
+          <div class="book-cat">Personal Development</div>
+          <div class="book-title">The Nursing Mother: Student & Bread Winner</div>
+          <p class="book-desc">Inspiring guide for nursing mothers juggling studies and work. Practical strategies to balance multiple roles while achieving your academic goals.</p>
           <div class="book-footer">
-            <a href="#" class="btn-sample" onclick="openSample('R for Researchers')">Sample</a>
-            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar</a>
+            <a href="https://www.amazon.ca/NURSING-MOTHER-STUDENT-BREAD-WINNER-ebook/dp/B075KLB3N3" target="_blank" class="btn-selar">Get on Amazon</a>
           </div>
         </div>
       </div>
-      <!-- BOOK 5 -->
-      <div class="book-card visible" data-cat="microbiology">
-        <div class="book-cover bc-5">
-          <div class="cover-text">Clinical Microbiology</div>
+      <!-- BOOK 5: The Road Map to Graduate -->
+      <div class="book-card visible" data-cat="academic">
+        <div class="book-cover bc-5" style="background-image: url('Book store/THE ROAD MAP TO GRADUATE ACADEMIC EXCELLENCE.jpg'); background-size: cover; background-position: center;">
         </div>
         <div class="book-body">
-          <div class="book-cat">Microbiology</div>
-          <div class="book-title">Clinical Microbiology Essentials for Students</div>
-          <p class="book-desc">Core concepts in diagnostic microbiology, specimen processing and culture interpretation.</p>
+          <div class="book-cat">Graduate Studies</div>
+          <div class="book-title">The Road Map to Graduate Academic Excellence</div>
+          <p class="book-desc">Navigate your graduate journey successfully. Discover the unique strategies that make a difference in postgraduate studies and research success.</p>
           <div class="book-footer">
-            <a href="#" class="btn-sample" onclick="openSample('Clinical Microbiology Essentials')">Sample</a>
-            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar</a>
+            <a href="https://www.amazon.com/ROAD-MAP-GRADUATE-ACADEMIC-EXCELLENCE-ebook/dp/B073LMD3NJ/ref=sr_1_1?crid=1ZFMQ5LGRHZYH&dib=eyJ2IjoiMSJ9.3r2Y1uAPfmiTzeBvhXEXxw.q_yOgRH9LLXw5YlJoGiT0O0HcfN8T1OUlMLLH3Usl4g&dib_tag=se&keywords=THE+ROAD+MAP+TO+GRADUATE+ACADEMIC+EXCELLENCE%3A+The+unique+things+that+makes+a+difference+in+graduate+studies+exercise&nsdOptOutParam=true&qid=1781118966&s=digital-text&sprefix=the+road+map+to+graduate+academic+excellence+the+unique+things+that+makes+a+difference+in+graduate+studies+exercise%2Cdigital-text%2C178&sr=1-1" target="_blank" class="btn-selar">Get on Amazon</a>
           </div>
         </div>
       </div>
-      <!-- BOOK 6 -->
-      <div class="book-card visible" data-cat="research">
-        <div class="book-cover bc-6">
-          <div class="cover-text">Grant Writing Playbook</div>
+      <!-- BOOK 6: Postgraduate Odyssey -->
+      <div class="book-card visible" data-cat="academic">
+        <div class="book-cover bc-6" style="background-image: url('Book store/THE POSTGRADUATE ODYSSEY.jpg'); background-size: cover; background-position: center;">
         </div>
         <div class="book-body">
-          <div class="book-cat">Research Methods</div>
-          <div class="book-title">The Grant Writing Playbook: Proposals That Win</div>
-          <p class="book-desc">Practical strategies for writing competitive research grant proposals and budget justifications.</p>
+          <div class="book-cat">Advanced Studies</div>
+          <div class="book-title">Postgraduate Odyssey: Excellence in Advanced Academic Quest</div>
+          <p class="book-desc">Embark on your postgraduate journey with confidence. Uncover the exciting secrets to an excellent experience in your advanced academic pursuit.</p>
           <div class="book-footer">
-            <a href="#" class="btn-sample" onclick="openSample('The Grant Writing Playbook')">Sample</a>
-            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar</a>
-          </div>
-        </div>
-      </div>
-      <!-- BOOK 7 -->
-      <div class="book-card visible" data-cat="chemistry">
-        <div class="book-cover bc-7">
-          <div class="cover-text">Analytical Chemistry</div>
-        </div>
-        <div class="book-body">
-          <div class="book-cat">Chemistry</div>
-          <div class="book-title">Analytical Chemistry Methods: Student Reference</div>
-          <p class="book-desc">HPLC, UV-Vis, AAS, GC-MS      Concise explanations of key analytical techniques..</p>
-          <div class="book-footer">
-            <a href="#" class="btn-sample" onclick="openSample('Analytical Chemistry Methods')">Sample</a>
-            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar</a>
-          </div>
-        </div>
-      </div>
-      <!-- BOOK 8 -->
-      <div class="book-card visible" data-cat="data">
-        <div class="book-cover bc-8">
-          <div class="cover-text">SPSS for Beginners</div>
-        </div>
-        <div class="book-body">
-          <div class="book-cat">Data Analysis</div>
-          <div class="book-title">SPSS for Beginners: A Complete Toolkit</div>
-          <p class="book-desc">Covers data entry, cleaning, and descriptive statistics with worked examples.</p>
-          <div class="book-footer">
-            <a href="#" class="btn-sample" onclick="openSample('SPSS for Beginners')">Sample</a>
-            <a href="https://selar.co" target="_blank" class="btn-selar">Get on Selar</a>
+            <a href="https://www.amazon.com/POSTGRADUATE-ODYSSEY-exciting-excellent-experience-ebook/dp/B07B88TC1V/ref=sr_1_1?crid=2OXUTOKB70B10&dib=eyJ2IjoiMSJ9.IgEe0a_2ODRdVk0VaafDAg.Xs_SYan3iW7khU8kg3PT8gtaozSILayUNKkFz3sNnNA&dib_tag=se&keywords=THE+POSTGRADUATE+ODYSSEY%3A+The+exciting+secrets+to+an+excellent+experience+in+advanced+academic+quest&nsdOptOutParam=true&qid=1781119087&s=digital-text&sprefix=the+postgraduate+odyssey+the+exciting+secrets+to+an+excellent+experience+in+advanced+academic+quest%2Cdigital-text%2C207&sr=1-1" target="_blank" class="btn-selar">Get on Amazon</a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SAMPLE SECTION -->
+  <!-- ABOUT AUTHOR SECTION -->
   <section class="sample-section">
     <div>
-      <span class="section-label">Free Samples</span>
-      <h2>Read Before You Buy</h2>
-      <p>Every book includes a free sample chapter so you can assess quality and relevance before purchasing. No signup required.</p>
+      <span class="section-label">About the Author</span>
+      <h2>Matthew C. Enebe</h2>
+      <p>Matthew C. Enebe is an acclaimed author and academic excellence expert with over a decade of experience helping students and professionals achieve their career goals. His proven methodologies have transformed thousands of lives across academia and beyond.</p>
       <div class="sample-steps">
         <div class="sample-step">
-          <div class="step-num">1</div>
-          <div class="step-text">Click "Sample" on any book card to open a preview.</div>
+          <div class="step-num">✓</div>
+          <div class="step-text">Expert guidance on academic success strategies</div>
         </div>
         <div class="sample-step">
-          <div class="step-num">2</div>
-          <div class="step-text">Review the content to ensure it meets your needs.</div>
+          <div class="step-num">✓</div>
+          <div class="step-text">Proven frameworks for career advancement</div>
         </div>
         <div class="sample-step">
-          <div class="step-num">3</div>
-          <div class="step-text">Purchase the full book on Selar for instant delivery.</div>
+          <div class="step-num">✓</div>
+          <div class="step-text">Practical insights from real-world experience</div>
         </div>
       </div>
     </div>
@@ -1016,16 +968,16 @@
     </div>
   </section>
 
-  <!-- SELAR BANNER -->
+  <!-- AMAZON BANNER -->
   <section class="selar-banner">
-    <h2>Safe, Simple, Instant Delivery</h2>
-    <p>All purchases are processed securely through Selar.co — Nigeria's leading digital product platform. Pay with card, bank transfer, or USSD.</p>
+    <h2>Easy, Secure, Instant Access</h2>
+    <p>All books are available on Amazon — the world's leading e-book platform. Purchase with confidence and get instant delivery to your Kindle or PDF reader.</p>
     <div class="selar-features">
-      <div class="selar-feature"><i class="fas fa-check-circle"></i> Secure Payments</div>
-      <div class="selar-feature"><i class="fas fa-check-circle"></i> Instant PDF Delivery</div>
-      <div class="selar-feature"><i class="fas fa-check-circle"></i> Multiple Payment Options</div>
+      <div class="selar-feature"><i class="fas fa-check-circle"></i> Secure Amazon Checkout</div>
+      <div class="selar-feature"><i class="fas fa-check-circle"></i> Instant Delivery</div>
+      <div class="selar-feature"><i class="fas fa-check-circle"></i> Lifetime Access</div>
     </div>
-    <a href="https://selar.co" target="_blank" class="btn-selar-main">Visit Our Selar Store</a>
+    <a href="https://www.amazon.com/s?k=Matthew+C+Enebe" target="_blank" class="btn-selar-main">Browse on Amazon</a>
   </section>
 
   <!-- FOOTER -->

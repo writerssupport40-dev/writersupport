@@ -72,7 +72,7 @@ const COOKIE_OPTIONS = {
 };
 
 // Email Configuration
-const EMAIL_USER = process.env.EMAIL_USER || 'inforwritersupport@gmail.com';
+const EMAIL_USER = process.env.EMAIL_USER || 'writerssupport40@gmail.com';
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD; // Gmail app password (set in environment)
 
 const transporter = nodemailer.createTransport({
@@ -398,11 +398,16 @@ app.post('/api/public/requests', async (req, res) => {
     ctaUrl: 'http://localhost:3000/'
   });
 
-  console.log(`📧 Attempting to send email to: ${email}`);
-  const emailSent = await sendEmail(email, emailSubject, emailHtml);
-  console.log(`📧 Email send result: ${emailSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
+  // ✅ RESPOND IMMEDIATELY TO FRONTEND — do NOT wait for emails
+  res.json({ id: result.lastID, success: true });
 
-  // Build professional admin notification
+  // 📧 Send confirmation email ASYNCHRONOUSLY (fire-and-forget)
+  console.log(`📧 Queueing user confirmation email to: ${email}`);
+  sendEmail(email, emailSubject, emailHtml)
+    .then(sent => console.log(`📧 User email result: ${sent ? 'SUCCESS ✓' : 'FAILED ✗'}`))
+    .catch(err => console.error(`❌ User email error: ${err.message}`));
+
+  // 📧 Build and send admin notification asynchronously
   const adminSubject = `New Service Request - ${service} from ${first}`;
   const adminDetailsHtml = `
     <table style="width:100%;background:#ffffff;border-radius:6px;padding:14px;margin-top:12px;">
@@ -422,11 +427,10 @@ app.post('/api/public/requests', async (req, res) => {
     ctaUrl: 'http://localhost:3000/adminpanel.html'
   });
 
-  console.log(`📧 Attempting to send admin notification to: ${EMAIL_USER}`);
-  const adminNotificationSent = await sendAdminNotification(adminSubject, adminHtml);
-  console.log(`📧 Admin notification result: ${adminNotificationSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
-  
-  res.json({ id: result.lastID, success: true, emailSent, adminNotificationSent });
+  console.log(`📧 Queueing admin notification to: ${EMAIL_USER}`);
+  sendAdminNotification(adminSubject, adminHtml)
+    .then(sent => console.log(`📧 Admin notification result: ${sent ? 'SUCCESS ✓' : 'FAILED ✗'}`))
+    .catch(err => console.error(`❌ Admin notification error: ${err.message}`));
 });
 
 // PUBLIC API — Website booking submissions (no auth required)
@@ -579,11 +583,16 @@ app.post('/api/contact', async (req, res) => {
     ctaUrl: `mailto:${EMAIL_USER}`
   });
 
-  console.log(`📧 Attempting to send contact confirmation email to: ${email}`);
-  const emailSent = await sendEmail(email, emailSubject, emailHtml);
-  console.log(`📧 Contact email send result: ${emailSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
+  // ✅ RESPOND IMMEDIATELY TO FRONTEND — do NOT wait for emails
+  res.json({ id: result.lastID, success: true });
 
-  // Build professional admin notification
+  // 📧 Send confirmation email ASYNCHRONOUSLY (fire-and-forget)
+  console.log(`📧 Queueing user confirmation email to: ${email}`);
+  sendEmail(email, emailSubject, emailHtml)
+    .then(sent => console.log(`📧 User email result: ${sent ? 'SUCCESS ✓' : 'FAILED ✗'}`))
+    .catch(err => console.error(`❌ User email error: ${err.message}`));
+
+  // 📧 Build and send admin notification asynchronously
   const adminSubject = `New Contact Message from ${first} - ${subject}`;
   const adminDetails = `
     <table style="width:100%;background:#ffffff;border-radius:6px;padding:12px;margin-top:12px;">
@@ -603,11 +612,10 @@ app.post('/api/contact', async (req, res) => {
     ctaUrl: 'http://localhost:3000/adminpanel.html'
   });
 
-  console.log(`📧 Attempting to send admin notification to: ${EMAIL_USER}`);
-  const adminNotificationSent = await sendAdminNotification(adminSubject, adminHtml);
-  console.log(`📧 Admin notification result: ${adminNotificationSent ? 'SUCCESS ✓' : 'FAILED ✗'}`);
-  
-  res.json({ id: result.lastID, emailSent, adminNotificationSent });
+  console.log(`📧 Queueing admin notification to: ${EMAIL_USER}`);
+  sendAdminNotification(adminSubject, adminHtml)
+    .then(sent => console.log(`📧 Admin notification result: ${sent ? 'SUCCESS ✓' : 'FAILED ✗'}`))
+    .catch(err => console.error(`❌ Admin notification error: ${err.message}`));
 });
 
 // PUBLIC CONSULTATION BOOKING API (no auth required)

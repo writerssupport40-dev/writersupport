@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Privacy Policy — Writers Support</title>
+  <link rel="icon" type="image/png" href="Book store/logo.png"/>
   <!-- Professional Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -571,19 +572,19 @@
 
     // Mobile Menu Toggle
     const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
+    const navLinksMenu = document.getElementById('navLinks');
     
-    if (hamburger && navLinks) {
+    if (hamburger && navLinksMenu) {
       hamburger.addEventListener('click', () => {
         hamburger.classList.toggle('active');
-        navLinks.classList.toggle('active');
+        navLinksMenu.classList.toggle('active');
       });
       
       // Close menu when a link is clicked
-      navLinks.querySelectorAll('a').forEach(link => {
+      navLinksMenu.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
           hamburger.classList.remove('active');
-          navLinks.classList.remove('active');
+          navLinksMenu.classList.remove('active');
         });
       });
     }

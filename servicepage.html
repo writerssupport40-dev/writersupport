@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Services — Writers Support</title>
+  <link rel="icon" type="image/png" href="Book store/logo.png"/>
   <!-- Professional Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -857,7 +858,6 @@
     <!-- EDITING -->
     <div class="service-block active" id="block-editing">
       <div class="service-info">
-        <span class="service-tag">Service 01</span>
         <h2>Editing</h2>
         
         <div style="margin-bottom: 2rem;">
@@ -929,7 +929,7 @@
               <option>7,000+ words</option>
             </select>
           </div>
-          <button class="btn-submit" onclick="submitQuote('Editing')">Send Request</button>
+          <button type="button" class="btn-submit" onclick="event.preventDefault(); submitQuote('Editing')">Send Request</button>
           <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
         </div>
         <div class="form-success" id="formSuccess-editing">
@@ -944,7 +944,6 @@
     <!-- STATS -->
     <div class="service-block" id="block-stats">
       <div class="service-info">
-        <span class="service-tag">Service 02</span>
         <h2>Statistical Analysis</h2>
         <p>From descriptive statistics to complex multivariate analyses — we handle your data with precision, using industry-standard tools and producing fully interpreted, publication-ready results.</p>
         
@@ -990,7 +989,7 @@
               <option>Large (1000+ rows)</option>
             </select>
           </div>
-          <button class="btn-submit" onclick="submitQuote('Statistical Analysis')">Send Request</button>
+          <button type="button" class="btn-submit" onclick="event.preventDefault(); submitQuote('Statistical Analysis')">Send Request</button>
           <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
         </div>
         <div class="form-success" id="formSuccess-stats">
@@ -1005,7 +1004,6 @@
     <!-- GRAPHICS -->
     <div class="service-block" id="block-graphics">
       <div class="service-info">
-        <span class="service-tag">Service 03</span>
         <h2>Graphic Design</h2>
         <p>Transform your data into high quality images, we create 2D & 3D graphic images, custom charts, diagram and infographics that meet the requirements of top-tier journals.</p>
         
@@ -1046,7 +1044,7 @@
             <label>Number of Figures</label>
             <input type="number" id="figures-graphics" placeholder="1">
           </div>
-          <button class="btn-submit" onclick="submitQuote('Graphic Design')">Send Request</button>
+          <button type="button" class="btn-submit" onclick="event.preventDefault(); submitQuote('Graphic Design')">Send Request</button>
           <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
         </div>
         <div class="form-success" id="formSuccess-graphics">
@@ -1061,7 +1059,6 @@
     <!-- GENOMICS -->
     <div class="service-block" id="block-genomics">
       <div class="service-info">
-        <span class="service-tag">Service 04</span>
         <h2>Data & Genomic Analysis</h2>
         <p>Specialized bioinformatics support for genomic research. We handle sequence analysis, phylogenetic studies, and complex biological data interpretation.</p>
         
@@ -1106,7 +1103,7 @@
               <option>Transcriptomics</option>
             </select>
           </div>
-          <button class="btn-submit" onclick="submitQuote('Data & Genomic Analysis')">Send Request</button>
+          <button type="button" class="btn-submit" onclick="event.preventDefault(); submitQuote('Data & Genomic Analysis')">Send Request</button>
           <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
         </div>
         <div class="form-success" id="formSuccess-genomics">
@@ -1121,7 +1118,6 @@
     <!-- ALL-INCLUSIVE -->
     <div class="service-block" id="block-allincl">
       <div class="service-info">
-        <span class="service-tag">Service 05</span>
         <h2>All-inclusive Services - Original Article</h2>
         <p>Do you have a research data and currently need the services of an expert to transform it into publication-ready manuscripts? Don't worry, we are here for you.</p>
         
@@ -1170,7 +1166,7 @@
               <option>Other</option>
             </select>
           </div>
-          <button class="btn-submit" onclick="submitQuote('All-inclusive - Original Article')">Send Request</button>
+          <button type="button" class="btn-submit" onclick="event.preventDefault(); submitQuote('All-inclusive - Original Article')">Send Request</button>
           <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
         </div>
         <div class="form-success" id="formSuccess-allincl">
@@ -1185,7 +1181,6 @@
     <!-- ALL-INCLUSIVE REVIEW -->
     <div class="service-block" id="block-review">
       <div class="service-info">
-        <span class="service-tag">Service 06</span>
         <h2>All-inclusive Services - Review Article</h2>
         <p>Do you have an idea for a possible review topic and needed to make it come to light? Don't worry, we are here for you. Just share your idea or area of your interest and we will get to work and transform your ideas into a complete high quality review manuscript ready for submission.</p>
         
@@ -1231,7 +1226,7 @@
             <label>Review Topic Area</label>
             <input type="text" id="topic-review" placeholder="e.g., Cancer Biology, Machine Learning in Medicine">
           </div>
-          <button class="btn-submit" onclick="submitQuote('All-inclusive - Review Article')">Send Request</button>
+          <button type="button" class="btn-submit" onclick="event.preventDefault(); submitQuote('All-inclusive - Review Article')">Send Request</button>
           <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
         </div>
         <div class="form-success" id="formSuccess-review">
@@ -1474,6 +1469,9 @@
         } else {
           console.error('❌ Success message element not found for:', formId);
         }
+        if (typeof window.openSuccessModal === 'function') {
+          window.openSuccessModal();
+        }
       }, 100);
       
       // Clear form fields
@@ -1504,19 +1502,25 @@
     }
     
     // Accessible modal open/close with focus trap
-    (function() {
+    document.addEventListener('DOMContentLoaded', function() {
       const overlay = document.getElementById('successModal');
       const dialog = overlay ? overlay.querySelector('.success-modal-content') : null;
       const closeBtn = overlay ? overlay.querySelector('.btn-submit') : null;
       let lastFocused = null;
 
+      console.log('🔍 Modal elements found:', { overlay: !!overlay, dialog: !!dialog, closeBtn: !!closeBtn });
+
       window.openSuccessModal = function() {
-        if (!overlay || !dialog) return;
+        if (!overlay || !dialog) {
+          console.error('❌ Modal elements not found when opening');
+          return;
+        }
         lastFocused = document.activeElement;
         overlay.classList.add('show');
         document.body.style.overflow = 'hidden';
         dialog.setAttribute('tabindex', '-1');
         dialog.focus();
+        console.log('✅ Modal opened successfully');
       };
 
       window.closeSuccessModal = function() {
@@ -1527,11 +1531,6 @@
       };
 
       if (closeBtn) closeBtn.addEventListener('click', closeSuccessModal);
-
-      // click outside to close
-      if (overlay) overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) closeSuccessModal();
-      });
 
       // keyboard handling (ESC + focus trap)
       document.addEventListener('keydown', function(e) {
@@ -1548,7 +1547,7 @@
           e.preventDefault(); first.focus();
         }
       });
-    })();
+    });
   </script>
 
   <!-- Success Modal (Professional) -->
