@@ -365,20 +365,38 @@
     }
 
     .book-cover {
-      height: 200px;
+      height: 420px;
+      background: var(--blue-primary);
+      background-size: contain !important;
+      background-repeat: no-repeat !important;
+      background-position: center !important;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--white);
       font-family: 'Libre Baskerville', serif;
       font-weight: 700;
-      padding: 2rem;
+      padding: 1rem;
       text-align: center;
+      position: relative;
     }
 
-    .book-cover.c1 { background: linear-gradient(135deg, var(--blue-primary), var(--blue-secondary)); }
-    .book-cover.c2 { background: linear-gradient(135deg, var(--oxblood), var(--oxblood-dark)); }
-    .book-cover.c3 { background: linear-gradient(135deg, #333, #000); }
+    .book-cover.c1 { background-color: var(--blue-primary); }
+    .book-cover.c2 { background-color: var(--oxblood); }
+    .book-cover.c3 { background-color: #333; }
+    
+    .new-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--oxblood);
+      color: var(--white);
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
 
     .book-info { padding: 1.5rem; }
     .book-category { font-size: 0.7rem; text-transform: uppercase; color: var(--oxblood); font-weight: 700; margin-bottom: 0.5rem; display: block; }
@@ -686,32 +704,40 @@
     </div>
     <div class="books-grid">
       <div class="book-card">
-        <div class="book-cover c1">Mastering Scientific Writing</div>
+        <div class="book-cover bc-1" style="background-image: url('Book store/ultimate academic excellence.jpg');">
+          <div class="new-badge">Bestseller</div>
+        </div>
         <div class="book-info">
-          <span class="book-category">E-Book</span>
-          <h4 class="book-title">The Complete Guide to Journal Publications</h4>
+          <span class="book-category">Academic Excellence</span>
+          <h4 class="book-title">Ultimate Academic Excellence - E-Book Version</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.8rem;">Master the strategies that separate top performers from the rest.</p>
           <div class="book-actions">
-            <a href="store.html" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">View Details</a>
+            <a href="store.html#all-books" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">View on Store</a>
           </div>
         </div>
       </div>
       <div class="book-card">
-        <div class="book-cover c2">Graphic Design Pro</div>
+        <div class="book-cover bc-2" style="background-image: url('Book store/Graphic2.JPG');">
+          <div class="new-badge">New</div>
+        </div>
         <div class="book-info">
-          <span class="book-category">Template</span>
-          <h4 class="book-title">High-Impact Figure Templates for Journals</h4>
+          <span class="book-category">Academic Excellence</span>
+          <h4 class="book-title">Prepare to Win: Preparation Gives Access and Control</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.8rem;">Strategic preparation unlocks opportunities and puts you in control.</p>
           <div class="book-actions">
-            <a href="store.html" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">View Details</a>
+            <a href="store.html#all-books" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">View on Store</a>
           </div>
         </div>
       </div>
       <div class="book-card">
-        <div class="book-cover c3">Statistical Mastery</div>
+        <div class="book-cover bc-3" style="background-image: url('Book store/the 22 laws of academic career promotion.jpg');">
+        </div>
         <div class="book-info">
-          <span class="book-category">Course</span>
-          <h4 class="book-title">Advanced R for Biological Data Analysis</h4>
+          <span class="book-category">Career Development</span>
+          <h4 class="book-title">The 22 Laws of Academic Career Excellence</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.8rem;">Master the proven laws that accelerate professional advancement.</p>
           <div class="book-actions">
-            <a href="store.html" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">View Details</a>
+            <a href="store.html#all-books" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">View on Store</a>
           </div>
         </div>
       </div>
