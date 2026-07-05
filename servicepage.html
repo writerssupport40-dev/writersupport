@@ -963,7 +963,7 @@
     <button class="tab-btn" data-tab="editing" onclick="switchTab('editing', this)">Editing</button>
     <button class="tab-btn" data-tab="stats" onclick="switchTab('stats', this)">Statistical Analysis</button>
     <button class="tab-btn" data-tab="graphics" onclick="switchTab('graphics', this)">Graphic Design</button>
-    <button class="tab-btn" data-tab="genomics" onclick="switchTab('genomics', this)">Data & Genomic Analysis</button>
+    <button class="tab-btn" data-tab="genomics" onclick="switchTab('genomics', this)">Bioinformatics Analysis</button>
     <button class="tab-btn" data-tab="allincl" onclick="switchTab('allincl', this)">All Inclusive Services</button>
     <button class="tab-btn" data-tab="delivered" onclick="switchTab('delivered', this)">Services Delivered</button>
   </div>
@@ -1170,7 +1170,7 @@
     <!-- GENOMICS -->
     <div class="service-block" id="block-genomics">
       <div class="service-info">
-        <h2>Data & Genomic Analysis</h2>
+        <h2>Bioinformatics Analysis</h2>
         <p>Specialized bioinformatics support for genomic research. We handle sequence analysis, phylogenetic studies, and complex biological data interpretation.</p>
         
         <div class="deliverables">
@@ -1214,7 +1214,7 @@
               <option>Transcriptomics</option>
             </select>
           </div>
-          <button type="button" class="btn-submit" onclick="event.preventDefault(); submitQuote('Data & Genomic Analysis')">Send Request</button>
+          <button type="button" class="btn-submit" onclick="event.preventDefault(); submitQuote('Bioinformatics Analysis')">Send Request</button>
           <span class="secure-note"><i class="fas fa-lock"></i> Confidential & Secure</span>
         </div>
         <div class="form-success" id="formSuccess-genomics">
@@ -1422,6 +1422,8 @@
           <li><a href="servicepage.html#block-stats">Statistical Analysis</a></li>
           <li><a href="servicepage.html#block-graphics">Graphic Design</a></li>
           <li><a href="servicepage.html#block-genomics">Genomic Analysis</a></li>
+          <li><a href="servicepage.html#block-allincl">All Inclusive Services</a></li>
+          <li><a href="servicepage.html#block-delivered">Services Delivered</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -1535,7 +1537,7 @@
         'Editing': 'editing',
         'Statistical Analysis': 'stats',
         'Graphic Design': 'graphics',
-        'Data & Genomic Analysis': 'genomics',
+        'Bioinformatics Analysis': 'genomics',
         'All Inclusive Services': 'allincl',
         'Services Delivered': 'delivered'
       };
