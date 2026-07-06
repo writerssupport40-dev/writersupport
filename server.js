@@ -16,6 +16,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'WritersSupport-secret-2026';
 const COOKIE_NAME = 'admin_token';
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Delight@2024';
+const FRONTEND_URL = process.env.FRONTEND_URL || process.env.BASE_URL || 'http://localhost:3000';
 
 app.set('trust proxy', 1);
 
@@ -26,13 +27,12 @@ app.use(cors({
   origin: function(origin, callback) {
     if (!origin) return callback(null, true);
 
-    if (origin.includes('localhost') || origin.includes('127.0.0.1')) return callback(null, true);
-    if (origin === 'file://') return callback(null, true);
-
-    const FRONTEND_URL = process.env.FRONTEND_URL;
+    if (origin === 'file://' || origin.includes('localhost') || origin.includes('127.0.0.1')) return callback(null, true);
     if (FRONTEND_URL && origin === FRONTEND_URL) return callback(null, true);
+    if (process.env.CORS_ORIGIN && origin === process.env.CORS_ORIGIN) return callback(null, true);
 
     if (origin.includes('.netlify.app')) return callback(null, true);
+    if (origin.includes('.onrender.com')) return callback(null, true);
     if (origin.includes('.up.railway.app')) return callback(null, true);
     if (origin.includes('railway.internal')) return callback(null, true);
 
@@ -377,7 +377,7 @@ app.post('/api/public/requests', async (req, res) => {
     intro: `Hi ${first}, thank you for contacting Writers Support. We have received your request and our team will review it shortly.`,
     detailsHtml: userDetailsHtml,
     ctaText: 'View Request Status',
-    ctaUrl: 'http://localhost:3000/'
+    ctaUrl: `${FRONTEND_URL}/`
   });
 
   // ✅ RESPOND IMMEDIATELY TO FRONTEND — do NOT wait for emails
@@ -406,7 +406,7 @@ app.post('/api/public/requests', async (req, res) => {
     intro: 'A new service request was submitted via the website.',
     detailsHtml: adminDetailsHtml,
     ctaText: 'Open Admin Panel',
-    ctaUrl: 'http://localhost:3000/adminpanel.html'
+    ctaUrl: `${FRONTEND_URL}/adminpanel.html`
   });
 
   console.log(`📧 Queueing admin notification to: ${EMAIL_USER}`);
@@ -591,7 +591,7 @@ app.post('/api/contact', async (req, res) => {
     intro: 'A new message was submitted through the contact form.',
     detailsHtml: adminDetails,
     ctaText: 'Open Admin Panel',
-    ctaUrl: 'http://localhost:3000/adminpanel.html'
+    ctaUrl: `${FRONTEND_URL}/adminpanel.html`
   });
 
   console.log(`📧 Queueing admin notification to: ${EMAIL_USER}`);
@@ -658,7 +658,7 @@ app.post('/api/bookings/public', async (req, res) => {
     intro: 'A new consultation booking was submitted via the website.',
     detailsHtml: adminDetails,
     ctaText: 'Open Admin Panel',
-    ctaUrl: 'http://localhost:3000/adminpanel.html'
+    ctaUrl: `${FRONTEND_URL}/adminpanel.html`
   });
 
   console.log(`📧 Attempting to send admin notification to: ${EMAIL_USER}`);
